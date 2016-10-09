@@ -1,0 +1,22 @@
+{
+  "middleware": ["ensureLoggedIn"],
+  "path": "/api/users",
+  "routes": [
+    {
+      "path": "profile",
+      "method": "post",
+      "handler": "updateProfile",
+      "acl": {
+        "role": "USER"
+      }
+    },
+    {
+      "path": ":id",
+      "method": "get",
+      "handler": "getUser",
+      "acl": {
+        "role": "USER"
+      }
+    }
+  ]
+}

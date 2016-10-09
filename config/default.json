@@ -1,0 +1,20 @@
+{
+    "mongo": {
+        "host": "127.0.0.1",
+        "port": "",
+        "db": "liquidsc"
+    },
+    "jwtSecret": "923hKDB012emlkmXA)_2!(hb*&9w2b&XbsfMHwk892JN#$#@63fJn29132nkj",
+
+    "ui": {
+        "host": "localhost",
+        "port": "3000",
+        "protocol": "http"
+    },
+
+    "sendGrid": "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",
+
+    "uploadDir": "C:\\Users\\amita\\Documents\\work\\liquidsc\\uploads\\",
+
+    "gallery_key": "YbJFVJ&588bjksan%%$@#$^shbsBFGHYRjashdbNM87K95BJ*^%^886"
+}
