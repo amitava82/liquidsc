@@ -15,9 +15,25 @@ export default class Header extends React.Component {
         this.props.dispatch(showNav());
     }
 
+    renderMenus() {
+        const {session: {user}} = this.props;
+        const items = [];
+        if(user) {
+            if(user.role == 'BORROWER') {
+                items.push(
+                    <LinkContainer to="/application/create" key={1}>
+                        <NavItem>New Loan</NavItem>
+                    </LinkContainer>
+                )
+            }
+        }
+        return items;
+
+    }
+
     render () {
         const {session} = this.props;
-        const isProvider = session.user && session.user.role == 'PROVIDER';
+
         return (
             <div className="header">
                 <Navbar  expanded={session.showNav} onToggle={this.onToggle}>
@@ -32,6 +48,7 @@ export default class Header extends React.Component {
                             <LinkContainer to="/home">
                                 <NavItem>Home</NavItem>
                             </LinkContainer>
+                            {this.renderMenus()}
                         </Nav>
                         <Nav pullRight>
                             {session.isLoggedIn ? (

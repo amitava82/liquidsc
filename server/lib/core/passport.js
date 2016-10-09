@@ -69,6 +69,10 @@ module.exports = function(deps){
                        return done(null, false, { message: 'Incorrect username or password.' });
                    }
 
+                   if(!user.approved) {
+                       return done(null, false, { message: 'Account is not approved.' });
+                   }
+
                    passwordHelper.compare(password, user.password, (err, valid) => {
                        if(err) {
                            done(err);

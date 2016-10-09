@@ -1,0 +1,32 @@
+{
+  "middleware": ["ensureLoggedIn"],
+  "path": "/api/applications",
+  "routes": [
+    {
+      "path": "",
+      "method": "get",
+      "handler": "getApplications"
+    },
+    {
+      "path": ":id",
+      "method": "get",
+      "handler": "getApplications"
+    },
+    {
+      "path": "",
+      "method": "post",
+      "handler": "createApplication",
+      "acl": {
+        "role": "BORROWER"
+      }
+    },
+    {
+      "path": ":id/upload",
+      "method": "put",
+      "handler": "uploadDocs",
+      "acl": {
+        "role": "BORROWER"
+      }
+    }
+  ]
+}

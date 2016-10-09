@@ -8,52 +8,44 @@ import Input from '../../components/form/PureInput';
 import RadioGroup from '../../components/form/RadioGroup';
 import { signup } from '../../redux/modules/session';
 import { createToast } from '../../redux/modules/toast';
-import { createValidator, required, email } from '../../utils/validator';
 
-const ROLE_OPTIONS = [
-    {label: 'I\'m an user', value: 'USER'},
-    {label: 'I\'m a Provider', value: 'PROVIDER'},
-];
+import BuyerSupplierFrom from './BuyerSupplier';
+import LenderForm from './Lender';
 
-@reduxForm({
-    form: 'signup',
-    fields: ['email', 'password', 'role', 'name'],
-    validate: createValidator({
-        email: [required(), email],
-        password: required(),
-        role: required(),
-        name: required()
-    }),
-    initialValues: {
-        role: 'USER'
-    }
-})
 @connect(state=>state, {signup})
 export default class Signup extends React.Component {
+    constructor(...args) {
+        super(...args);
+        this.state = {
+            type: null,
+            success: false
+        }
+    }
 
     @autobind
     submit(data){
-        return this.props.signup(data).then(
-            r => {
-                this.props.dispatch(createToast('Registration successful!'));
-                this.props.dispatch(push('/login'));
-            }
-        )
+        return this.props.signup(data);
     }
 
     render() {
-        const {fields: {email, password, role, name}, handleSubmit, submitting, error} = this.props;
+        const {type} = this.state;
+        let content = (
+            <div>
+                <Button onClick={e => this.setState({type: 'lender'})} bsStyle="primary">Register for Lender account</Button>
+                {' '}
+                <Button onClick={e => this.setState({type: 'buyer'})} bsStyle="primary">Register for Buyer/Supplier</Button>
+            </div>
+        );
+        if(type == 'buyer') {
+            content = <BuyerSupplierFrom submit={this.submit} />
+        } else if(type == 'lender') {
+            content = <LenderForm submit={this.submit} />;
+        }
+
         return (
             <div>
                 <h3>Sign up for an account</h3>
-                <form onSubmit={handleSubmit(this.submit)}>
-                    {error && <Alert bsStyle="danger">{error}</Alert> }
-                    <RadioGroup options={ROLE_OPTIONS} field={role} label="What's your role?" />
-                    <Input field={name} label="Your name" />
-                    <Input field={email} label="Email" type="email" />
-                    <Input type="password" field={password} label="Password" />
-                    <Button disabled={submitting} type="submit" bsStyle="primary">Register</Button>
-                </form>
+                {content}
             </div>
         )
     }

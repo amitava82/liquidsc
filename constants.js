@@ -1,8 +1,12 @@
 module.exports = {
     roles: {
         'BUYER': 'BUYER',
-        'SUPPLIER': 'SUPPLIER',
+        'BORROWER': 'BORROWER',
         'LENDER': 'LENDER',
         'ADMIN': 'ADMIN'
-    }
+    },
+    status: {
+
+    },
+    adminEmail: 'amitava82@gmail.com'
 };

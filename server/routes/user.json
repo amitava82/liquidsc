@@ -3,19 +3,26 @@
   "path": "/api/users",
   "routes": [
     {
-      "path": "profile",
-      "method": "post",
-      "handler": "updateProfile",
-      "acl": {
-        "role": "USER"
-      }
+      "path": "",
+      "method": "get",
+      "handler": "getUsers"
     },
     {
       "path": ":id",
       "method": "get",
-      "handler": "getUser",
+      "handler": "getUsers"
+    },
+    {
+      "path": "profile",
+      "method": "post",
+      "handler": "updateProfile"
+    },
+    {
+      "path": ":id/approve",
+      "method": "post",
+      "handler": "approveUser",
       "acl": {
-        "role": "USER"
+        "role": "ADMIN"
       }
     }
   ]

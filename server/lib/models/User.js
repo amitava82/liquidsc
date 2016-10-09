@@ -7,16 +7,13 @@ var passwordHelper = require('../helpers/password');
 var Promise = require('bluebird');
 var uuid = require('uuid');
 var _ = require('lodash');
+var constants = require('../../../constants');
 
 module.exports = function (deps) {
 
     const model = 'User';
 
     var userSchema = mongoose.Schema({
-        name: {
-            type: String,
-            required: true
-        },
 
         email: {
             type: String,
@@ -29,12 +26,8 @@ module.exports = function (deps) {
 
         phone: {
             type: Number,
-            required: true,
-            index: true,
-            unique: true
+            required: true
         },
-
-        occupation: String,
 
         password: {
             type: String,
@@ -44,15 +37,33 @@ module.exports = function (deps) {
 
         role: {
             type: String,
-            enum: ['USER', 'ADMIN', 'PROVIDER'],
-            default: 'USER',
+            enum: _.keys(constants.roles),
+            default: 'SUPPLIER',
             required: true
         },
-        
-        oauthID: {
-            type: String,
-            index: 1,
-            unique: 1
+
+        fullName: {
+            type: String
+        },
+
+        company: String,
+
+        lenderType: String,
+
+        designation: String,
+
+        comments: String,
+
+        pan: String,
+
+        contactPerson: String,
+
+        businessType: String,
+
+        approved: {
+            type: Boolean,
+            required: true,
+            default: false
         },
         
         active: {

@@ -23,7 +23,7 @@ class _ApiClient {
             return _prefix + adjustedPath;
         }
         methods.forEach((method) =>
-            this[method] = (path, {params, data, schema, prefix, headers} = {}) => new Promise((resolve,reject,onCancel) => {
+            this[method] = (path, {params, data, files, schema, prefix, headers} = {}) => new Promise((resolve,reject,onCancel) => {
 
                 const url = formatUrl(path, prefix);
                 const request = superagent[method](url);
@@ -49,9 +49,13 @@ class _ApiClient {
                     request.set('cookie', req.get('cookie'));
                 }
 
-                if (data) {
+                if(files) {
+                    files.forEach(f => request.attach(f.field, f.value));
+                    request.field('model', JSON.stringify(data))
+                } else  if (data) {
                     request.send(data);
                 }
+
                 request.end((err, {body} = {}) => {
                     if(err){
                         return reject(body || err);

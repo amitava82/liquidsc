@@ -9,28 +9,30 @@ var _ = require('lodash');
 var passwordHelper = require('../helpers/password');
 var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
+var constants = require('../../../constants');
+var templates = require('../../../templates');
 
 module.exports = function(deps){
 
-    var sendgrid = Sendgrid(deps.config.get('sendGrid'));
     var authHelper = require('../helpers/auth')(deps);
     var User = mongoose.models.User;
     var Session = mongoose.models.Session;
 
+
     return {
 
         oauthCallback: function(req, res, next){
-            var returnUrl = req.session.return;
-            if(returnUrl){
-                delete req.session.return;
-            }else{
-                returnUrl = '/';
-            }
-
-            deps.passport.authenticate(req.params.module, {
-                successRedirect: returnUrl,
-                failureRedirect: '/login' }
-            )(req, res, next)
+            // var returnUrl = req.session.return;
+            // if(returnUrl){
+            //     delete req.session.return;
+            // }else{
+            //     returnUrl = '/';
+            // }
+            //
+            // deps.passport.authenticate(req.params.module, {
+            //     successRedirect: returnUrl,
+            //     failureRedirect: '/login' }
+            // )(req, res, next)
         },
 
         /*
@@ -65,9 +67,8 @@ module.exports = function(deps){
         },
 
         signup: function (req, res, next) {
-
-            var data = _.pick(req.body, 'email', 'password', 'name', 'role');
-
+            var mailer = deps.nodemailer;
+            var data = req.body;
             if(data.role === 'ADMIN'){
                 return next(new Error('Invalid role'));
             }
@@ -76,10 +77,25 @@ module.exports = function(deps){
                 data.password = pass;
 
                 User.create(data).then(
+                    user => {
+                        mailer.sendMail({
+                            from: 'noreply@test.com',
+                            to: data.email,
+                            subject: 'Registration success',
+                            html: templates.signup(user)
+                        });
+                        return user;
+                    }
+                ).then(
                     () => res.send({success: true}),
                     next
                 );
             });
+        },
+
+        currentSession(req, res, next) {
+            res.send(req.user);
+
         },
 
         validate: function(req, res, next){
@@ -211,6 +227,30 @@ module.exports = function(deps){
                     console.log(e)
                     res.render('signup', {title: 'Signup - Careerraft', data: {error: 'Please check your input'}});
                 }
+            )
+        },
+
+        createAdmin(req, res, next) {
+            const data = req.body;
+            User.findOne({role: 'ADMIN'}).exec().then(
+                user => {
+                    if(user) throw new Error('admin exists');
+
+                    return new Promise((resolve, reject) => {
+                        passwordHelper.hash(data.password, (err, pass) => {
+                            if(err) {
+                                reject(err);
+                            } else {
+                                data.password = pass;
+
+                                User.create(data).then(resolve, reject);
+                            }
+                        })
+                    })
+                }
+            ).then(
+                () => res.send('OK'),
+                next
             )
         }
     }

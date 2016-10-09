@@ -30,9 +30,10 @@ require('./server/lib')(deps);
 //Load core modules. Loaded asynchronously.
 async.eachSeries([
     'log',
+    'nodemailer',
     'db',
     'app',
-    'passport'
+    'passport',
 ], function(item, done){
     var fn = require('./server/lib/core/'+item)(deps);
 
