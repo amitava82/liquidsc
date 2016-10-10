@@ -17,8 +17,15 @@ module.exports = function (deps) {
             type: String
         },
 
+        borrower: {
+            type: String,
+            ref: 'User',
+            required: true
+        },
+
         lender: {
             type: String,
+            ref: 'User',
             required: true
         },
 
@@ -43,8 +50,16 @@ module.exports = function (deps) {
 
         repaymentDate: {
             type: Date
+        },
+
+        application: {
+            type: String,
+            ref: 'Application',
+            index: 1,
+            unique: 1
         }
     });
+
 
     loanSchema.pre('save', function(next) {
         this._id = uid('loan');

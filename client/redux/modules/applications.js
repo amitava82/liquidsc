@@ -10,7 +10,7 @@ import reject from 'lodash/reject';
 
 import createAction from '../createActions';
 
-const [GET_APPLICATIONS, GET_APPLICATION, CREATE, REJECT_APPLICATION, ASSIGN_LENDER, BUYER_CHANGE_STATUS, SUBMIT_PROPOSAL] =
+const [GET_APPLICATIONS, GET_APPLICATION, CREATE, REJECT_APPLICATION, ASSIGN_LENDER, BUYER_CHANGE_STATUS, SUBMIT_PROPOSAL, CREATE_LOAN_ACCOUNT] =
     createAction('applications', [
         "GET_APPLICATIONS",
         "GET_APPLICATION",
@@ -18,7 +18,8 @@ const [GET_APPLICATIONS, GET_APPLICATION, CREATE, REJECT_APPLICATION, ASSIGN_LEN
         "REJECT_APPLICATION",
         "ASSIGN_LENDER",
         "BUYER_CHANGE_STATUS",
-        "SUBMIT_PROPOSAL"
+        "SUBMIT_PROPOSAL",
+        "CREATE_LOAN_ACCOUNT"
     ]);
 
 const initialState = {
@@ -109,5 +110,12 @@ export const submitProposal = (id, data) => ({
     type: SUBMIT_PROPOSAL,
     payload: {
         promise: api => api.post(`applications/${id}/proposals`, {data})
+    }
+});
+
+export const createLoanAccount = (proposalId) => ({
+    type: CREATE_LOAN_ACCOUNT,
+    payload: {
+        promise: api => api.post(`applications/proposals/${proposalId}/approve`)
     }
 });

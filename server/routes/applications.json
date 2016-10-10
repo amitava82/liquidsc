@@ -69,7 +69,7 @@
       }
     },
     {
-      "path": ":id/proposals/:id/approve",
+      "path": "proposals/:id/approve",
       "method": "post",
       "handler": "createLoanAccount",
       "acl": {

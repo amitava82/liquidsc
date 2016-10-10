@@ -9,7 +9,7 @@ import { Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 import map from 'lodash/map';
 
-import { getApplication, assignToLenders, rejectApplication } from '../../redux/modules/applications';
+import { getApplication, assignToLenders, rejectApplication, createLoanAccount } from '../../redux/modules/applications';
 import { getLenders } from '../../redux/modules/users';
 
 @connect(state=>state)
@@ -67,9 +67,28 @@ export default class ApplicationDetails extends React.Component {
         }
     }
 
-    renderOffers(doc) {
-        const offers = doc.offers.map(i => (
-          <p></p>
+    createLoanAccount(id) {
+        this.props.dispatch(createLoanAccount(id));
+    }
+
+    renderProposals(doc) {
+        const offers = doc.proposals.map(i => (
+          <div className="well well-sm">
+              <Row>
+                  <Col xs={6}>
+                      <h5>{i.lender.company}</h5>
+                      <p>{i.comment}</p>
+                  </Col>
+                  <Col xs={4}>
+                      <div><strong>Loan amount: </strong> <span>{i.loanAmount}</span></div>
+                      <div><strong>Interest rate:</strong> <span>{i.interestRate}</span></div>
+                      <div><strong>Tenor</strong> <span>{i.tenor}</span></div>
+                  </Col>
+                  <Col xs={2}>
+                    <Button bsStyle="primary" onClick={e => this.createLoanAccount(i._id)}>Select</Button>
+                  </Col>
+              </Row>
+          </div>
         ));
         return offers;
     }
@@ -79,7 +98,7 @@ export default class ApplicationDetails extends React.Component {
 
         if(!viewing) return <h5>Loading...</h5>;
 
-        const docs = viewing.documents.map(doc => <p><a href={`/api/applications/${viewing._id}/docs/${doc.fieldname}`}>{doc.fieldname}</a></p>);
+        const docs = viewing.documents.map(doc => <div><a target="_blank" href={`/api/applications/${viewing._id}/docs/${doc.fieldname}`}>{doc.fieldname}</a> </div>);
 
         return (
             <div>
@@ -105,9 +124,9 @@ export default class ApplicationDetails extends React.Component {
                         </dl>
                         <h4>Documents</h4>
                         {docs}
-                        <h4>Lenders</h4>
+                        <h4>Proposals</h4>
                         <div>
-                            {this.renderOffers(viewing)}
+                            {this.renderProposals(viewing)}
                         </div>
                     </Col>
                     {this.renderAssignAction(viewing)}

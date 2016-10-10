@@ -14,5 +14,5 @@ module.exports = {
         LENDER_APPROVED: 'LENDER_APPROVED',
 
     },
-    adminEmail: 'amitava82@gmail.com'
+    adminEmail: 'amitava82+admin@gmail.com'
 };

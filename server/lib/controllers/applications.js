@@ -16,15 +16,16 @@ const populate = [
     {path: 'company'},
     {path: 'lenders'},
     {path: 'buyer'},
+    {path: 'proposals.lender', model: 'User'}
 ];
 
 module.exports = deps => {
     const User = mongoose.models.User;
     const Application = mongoose.models.Application;
     const Proposal = mongoose.models.Proposal;
+    const LoanAccount = mongoose.models.LoanAccount;
     var storage = multer.diskStorage({
         destination: function (req, file, cb) {
-
             const dir =  path.join(deps.config.uploadDir, req.user._id, req.instance.id);
             mkdirp.sync(dir);
             cb(null, dir);
@@ -52,8 +53,20 @@ module.exports = deps => {
             }
 
             if(id) {
-                Application.findById(id).populate(populate).exec().then(
-                    docs => res.send(docs),
+                Application.aggregate([
+                    {
+                        $match: {_id: id}
+                    },
+                    {$lookup: {
+                        from: 'proposals',
+                        localField: '_id',
+                        foreignField: 'application',
+                        as: 'proposals'
+                    }}
+                ]).then(
+                    doc => Application.populate(doc, populate)
+                ).then(
+                    doc => res.send(doc[0]),
                     next
                 )
             } else {
@@ -95,9 +108,20 @@ module.exports = deps => {
                 ).then(
                     () =>  Application.create(application)
                 ).then(
+                    doc => {
+                        var mailer = deps.nodemailer;
+                        mailer.sendMail({
+                            from: 'noreply@test.com',
+                            to: constants.adminEmail,
+                            subject: 'Application created',
+                            html: templates.applicationReceived(doc)
+                        });
+                        return doc;
+                    }
+                ).then(
                     doc => res.send(doc),
                     next
-                );
+                )
             }
         ],
 
@@ -117,11 +141,26 @@ module.exports = deps => {
             const id = req.params.id;
 
             Application.findByIdAndUpdate(id, {
-             $addToSet: { lenders: { $each: lenders } }
-            }, {new: true}).populate(populate).exec().then(
-                doc => res.send(doc),
-                next
-            )
+                $addToSet: {lenders: {$each: lenders}}
+            }, {new: true}).populate(populate)
+                .exec()
+                .then(
+                    doc => {
+                        const lenders = _.map(doc.lenders, 'email');
+                        var mailer = deps.nodemailer;
+                        mailer.sendMail({
+                            from: 'noreply@test.com',
+                            to: lenders,
+                            subject: 'Application received',
+                            html: templates.lenderAssigned(doc)
+                        });
+                        return doc;
+                    }
+                )
+                .then(
+                    doc => res.send(doc),
+                    next
+                )
         },
 
         getDoc(req, res, next) {
@@ -129,6 +168,7 @@ module.exports = deps => {
             Application.findById(id).exec().then(
                 f => {
                     const file = _.find(f.documents, {fieldname: doc});
+
                     res.sendFile(file.path);
                 },
                 next
@@ -140,6 +180,18 @@ module.exports = deps => {
             Application.findOneAndUpdate({buyer: req.user._id, _id: id}, {receivableStatus: status}, {new: true})
                 .populate(populate)
                 .exec()
+                .then(
+                    doc => {
+                        var mailer = deps.nodemailer;
+                        mailer.sendMail({
+                            from: 'noreply@test.com',
+                            to: [constants.adminEmail, doc.company.email],
+                            subject: 'Receivable doc status updated',
+                            html: templates.recStatusUpdated(doc)
+                        });
+                        return doc;
+                    }
+                )
                 .then(
                     doc => res.send(doc),
                     next
@@ -158,10 +210,52 @@ module.exports = deps => {
         },
 
         lenderReject(req, res, next) {
-
+            Application.findByIdAndUpdate(req.params.id, {
+                $pull: {
+                    lenders: req.user._id
+                }
+            }).exec().then(
+                doc => res.send(doc),
+                next
+            )
         },
 
         createLoanAccount(req, res, next) {
+            const proposalId = req.params.id;
+            Proposal.findById(proposalId).populate(['application']).exec()
+                .then(
+                    prop => {
+                        return LoanAccount.create({
+                            lender: prop.lender,
+                            loanAmount: prop.loanAmount,
+                            interestRate: prop.interestRate,
+                            tenor: prop.tenor,
+                            application: prop.application._id,
+                            borrower: prop.application.company
+                        }).then(
+                            doc => LoanAccount.populate(doc, 'borrower')
+                        );
+                    }
+                )
+                .then(
+                    acc => {
+                        var mailer = deps.nodemailer;
+                        mailer.sendMail({
+                            from: 'noreply@test.com',
+                            to: [acc.borrower.email],
+                            subject: 'Loan account created',
+                            html: templates.loanAccountCreated(acc)
+                        });
+                        return acc;
+                    }
+                )
+                .then(
+                    doc => res.send(doc),
+                    next
+                );
+        },
+
+        updateLoanAccount(req, res, next) {
 
         }
     }
