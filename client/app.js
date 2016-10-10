@@ -10,6 +10,7 @@ import { events } from '../constants';
 
 import { createToast } from './redux/modules/toast';
 import './scss/export.scss';
+require('react-datepicker/dist/react-datepicker.css');
 
 @connect(state => state)
 export default class App extends React.Component {

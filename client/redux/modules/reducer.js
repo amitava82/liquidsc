@@ -7,6 +7,7 @@ import toast from './toast';
 import session from './session';
 import users from './users';
 import applications from './applications';
+import loanAccounts from './loanAccounts';
 
 export default combineReducers({
     errorMessage,
@@ -14,6 +15,7 @@ export default combineReducers({
     session,
     users,
     applications,
+    loanAccounts,
     routing: routerReducer,
     form: formReducer
 });

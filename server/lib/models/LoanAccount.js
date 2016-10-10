@@ -62,7 +62,8 @@ module.exports = function (deps) {
 
 
     loanSchema.pre('save', function(next) {
-        this._id = uid('loan');
+        if(this.isNew)
+            this._id = uid('loan');
         next();
     });
 

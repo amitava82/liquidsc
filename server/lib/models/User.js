@@ -79,7 +79,8 @@ module.exports = function (deps) {
     }, {timestamps: true});
 
     userSchema.pre('save', function(next) {
-        this._id = uid(this.role);
+        if(this.isNew)
+            this._id = uid(this.role);
         next();
     });
 

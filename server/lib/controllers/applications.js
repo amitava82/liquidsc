@@ -238,6 +238,9 @@ module.exports = deps => {
                     }
                 )
                 .then(
+                    doc => Application.findByIdAndUpdate(doc.application, {status: constants.status.APPROVED}).exec().then(() => doc)
+                )
+                .then(
                     acc => {
                         var mailer = deps.nodemailer;
                         mailer.sendMail({

@@ -1,0 +1,24 @@
+{
+  "middleware": [
+    "ensureLoggedIn"
+  ],
+  "path": "/api/accounts",
+  "routes": [
+    {
+      "path": "",
+      "method": "get",
+      "handler": "getAccounts",
+      "acl": {
+        "role": "ADMIN"
+      }
+    },
+    {
+      "path": ":id",
+      "method": "put",
+      "handler": "updateAccount",
+      "acl": {
+        "role": "ADMIN"
+      }
+    }
+  ]
+}

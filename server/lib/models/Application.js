@@ -110,7 +110,8 @@ module.exports = function (deps) {
     }, {timestamps: true});
 
     applicationSchema.pre('save', function(next) {
-        this._id = uid('app');
+        if(this.isNew)
+            this._id = uid('app');
         next();
     });
 

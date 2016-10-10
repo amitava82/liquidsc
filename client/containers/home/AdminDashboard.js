@@ -14,7 +14,6 @@ export default class AdminDashboard extends React.Component {
 
     componentWillMount() {
         this.props.dispatch(getUsers({approved: false}));
-        this.props.dispatch(getApplications({status: 'PENDING'}))
     }
 
     @autobind
@@ -23,7 +22,7 @@ export default class AdminDashboard extends React.Component {
     }
 
     render() {
-        const {users: {data}, applications} = this.props;
+        const {users: {data}} = this.props;
         const rows = data.map(i => (
             <tr key={i._id}>
                 <td>{i.email}</td>
@@ -34,15 +33,7 @@ export default class AdminDashboard extends React.Component {
             </tr>
         ));
 
-        const appRows = applications.data.map(i => (
-           <tr key={i._id}>
-               <td>{i._id}</td>
-               <td>{i.company.company}</td>
-               <td>{i.loanAmount}</td>
-               <td>{i.buyerCompany}</td>
-               <td><Link to={`/admin/applications/${i._id}`}>View</Link></td>
-           </tr>
-        ));
+
         return (
             <div>
                 <h3>New Users registrations</h3>
@@ -58,21 +49,6 @@ export default class AdminDashboard extends React.Component {
                     </thead>
                     <tbody>
                     {rows}
-                    </tbody>
-                </table>
-                <h3>New Applications</h3>
-                <table className="table table-striped table-bordered">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Company</th>
-                        <th>Loan amount</th>
-                        <th>Buyer</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        {appRows}
                     </tbody>
                 </table>
             </div>

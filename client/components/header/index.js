@@ -27,8 +27,13 @@ export default class Header extends React.Component {
                 )
             } else if(user.role == 'ADMIN') {
                 items.push(
-                    <LinkContainer to="/applications" key={1}>
+                    <LinkContainer to="/admin/applications" key={2}>
                         <NavItem>Applications</NavItem>
+                    </LinkContainer>
+                );
+                items.push(
+                    <LinkContainer to="/admin/accounts" key={3}>
+                        <NavItem>Accounts</NavItem>
                     </LinkContainer>
                 )
             }
