@@ -59,6 +59,23 @@
       "acl": {
         "role": "LENDER"
       }
+    },
+    {
+      "path": ":id/lender/reject",
+      "method": "delete",
+      "handler": "lenderReject",
+      "acl": {
+        "role": "LENDER"
+      }
+    },
+    {
+      "path": ":id/proposals/:id/approve",
+      "method": "post",
+      "handler": "createLoanAccount",
+      "acl": {
+        "role": "ADMIN"
+      }
     }
+
   ]
 }

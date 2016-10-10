@@ -21,6 +21,7 @@ const populate = [
 module.exports = deps => {
     const User = mongoose.models.User;
     const Application = mongoose.models.Application;
+    const Proposal = mongoose.models.Proposal;
     var storage = multer.diskStorage({
         destination: function (req, file, cb) {
 
@@ -146,7 +147,22 @@ module.exports = deps => {
         },
 
         submitProposal(req, res, next) {
-            
+
+            const data = req.body;
+            data.lender = req.user._id;
+            data.application = req.params.id;
+            Proposal.create(data).then(
+                doc => res.send(doc),
+                next
+            )
+        },
+
+        lenderReject(req, res, next) {
+
+        },
+
+        createLoanAccount(req, res, next) {
+
         }
     }
 };

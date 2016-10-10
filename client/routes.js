@@ -8,6 +8,7 @@ import Reset from './containers/forgot/PasswordReset';
 import Signup from './containers/signup';
 import Application from './containers/application';
 import Admin from './containers/admin';
+import Lender from './containers/lender';
 
 import NotFound from './containers/misc/NotFound';
 
@@ -46,6 +47,9 @@ export default (store) => {
             <Route path="application/create" component={Application} onEnter={checkRole('BORROWER')} />
             <Route path="/admin" onEnter={checkRole('ADMIN')}>
                 <Route path="applications/:id" component={Admin.ApplicationDetails} />
+            </Route>
+            <Route path="/lender" onEnter={checkRole('LENDER')}>
+                <Route path="applications/:id" component={Lender.SubmitProposal} />
             </Route>
             <Route path="*" component={NotFound}/>
         </Route>

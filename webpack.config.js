@@ -25,7 +25,7 @@ module.exports = {
   entry: {
     app: path.resolve(__dirname, 'client/main.js'),
     vendors: ['react', 'react-dom', 'react-redux', 'react-router', 'redux-thunk', 'lodash', 'classnames', 'react-router-scroll',
-    'redux', 'autobind-decorator', 'react-bootstrap', 'react-router-redux', 'react-helmet', 'bluebird', 'redux-form', 'react-select', 'superagent']
+    'redux', 'autobind-decorator', 'react-bootstrap', 'react-router-redux', 'bluebird', 'redux-form', 'react-select', 'superagent']
   },
   //devtool: 'source-map',
   output: {

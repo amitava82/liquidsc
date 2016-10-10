@@ -53,6 +53,8 @@ module.exports = function (deps) {
 
     }, {timestamps: true});
 
+    proposalSchema.index({application: 1, lender: 1}, {unique: 1});
+
     proposalSchema.pre('save', function(next) {
         this._id = uid('proposal');
         next();

@@ -13,11 +13,6 @@ var uid = require('../helpers/id');
 module.exports = function (deps) {
     const model = 'Application';
 
-    const proposalSchema = mongoose.Schema({
-        lender: String,
-
-    });
-
     const applicationSchema = mongoose.Schema({
         //borrower input fields
         _id: {
@@ -109,7 +104,6 @@ module.exports = function (deps) {
             type: String,
             ref: 'User'
         }],
-
 
         adminComment: String
 
