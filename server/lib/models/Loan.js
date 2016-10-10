@@ -7,6 +7,7 @@ var passwordHelper = require('../helpers/password');
 var Promise = require('bluebird');
 var shortid = require('shortid');
 var _ = require('lodash');
+var uid = require('../helpers/id');
 
 module.exports = function (deps) {
 

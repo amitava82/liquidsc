@@ -12,7 +12,7 @@ import { createValidator, required, email } from '../../utils/validator';
 
 const ROLE_OPTIONS = [
     {label: 'I\'m buyer', value: 'BUYER'},
-    {label: 'I\'m a supplier', value: 'SUPPLIER'},
+    {label: 'I\'m a borrower', value: 'BORROWER'},
 ];
 
 @reduxForm({

@@ -3,6 +3,7 @@
  */
 import React, {Component, PropTypes} from 'react';
 import sortBy from 'lodash/sortBy';
+import autobind from 'autobind-decorator';
 
 export default class Select extends Component {
     static propTypes = {
@@ -14,6 +15,7 @@ export default class Select extends Component {
     //    return this.props.field !== nextProps.field;
     //}
 
+    @autobind
     onChange(e) {
         const val = e.target.value;
         const {field, onChange} = this.props;
@@ -26,14 +28,14 @@ export default class Select extends Component {
     render() {
         const {field, options, label, ...rest} = this.props;
 
-        const optionsList = sortBy(options, 'label').map(i => {
+        const optionsList = options.map(i => {
             return <option key={i.value} value={i.value}>{i.label}</option>
         });
 
         return (
             <div className="form-group select">
                 {label && <label>{label}</label>}
-                <select className="form-control" {...field} {...rest} onChange={::this.onChange}>
+                <select className="form-control" {...field} {...rest} onChange={this.onChange}>
                     <option value="">Select</option>
                     {optionsList}
                 </select>

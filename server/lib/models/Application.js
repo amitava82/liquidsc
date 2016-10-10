@@ -8,20 +8,50 @@ var Promise = require('bluebird');
 var shortid = require('shortid');
 var _ = require('lodash');
 var constants = require('../../../constants');
+var uid = require('../helpers/id');
 
 module.exports = function (deps) {
     const model = 'Application';
 
-    const docSchema = mongoose.Schema({});
+    const proposalSchema = mongoose.Schema({
+        lender: String,
+
+    });
 
     const applicationSchema = mongoose.Schema({
+        //borrower input fields
+        _id: {
+            type: String
+        },
+
         company: {
             type: String,
+            ref: 'User',
+            required: true
+        },
+
+        loanAmount: {
+            type: Number,
+            required: true
+        },
+
+        rateOfInterest: {
+            type: Number,
+            required: true
+        },
+
+        tenor: {
+            type: Number,
             required: true
         },
 
         receivable: {
             type: Number,
+            required: true
+        },
+
+        receivableDate: {
+            type: Date,
             required: true
         },
 
@@ -40,36 +70,55 @@ module.exports = function (deps) {
             required: true
         },
 
+        buyer: {
+          type: String,
+          ref: 'User'
+        },
+
+        buyerConsent: {
+            type: Boolean,
+            required: true
+        },
+
         isExporter: {
             type: Boolean,
             required: true,
             default: false
         },
 
-        paymentDate: {
-            type: Date
-        },
-
         documents: [],
 
-        buyerValidated: {
-            type: Boolean,
-            default: false,
-            required: true
+        receivableStatus: {
+            type: String,
+            default: 'pending',
+            enum:['approved', 'pending', 'rejected']
         },
 
-        processingFees: {
-            type: Number,
-            default: 0
+        loanAccount: {
+          type: String,
+          ref: 'Loan'
         },
 
         status: {
             type: String,
+            required: true,
             enum: Object.keys(constants.status)
-        }
+        },
+
+        lenders: [{
+            type: String,
+            ref: 'User'
+        }],
+
+
+        adminComment: String
 
     }, {timestamps: true});
 
+    applicationSchema.pre('save', function(next) {
+        this._id = uid('app');
+        next();
+    });
 
     return mongoose.model(model, applicationSchema);
 };

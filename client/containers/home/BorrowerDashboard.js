@@ -16,12 +16,30 @@ export default class SupplierDashboard extends React.Component {
         const {applications: {data}} = this.props;
         const rows = data.map(i => (
             <tr>
-                <td></td>
+                <td>{i._id}</td>
+                <td>{new Date(i.createdAt).toDateString()}</td>
+                <td>{i.loanAmount}</td>
+                <td>{i.status}</td>
             </tr>
         ));
 
         return (
-            <h1>Borrower</h1>
+            <div>
+                <h3>Applications</h3>
+                <table className="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {rows}
+                    </tbody>
+                </table>
+            </div>
         )
     }
 }

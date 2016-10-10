@@ -47,6 +47,12 @@ export function maxLength(max) {
   };
 }
 
+export function file(err) {
+  return value => {
+    if(!value || !value.length) return err || 'Required'
+  }
+}
+
 export function integer(err) {
   return value => {
     if (value) {

@@ -45,6 +45,13 @@ module.exports = deps => {
                 user => res.send(user),
                 next
             )
+        },
+
+        getLenders(req, res, next) {
+            User.find({role: 'LENDER', approved: true}).select('_id, fullName, company').exec().then(
+                docs => res.send(docs),
+                next
+            )
         }
     }
 };

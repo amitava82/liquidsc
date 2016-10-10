@@ -9,11 +9,12 @@ import reject from 'lodash/reject';
 
 import createAction from '../createActions';
 
-const [GET_USERS, APPROVE_USER, REJECT_USER] =
-    createAction('users', ["GET_USERS", "LOGIN", "APPROVE_USER", "REJECT_USER"]);
+const [GET_USERS, APPROVE_USER, REJECT_USER, GET_LENDERS] =
+    createAction('users', ["GET_USERS", "LOGIN", "APPROVE_USER", "REJECT_USER", "GET_LENDERS"]);
 
 const initialState = {
     data: [],
+    lenders: [],
     loading: false,
     error: null
 };
@@ -29,6 +30,9 @@ export default function (state = initialState, action) {
 
         case resolve(APPROVE_USER):
             return {...state, data: reject(state.data, {_id: meta.id})};
+
+        case resolve(GET_LENDERS):
+            return {...state, lenders: payload};
 
         default:
             return state;
@@ -50,3 +54,19 @@ export const approveUser = id => ({
         id
     }
 });
+
+export const getLenders = () => {
+   return (dispatch, getState) => {
+
+       const lenders = getState().users.lenders;
+
+       if(lenders.length) return lenders;
+
+       dispatch({
+           type: GET_LENDERS,
+           payload: {
+               promise: api => api.get('users/lenders/list')
+           }
+       })
+   }
+};

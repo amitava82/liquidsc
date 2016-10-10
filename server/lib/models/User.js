@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 var ObjId = mongoose.Schema.Types.ObjectId;
 var passwordHelper = require('../helpers/password');
 var Promise = require('bluebird');
-var uuid = require('uuid');
+var uid = require('../helpers/id');
 var _ = require('lodash');
 var constants = require('../../../constants');
 
@@ -14,6 +14,10 @@ module.exports = function (deps) {
     const model = 'User';
 
     var userSchema = mongoose.Schema({
+
+        _id: {
+            type: String
+        },
 
         email: {
             type: String,
@@ -73,6 +77,11 @@ module.exports = function (deps) {
         }
 
     }, {timestamps: true});
+
+    userSchema.pre('save', function(next) {
+        this._id = uid(this.role);
+        next();
+    });
 
     return mongoose.model(model, userSchema);
 };

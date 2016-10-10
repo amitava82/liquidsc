@@ -25,6 +25,12 @@ export default class Header extends React.Component {
                         <NavItem>New Loan</NavItem>
                     </LinkContainer>
                 )
+            } else if(user.role == 'ADMIN') {
+                items.push(
+                    <LinkContainer to="/applications" key={1}>
+                        <NavItem>Applications</NavItem>
+                    </LinkContainer>
+                )
             }
         }
         return items;
@@ -36,7 +42,7 @@ export default class Header extends React.Component {
 
         return (
             <div className="header">
-                <Navbar  expanded={session.showNav} onToggle={this.onToggle}>
+                <Navbar  expanded={session.showNav} onToggle={this.onToggle} inverse>
                     <Navbar.Header>
                         <Navbar.Brand>
                             <Link to="/">LiquidSC</Link>
