@@ -5,9 +5,12 @@ import { reduxForm } from 'redux-form';
 import { Button, Alert } from 'react-bootstrap';
 import autobind from 'autobind-decorator';
 import Input from '../../components/form/PureInput';
+import Select from '../../components/form/Select';
 import { signup } from '../../redux/modules/session';
 import { createToast } from '../../redux/modules/toast';
 import { createValidator, required, email } from '../../utils/validator';
+
+const LENDER_TYPES = 'Accredited Investor Individual Company Bank NBFC Fund Others'.split(' ').map(i => ({label: i, value: i}));
 
 @reduxForm({
     form: 'signup',
@@ -30,8 +33,7 @@ import { createValidator, required, email } from '../../utils/validator';
         fullName: required(),
         lenderType: required(),
         phone: required(),
-        designation: required(),
-        comments: required()
+        designation: required()
     }),
     initialValues: {
         role: 'LENDER'
@@ -70,7 +72,7 @@ export default class Lender extends React.Component {
                         <Input type="password" field={password} label="Password" />
                         <Input field={fullName} label="Full name" />
                         <Input field={phone} label="Contact number" />
-                        <Input field={lenderType} label="Lender type" />
+                        <Select field={lenderType} options={LENDER_TYPES} label="Lender type" required />
                         <Input field={designation} label="Designation" />
                         <Input field={comments} label="Comments" />
                         <Button disabled={submitting} type="submit" bsStyle="primary">Register</Button>

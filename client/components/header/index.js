@@ -41,6 +41,8 @@ export default class Header extends React.Component {
                         <NavItem>Accounts</NavItem>
                     </LinkContainer>
                 )
+            } else if(user.role == 'LENDER') {
+
             }
         }
         return items;

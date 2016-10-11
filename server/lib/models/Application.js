@@ -8,6 +8,7 @@ var Promise = require('bluebird');
 var shortid = require('shortid');
 var _ = require('lodash');
 var constants = require('../../../constants');
+
 var uid = require('../helpers/id');
 
 module.exports = function (deps) {
@@ -116,7 +117,7 @@ module.exports = function (deps) {
 
     applicationSchema.pre('save', function(next) {
         if(this.isNew)
-            this._id = uid('app');
+            this._id = uid('app', 1);
         next();
     });
 

@@ -87,7 +87,7 @@ module.exports = function (deps) {
 
     userSchema.pre('save', function(next) {
         if(this.isNew)
-            this._id = uid(this.role);
+            this._id = uid(this.role, 1);
         next();
     });
 

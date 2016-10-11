@@ -9,6 +9,6 @@ export default function (props) {
     if(!date) return null;
 
     return (
-        <span>{moment(date).format('DD-MM-YYYY')}</span>
+        <span>{moment(date).format('DD-MM-YYYY h:m a')}</span>
     )
 }

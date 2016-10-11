@@ -41,7 +41,7 @@ export default class Users extends React.Component {
                         <th>Phone</th>
                         <th>Contact person</th>
                         <th>Designation</th>
-                        <th>Business type</th>
+                        <th>Nature of Business</th>
                         <th>Created</th>
                         <th>Approved</th>
                     </tr>

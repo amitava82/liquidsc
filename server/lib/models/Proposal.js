@@ -57,7 +57,7 @@ module.exports = function (deps) {
 
     proposalSchema.pre('save', function(next) {
         if(this.isNew)
-            this._id = uid('proposal');
+            this._id = uid('proposal', 1);
         next();
     });
 
