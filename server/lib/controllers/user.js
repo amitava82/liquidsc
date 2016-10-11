@@ -30,7 +30,7 @@ module.exports = deps => {
         },
 
         approveUser(req, res, next) {
-            User.findByIdAndUpdate(req.params.id, {approved: true}, {new: true}).exec().then(
+            User.findByIdAndUpdate(req.params.id, {approved: true, approvedAt: new Date()}, {new: true}).exec().then(
                 user => {
                     var mailer = deps.nodemailer;
                     mailer.sendMail({

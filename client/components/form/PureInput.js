@@ -14,11 +14,12 @@ export default class PureInput extends Component {
     }
 
     render() {
-        const {field, label, className, ...rest} = this.props;
+        const {field, label, className, required, ...rest} = this.props;
         const classes = classNames('form-group', className, {'has-error': field && field.touched && field.error});
+        const labelClass = classNames({required});
         return (
             <div className={classes}>
-                {label && <label>{label}</label>}
+                {label && <label className={labelClass}>{label}</label>}
                 <input className="form-control" {...field} {...rest}/>
                 {field && field.touched && field.error && <div className="text-error help-block sm">{field.error}</div>}
             </div>

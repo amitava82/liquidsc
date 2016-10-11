@@ -74,6 +74,8 @@ module.exports = function (deps) {
             required: true,
             default: false
         },
+
+        approvedAt: Date,
         
         active: {
             type: Boolean,

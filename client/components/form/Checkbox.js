@@ -21,16 +21,17 @@ export default class Checkbox extends Component {
     // }
 
     render() {
-        const {field, label, className, checked, ...rest} = this.props;
+        const {field, label, className, checked, required, ...rest} = this.props;
         const classes = classNames('checkbox', className, {
             'has-error': field && field.touched && field.error
         });
 
         const isChecked = checked !== undefined ? checked : field.value;
+        const labelClass = classNames({required});
 
         return (
             <div className={classes}>
-                <label>
+                <label className={labelClass}>
                     <input type="checkbox" {...field} {...rest} checked={isChecked} />
                     {label}
                 </label>

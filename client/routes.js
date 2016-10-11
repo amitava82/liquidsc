@@ -48,6 +48,7 @@ export default (store) => {
             <Route path="home" component={Home} onEnter={ensureLoggedIn} />
             <Route path="application/create" component={Application} onEnter={checkRole('BORROWER')} />
             <Route path="/admin" onEnter={checkRole('ADMIN')}>
+                <Route path="users" component={Admin.Users} />
                 <Route path="applications" component={Admin.Applications} />
                 <Route path="applications/:id" component={Admin.ApplicationDetails} />
                 <Route path="accounts" component={Admin.LoanAccounts} />

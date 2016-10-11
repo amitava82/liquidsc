@@ -17,11 +17,13 @@ export default class DatePicker extends React.Component{
     }
 
     render(){
-        const { field, className, label} = this.props;
+        const { field, className, label, required} = this.props;
         const value = field.value ? moment(field.value) : null;
+        const labelClass = classNames("control-label", {required});
+
         return (
             <div className={classNames('form-group', {'has-error': field && field.touched && field.error})}>
-                {label && <label className="control-label">{label}</label>}
+                {label && <label className={labelClass}>{label}</label>}
                 <div>
                     <Picker selected={value} onChange={this.onChange} />
                 </div>

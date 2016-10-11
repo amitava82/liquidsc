@@ -43,10 +43,14 @@ const TENOR = [30, 60, 90, 120, 180].map(i => ({label: i + ' days', value: i}));
     validate: createValidator({
         loanAmount: [integer(),required()],
         receivable: [integer(),required()],
+        receivableDate: required(),
         buyerCompany: required(),
         buyerContactPerson: required(),
         buyerEmail: required(),
         isExporter: required(),
+        buyerConsent: (val) =>  !val ? 'Required' : null,
+        rateOfInterest: [integer(), required()],
+        tenor: required(),
         documents: createValidator({
             receivable: file(),
             pan: file(),
@@ -79,27 +83,27 @@ export default class Application extends React.Component {
         const fees = (loanAmount.value * (1.25/100)).toFixed(2);
 
         return (
-            <div>
+            <div className="col-xs-6">
                 <h3>Create new Loan application</h3>
                 {this.state.success ? (
                     <Alert bsStyle="success">Your application have been received.</Alert>
                 ) : (
                     <form onSubmit={handleSubmit(this.submit)}>
                         {error && <Alert bsStyle="danger">{error}</Alert> }
-                        <NumberInput field={receivable} label="Receivable Value"  />
-                        <DatePicker field={receivableDate} label="Receivable Payment Date"  />
-                        <File field={documents.report} label="Select latest annual report" />
-                        <File field={documents.pan} label="Select PAN document" />
-                        <File field={documents.coi} label="Select certificate of incorporation document" />
-                        <File field={documents.receivable} label="Select receivable document" />
-                        <Input field={buyerCompany} label="Buyer company name" />
-                        <Input field={buyerContactPerson} label="Buyer contact person" />
-                        <Input field={buyerEmail} type="email" label="Buyer email" />
+                        <NumberInput field={receivable} label="Receivable Value" min={0} required />
+                        <DatePicker field={receivableDate} label="Receivable Payment Date" required />
+                        <File field={documents.report} label="Select latest annual report" required />
+                        <File field={documents.pan} label="Select PAN document" required />
+                        <File field={documents.coi} label="Select certificate of incorporation document" required />
+                        <File field={documents.receivable} label="Select receivable document" required />
+                        <Input field={buyerCompany} label="Buyer company name" required />
+                        <Input field={buyerContactPerson} label="Buyer contact person" required />
+                        <Input field={buyerEmail} type="email" label="Buyer email" required />
                         <Checkbox field={isExporter} label="Is the Co an Exporter" />
-                        <Checkbox field={buyerConsent} label="Consent to check Receivable validity from Buyer" />
-                        <Input field={loanAmount} label="Loan amount" type="number" />
-                        <Input field={rateOfInterest} label="Rate of interest" type="number" />
-                        <Select field={tenor} options={TENOR} label="Tenor of Loan" />
+                        <Checkbox field={buyerConsent} label="Consent to check Receivable validity from Buyer" required />
+                        <NumberInput field={loanAmount} label="Loan amount" min={0} required />
+                        <NumberInput field={rateOfInterest} label="Rate of interest" min={0} required />
+                        <Select field={tenor} options={TENOR} label="Tenor of Loan" required />
                         <p>
                             <label className="text-info">Processing fees (1.25%): <strong>{fees}</strong></label>
 

@@ -55,9 +55,9 @@ export default class ApplicationDetails extends React.Component {
             <div>
                 <h4>Submit Proposal</h4>
                 <form onSubmit={handleSubmit(this.submit)}>
-                    <NumberInput field={loanAmount} label="Loan amount"/>
-                    <NumberInput field={interestRate} label="Interest rate"/>
-                    <Select field={tenor} options={TENOR} label="Tenor" />
+                    <NumberInput field={loanAmount} label="Loan amount" min={1} required/>
+                    <NumberInput field={interestRate} label="Interest rate"  min={0} required />
+                    <Select field={tenor} options={TENOR} label="Tenor" required />
                     <TextArea field={comment} label="Comments" />
                     <button disabled={submitting} className="btn btn-primary">Submit</button>
                 </form>
