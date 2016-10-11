@@ -6,7 +6,7 @@ import autobind from 'autobind-decorator';
 import {connect} from 'react-redux';
 import { Link } from 'react-router';
 import filter from 'lodash/filter';
-import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, Tabs, Tab } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import UIDate from '../../components/UIDate';
 
@@ -26,8 +26,12 @@ export default class Users extends React.Component {
         const borrowers = filter(data, {role: 'BORROWER'});
         const lenders = filter(data, {role: 'LENDER'});
 
+        const style= {
+            marginTop: 10
+        };
+
         const buyerTable = (
-            <table className="table table-bordered">
+            <table className="table table-bordered" style={style}>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -62,7 +66,7 @@ export default class Users extends React.Component {
         );
 
         const borrowerTable = (
-            <table className="table table-bordered">
+            <table className="table table-bordered" style={style}>
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -97,7 +101,7 @@ export default class Users extends React.Component {
         );
 
         const lenderTable = (
-            <table className="table table-bordered">
+            <table className="table table-bordered" style={style}>
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -131,12 +135,11 @@ export default class Users extends React.Component {
 
         return (
             <div>
-                <h3>Buyers</h3>
-                {buyerTable}
-                <h3>Borrowers</h3>
-                {borrowerTable}
-                <h3>Lenders</h3>
-                {lenderTable}
+                <Tabs defaultActiveKey={1}>
+                    <Tab eventKey={1} title="Buyers">{buyerTable}</Tab>
+                    <Tab eventKey={2} title="Borrowers">{borrowerTable}</Tab>
+                    <Tab eventKey={3} title="Lenders">{lenderTable}</Tab>
+                </Tabs>
             </div>
         )
 
