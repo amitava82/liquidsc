@@ -64,6 +64,11 @@ module.exports = function (deps) {
 
         businessType: String,
 
+        resetToken: {
+            type: String,
+            index: 1
+        },
+
         approved: {
             type: Boolean,
             required: true,

@@ -2,7 +2,7 @@
  * Created by amitava on 08/02/16.
  */
 
-var Sendgrid  = require('sendgrid');
+
 var uuid = require('uuid');
 var Promise = require('bluebird');
 var _ = require('lodash');
@@ -11,6 +11,8 @@ var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 var constants = require('../../../constants');
 var templates = require('../../../templates');
+
+var EXTERNAL_HOST = process.env.EXTERNAL_HOST || 'http://localhost:3000';
 
 module.exports = function(deps){
 
@@ -129,10 +131,13 @@ module.exports = function(deps){
         },
 
         sendResetMail: function (req, res, next) {
-            Session.create({data: {email: req.body.email}})
-                .then(
-                    sess => {
-                        const url = `http://workalley.in/api/auth/reset-password/${sess._id.toString()}`;
+
+            User.findOneAndUpdate({email: req.body.email}, {
+                resetToken: uuid()
+            }, {new: true}).exec().then(
+                user => {
+                    if(user) {
+                        const url = `${EXTERNAL_HOST}/api/auth/reset-password/${user.resetToken}`;
                         const mail = (
                             `
                                 <html>
@@ -144,66 +149,52 @@ module.exports = function(deps){
                                 </html>
                             `
                         );
-
-                        var grid = new sendgrid.Email({
+                        var mailer = deps.nodemailer;
+                        mailer.sendMail({
+                            from: 'noreply@test.com',
                             to: req.body.email,
-                            from: 'donotreplay@workalley.in',
-                            fromname: 'Work alley',
                             subject: 'Password reset',
-                            html: mail,
-                            text: ' '
+                            html: mail
                         });
-                        return sendgrid.send(grid);
+                    };
+                    res.send({success: true})
 
-                    }
-                )
-                .then(
-                    r => res.send({success: true}),
-                    next
-                )
+                }
+            ).catch(next);
         },
 
         resetPassword: function(req, res, next){
             var code = req.params.code;
-            Session.findById(code).exec().then(
-              sess => {
-                  if(!sess) throw new Error('Invalid request');
+            User.findOne({resetToken: code}).exec()
+                .then(
+                    user => {
+                        if(!user) throw new Error('Invalid request');
 
-                  User.findOne({email: sess.data.email}).then(
-                      user => {
-                          //TODO csrf
-                          res.render('reset-password', {title: 'Reset password - Work alley', data: { code: code}});
-                      }
-                  ).onReject(
-                      e => renderError(res, e)
-                  )
-              }
-            ).catch(next);
+                        res.render('reset-password', {title: 'Reset password', data: { code: code}});
+                    }
+                ).catch(e => renderError(res, e));
         },
 
         updatePassword: function(req, res){
             var code = req.body.code;
 
             if(!req.body.password || req.body.password !== req.body.confirmPassword)
-                return res.render('reset-password', {title: 'Reset password - work alley', data: {code: code, error: 'Password do not match'}});
+                return res.render('reset-password', {title: 'Reset password', data: {code: code, error: 'Password do not match'}});
 
-            Session.findById(code).exec().then(
-                sess => {
-                    if(!sess) throw new Error('Invalid request');
+            User.findOne({resetToken: code}).exec().then(
+                user => {
+                    if(!user) throw new Error('Invalid request');
 
                     passwordHelper.hash(req.body.password, (err, hash) => {
                         if(err) throw err;
 
-                        User.findOneAndUpdate({email: sess.data.email}, {password: hash}).exec().then(
-                            r => {
-                                Session.findByIdAndRemove(code).exec();
-                                res.render('reset-password', {data: {success: true}, title: 'Reset password - Work alley'});
-                            },
-                            e => renderError(res, e)
-                        )
+                        user.password = hash;
+                        user.resetToken = null;
+
+                        return user.save();
                     })
                 }
-            ).catch(e => renderError(res, e));
+            ).then(() => res.render('reset-password', {data: {success: true}, title: 'Reset password'})).catch(e => renderError(res, e));
         },
 
         /*
