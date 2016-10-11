@@ -52,7 +52,7 @@ module.exports = deps => {
                 query.status = constants.status.UNDER_REVIEW;
             } else if(userRole == constants.roles.LENDER) {
                 query.lenders = {$in: [userId]};
-                query.status = constants.status.UNDER_REVIEW;
+                query.status = constants.status.APPROVED;
                 //query.account
             }
 

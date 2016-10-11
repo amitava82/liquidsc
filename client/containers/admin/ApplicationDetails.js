@@ -30,7 +30,7 @@ export default class ApplicationDetails extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.applications.viewing != this.props.applications.viewing) {
+        if(nextProps.applications.viewing && nextProps.applications.viewing != this.props.applications.viewing) {
             this.setState({
                 lenders: map(nextProps.applications.viewing.lenders, '_id')
             })
@@ -60,7 +60,7 @@ export default class ApplicationDetails extends React.Component {
     }
 
     renderAssignAction(doc) {
-        if(doc.receivableStatus == 'approved' && doc.status == 'UNDER_REVIEW') {
+        if(doc.receivableStatus == 'approved' && doc.status == 'APPROVED' && !doc.account) {
             const {lenders} = this.state;
             const {users} = this.props;
             return (
@@ -87,7 +87,7 @@ export default class ApplicationDetails extends React.Component {
     }
 
     renderProposals(doc) {
-        if(doc.status != 'UNDER_REVIEW') return;
+        if(doc.status != 'APPROVED' || doc.account) return;
 
         const offers = doc.proposals.map(i => (
           <div className="well well-sm">
@@ -119,6 +119,23 @@ export default class ApplicationDetails extends React.Component {
         this.props.dispatch(changeStatus(this.props.params.id, status));
     }
 
+    renderActions(application) {
+        const btns = [];
+        const status = application.status;
+        if(status == 'PENDING') {
+            btns.push(<Button bsStyle="primary" onClick={this.requestInfo}>Request info</Button>);
+            btns.push(<Button bsStyle="success" onClick={e => this.changeStatus('UNDER_REVIEW')}>Under review</Button>);
+            btns.push(<Button bsStyle="danger" onClick={e => this.changeStatus('REJECTED')}>Reject</Button>)
+        } else if(status == 'UNDER_REVIEW') {
+            btns.push(<Button bsStyle="primary" onClick={this.requestInfo}>Request info</Button>);
+            if(application.receivableStatus == 'approved') {
+                btns.push(<Button bsStyle="success" onClick={e => this.changeStatus('APPROVED')}>Approve</Button>);
+            }
+            btns.push(<Button bsStyle="danger" onClick={e => this.changeStatus('REJECTED')}>Reject</Button>);
+        }
+        return btns;
+    }
+
     render() {
         const {applications: {viewing}} = this.props;
 
@@ -128,16 +145,9 @@ export default class ApplicationDetails extends React.Component {
             <div>
                 <h3>
                     <div className="pull-left">Application details</div>
-                    {viewing.status == 'PENDING' ? (
-                        <div className="pull-right">
-                            <Button bsStyle="primary" onClick={this.requestInfo}>Request info</Button>
-                            {' '}
-                            <Button bsStyle="success" onClick={e => this.changeStatus('UNDER_REVIEW')}>Under review</Button>
-                            {' '}
-                            <Button bsStyle="danger" onClick={e => this.changeStatus('REJECTED')}>Reject</Button>
-                        </div>
-                    ) : null}
-
+                    <div className="pull-right actions">
+                        {this.renderActions(viewing)}
+                    </div>
                 </h3>
                 <Row>
                     <DetailsSection data={viewing}>
