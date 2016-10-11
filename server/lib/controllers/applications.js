@@ -4,6 +4,7 @@
 var mongoose = require('mongoose');
 var Promise = require('bluebird');
 var multer = require('multer');
+var shortid = require('shortid');
 var _ = require('lodash');
 var ObjId = mongoose.Types.ObjectId;
 var templates = require('../../../templates');
@@ -46,7 +47,7 @@ module.exports = deps => {
             if(userRole == constants.roles.BORROWER) {
                 query.company = userId;
             } else if(userRole == constants.roles.BUYER) {
-                query.buyer = userId;
+                query.buyerEmail = req.user.email;
                 query.receivableStatus = 'pending'
             } else if(userRole == constants.roles.LENDER) {
                 query.lenders = {$in: [userId]};
@@ -155,9 +156,29 @@ module.exports = deps => {
         },
 
         uploadDocs: [
+            (req, res, next) => {
+                req.instance = req.instance || {};
+                req.instance.id = req.params.id;
+                next();
+            },
             uploader.any(),
             (req, res, next) => {
-
+                Application.findById(req.params.id).exec()
+                    .then(
+                        app => {
+                            req.files.forEach(doc => {
+                                const f = _.find(app.documents, {fieldname: doc.fieldname});
+                                if(f) doc.fieldname = f.fieldname + shortid();
+                                doc.fieldname = doc.fieldname.replace(/[^\w\s]/gi, '');
+                                app.documents.push(doc);
+                            });
+                            return app.save();
+                        }
+                    )
+                    .then(
+                        doc => res.send(doc),
+                        next
+                    )
             }
         ],
 
@@ -202,7 +223,9 @@ module.exports = deps => {
 
         updateBuyerStatus(req, res, next) {
             const {status, id} = req.params;
-            Application.findOneAndUpdate({buyer: req.user._id, _id: id}, {receivableStatus: status}, {new: true})
+            Application.findOneAndUpdate(
+                {buyerEmail: req.user.email, _id: id},
+                {receivableStatus: status, buyer: req.user._id}, {new: true})
                 .populate(populate)
                 .exec()
                 .then(

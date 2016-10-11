@@ -27,7 +27,7 @@
     },
     {
       "path": ":id/upload",
-      "method": "put",
+      "method": "post",
       "handler": "uploadDocs",
       "acl": {
         "role": "BORROWER"

@@ -3,3 +3,11 @@
 @import "utils";
 @import "home";
 @import '~react-select/scss/default.scss';
+
+.react-datepicker {
+  font-size: 14px !important;
+}
+
+.react-datepicker__day-name, .react-datepicker__day {
+  width: 25px !important;
+}

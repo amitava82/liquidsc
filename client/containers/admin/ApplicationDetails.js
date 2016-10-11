@@ -9,7 +9,7 @@ import { Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 import map from 'lodash/map';
 import UIDate from '../../components/UIDate';
-
+import DetailsSection from '../application/components/DetailsSection';
 import { getApplication, assignToLenders, rejectApplication, createLoanAccount, requestDetails } from '../../redux/modules/applications';
 import { getLenders } from '../../redux/modules/users';
 import { createToast } from '../../redux/modules/toast';
@@ -130,30 +130,7 @@ export default class ApplicationDetails extends React.Component {
                     </div>
                 </h3>
                 <Row>
-                    <Col md={9}>
-                        <h4>Details</h4>
-                        <dl className="dl-horizontal">
-                            <dt>ID</dt>
-                            <dd>{viewing._id}</dd>
-                            <dt>Created</dt>
-                            <dd><UIDate date={viewing.createdAt}/></dd>
-                            <dt>Updated</dt>
-                            <dd><UIDate date={viewing.updatedAt}/></dd>
-                            <dt>Company</dt>
-                            <dd>{viewing.company.company}</dd>
-                            <dt>Loan Amount</dt>
-                            <dd>{viewing.loanAmount}</dd>
-                            <dt> RECEIVABLE STATUS</dt>
-                            <dd>{viewing.receivableStatus}</dd>
-                            <dt>STATUS</dt>
-                            <dd>{viewing.status}</dd>
-                            <dt>Loan account</dt>
-                            <dd>{viewing.account && <Link to={`/admin/accounts/${viewing.account}`}>Account</Link>}</dd>
-                        </dl>
-                        <h4>Documents</h4>
-                        {docs}
-                        {this.renderProposals(viewing)}
-                    </Col>
+                    <DetailsSection data={viewing} />
                     {this.renderAssignAction(viewing)}
                 </Row>
             </div>

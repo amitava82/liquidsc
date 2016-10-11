@@ -3,16 +3,28 @@ import React from 'react';
 import {connect} from 'react-redux';
 import autobind from 'autobind-decorator';
 import UIDate from '../../components/UIDate';
-
 import { getApplications } from '../../redux/modules/applications';
 import { loadAccounts } from '../../redux/modules/loanAccounts';
+
+import UploadDocModal  from './UploadDocModal';
 
 @connect(state=>state)
 export default class SupplierDashboard extends React.Component {
 
+    constructor(...args) {
+        super(...args);
+        this.state = {
+            uploading: null
+        }
+    }
     componentWillMount() {
         this.props.dispatch(getApplications());
         this.props.dispatch(loadAccounts());
+    }
+
+    @autobind
+    toggleUpload(id) {
+        this.setState({uploading: id});
     }
 
     render() {
@@ -22,7 +34,10 @@ export default class SupplierDashboard extends React.Component {
                 <td>{i._id}</td>
                 <td><UIDate date={i.createdAt}/></td>
                 <td>{i.loanAmount}</td>
+                <td>{i.rateOfInterest}</td>
+                <td>{i.receivableStatus}</td>
                 <td>{i.status}</td>
+                <td>{i.status !== 'APPROVED' && <button onClick={e => this.toggleUpload(i._id)}>Upload Doc</button>}</td>
             </tr>
         ));
 
@@ -48,7 +63,10 @@ export default class SupplierDashboard extends React.Component {
                             <th>ID</th>
                             <th>Date</th>
                             <th>Amount</th>
-                            <th>Status</th>
+                            <th>Rate</th>
+                            <th>Rec Doc status</th>
+                            <th>Application Status</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,6 +91,7 @@ export default class SupplierDashboard extends React.Component {
                         {accountRows}
                     </tbody>
                 </table>
+                {this.state.uploading && <UploadDocModal id={this.state.uploading} onHide={e => this.toggleUpload(null)} />}
             </div>
         )
     }

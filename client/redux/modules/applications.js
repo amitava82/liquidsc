@@ -45,8 +45,10 @@ export default function (state = initialState, action) {
             return {...state, data: [...state.data, payload]};
 
         case resolve(BUYER_CHANGE_STATUS):
-        case resolve(ASSIGN_LENDER):
             return {...state, data: state.data.map(i => i._id == payload._id ? payload : i)};
+
+        case resolve(ASSIGN_LENDER):
+            return {...state, viewing: {...state.viewing, ...payload}};
 
         case resolve(CREATE_LOAN_ACCOUNT):
             return {...state, viewing: payload};

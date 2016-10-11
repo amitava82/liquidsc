@@ -8,6 +8,8 @@ import autobind from 'autobind-decorator';
 import Input from '../../components/form/PureInput';
 import Checkbox from '../../components/form/Checkbox';
 import Select from '../../components/form/Select';
+import DatePicker from '../../components/form/DatePicker';
+import NumberInput from '../../components/form/NumberInput';
 import File from '../../components/form/File';
 
 import { createApplication } from '../../redux/modules/applications';
@@ -84,8 +86,8 @@ export default class Application extends React.Component {
                 ) : (
                     <form onSubmit={handleSubmit(this.submit)}>
                         {error && <Alert bsStyle="danger">{error}</Alert> }
-                        <Input field={receivable} label="Receivable Value" type="number" />
-                        <Input field={receivableDate} label="Receivable Payment Date" type="date" />
+                        <NumberInput field={receivable} label="Receivable Value"  />
+                        <DatePicker field={receivableDate} label="Receivable Payment Date"  />
                         <File field={documents.report} label="Select latest annual report" />
                         <File field={documents.pan} label="Select PAN document" />
                         <File field={documents.coi} label="Select certificate of incorporation document" />
