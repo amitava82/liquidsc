@@ -14,5 +14,5 @@ module.exports = {
         LENDER_APPROVED: 'LENDER_APPROVED',
 
     },
-    adminEmail: 'amitava82+admin@gmail.com'
+    adminEmail: process.env.ADMIN_EMAIL || 'amitava82+admin@gmail.com'
 };
