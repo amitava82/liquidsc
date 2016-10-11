@@ -14,6 +14,15 @@ module.exports = deps => {
     const Proposal = mongoose.models.Proposal;
 
     return {
+
+        getAccount(req, res, next) {
+            LoanAccount.findById(req.params.id).populate(['borrower', 'lender']).exec()
+                .then(
+                    docs => res.send(docs),
+                    next
+                )
+        },
+
         getAccounts(req, res, next) {
             LoanAccount.find(req.query).populate(['borrower', 'lender']).exec()
                 .then(

@@ -48,6 +48,8 @@ export default function (state = initialState, action) {
         case resolve(ASSIGN_LENDER):
             return {...state, data: state.data.map(i => i._id == payload._id ? payload : i)};
 
+        case resolve(CREATE_LOAN_ACCOUNT):
+            return {...state, viewing: payload};
 
         default:
             return state;
@@ -117,5 +119,12 @@ export const createLoanAccount = (proposalId) => ({
     type: CREATE_LOAN_ACCOUNT,
     payload: {
         promise: api => api.post(`applications/proposals/${proposalId}/approve`)
+    }
+});
+
+export const requestDetails = (id, adminComment) => ({
+    type: 'UPDATE_APPLICATION',
+    payload: {
+        promise: api => api.put(`applications/${id}`, {data: {adminComment}})
     }
 });

@@ -105,6 +105,11 @@ module.exports = function (deps) {
             ref: 'User'
         }],
 
+        account: {
+            type: String,
+            ref: 'LoanAccount'
+        },
+
         adminComment: String
 
     }, {timestamps: true});

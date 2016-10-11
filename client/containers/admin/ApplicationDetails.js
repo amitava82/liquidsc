@@ -9,7 +9,7 @@ import { Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 import map from 'lodash/map';
 
-import { getApplication, assignToLenders, rejectApplication, createLoanAccount } from '../../redux/modules/applications';
+import { getApplication, assignToLenders, rejectApplication, createLoanAccount, requestDetails } from '../../redux/modules/applications';
 import { getLenders } from '../../redux/modules/users';
 
 @connect(state=>state)
@@ -37,8 +37,18 @@ export default class ApplicationDetails extends React.Component {
         this.setState({lenders: values});
     }
 
+    @autobind
+    requestInfo() {
+        const info = prompt('Please enter information to be requested:');
+        if(info) {
+            this.props.dispatch(requestDetails(this.props.params.id, info)).then(
+                () => alert('Request sent')
+            )
+        }
+    }
+
     renderAssignAction(doc) {
-        if(doc.receivableStatus == 'approved') {
+        if(doc.receivableStatus == 'approved' && doc.status == 'PENDING') {
             const {lenders} = this.state;
             const {users} = this.props;
             return (
@@ -72,6 +82,8 @@ export default class ApplicationDetails extends React.Component {
     }
 
     renderProposals(doc) {
+        if(doc.status != 'PENDING') return;
+
         const offers = doc.proposals.map(i => (
           <div className="well well-sm">
               <Row>
@@ -90,7 +102,12 @@ export default class ApplicationDetails extends React.Component {
               </Row>
           </div>
         ));
-        return offers;
+        return (
+            <div>
+                <h4>Proposals</h4>
+                {offers}
+            </div>
+        )
     }
 
     render() {
@@ -102,7 +119,12 @@ export default class ApplicationDetails extends React.Component {
 
         return (
             <div>
-                <h3>Application details</h3>
+                <h3>
+                    <div className="pull-left">Application details</div>
+                    <div className="pull-right">
+                        {viewing.status == 'PENDING' && <Button bsStyle="primary" onClick={this.requestInfo}>Request info</Button>}
+                    </div>
+                </h3>
                 <Row>
                     <Col md={9}>
                         <h4>Details</h4>
@@ -111,7 +133,7 @@ export default class ApplicationDetails extends React.Component {
                             <dd>{viewing._id}</dd>
                             <dt>Created</dt>
                             <dd>{new Date(viewing.createdAt).toDateString()}</dd>
-                            <dt>Created</dt>
+                            <dt>Updated</dt>
                             <dd>{new Date(viewing.updatedAt).toDateString()}</dd>
                             <dt>Company</dt>
                             <dd>{viewing.company.company}</dd>
@@ -121,13 +143,12 @@ export default class ApplicationDetails extends React.Component {
                             <dd>{viewing.receivableStatus}</dd>
                             <dt>STATUS</dt>
                             <dd>{viewing.status}</dd>
+                            <dt>Loan account</dt>
+                            <dd>{viewing.account && <Link to={`/admin/accounts/${viewing.account}`}>Account</Link>}</dd>
                         </dl>
                         <h4>Documents</h4>
                         {docs}
-                        <h4>Proposals</h4>
-                        <div>
-                            {this.renderProposals(viewing)}
-                        </div>
+                        {this.renderProposals(viewing)}
                     </Col>
                     {this.renderAssignAction(viewing)}
                 </Row>

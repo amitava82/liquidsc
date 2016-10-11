@@ -126,7 +126,22 @@ module.exports = deps => {
         ],
 
         updateApplication(req, res, next) {
-
+            Application.findByIdAndUpdate(req.params.id, req.body, {new: true}).populate(populate).exec()
+                .then(
+                    doc => {
+                        var mailer = deps.nodemailer;
+                        mailer.sendMail({
+                            from: 'noreply@test.com',
+                            to: [doc.company.email],
+                            subject: 'Additional information requested',
+                            html: templates.docRequested(doc)
+                        });
+                        return doc;
+                    }
+                ).then(
+                    doc => res.send(doc),
+                    next
+                )
         },
 
         uploadDocs: [
@@ -238,18 +253,24 @@ module.exports = deps => {
                     }
                 )
                 .then(
-                    doc => Application.findByIdAndUpdate(doc.application, {status: constants.status.APPROVED}).exec().then(() => doc)
+                    doc => Application.findByIdAndUpdate(doc.application, {
+                        status: constants.status.APPROVED,
+                        account: doc._id
+                    }, {new: true}).populate(populate).exec()
                 )
                 .then(
-                    acc => {
+                    doc => Proposal.findByIdAndUpdate(proposalId, {status: 'accepted'}).exec().then(() => doc)
+                )
+                .then(
+                    app => {
                         var mailer = deps.nodemailer;
                         mailer.sendMail({
                             from: 'noreply@test.com',
-                            to: [acc.borrower.email],
+                            to: [app.company.email],
                             subject: 'Loan account created',
-                            html: templates.loanAccountCreated(acc)
+                            html: templates.loanAccountCreated(app)
                         });
-                        return acc;
+                        return app;
                     }
                 )
                 .then(

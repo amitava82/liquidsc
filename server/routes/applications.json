@@ -13,6 +13,11 @@
       "handler": "getApplications"
     },
     {
+      "path": ":id",
+      "method": "put",
+      "handler": "updateApplication"
+    },
+    {
       "path": "",
       "method": "post",
       "handler": "createApplication",

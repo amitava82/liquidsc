@@ -45,7 +45,7 @@ module.exports = function (deps) {
 
         status: {
             type: String,
-            enum: ['approved', 'pending', 'rejected'],
+            enum: ['accepted', 'pending', 'rejected'],
             default: 'pending'
         },
 

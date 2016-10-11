@@ -55,10 +55,10 @@ module.exports = function (deps) {
         application: {
             type: String,
             ref: 'Application',
-            index: 1,
-            unique: 1
+            required: true,
+            index: {unique: true}
         }
-    });
+    }, {timestamps: true});
 
 
     loanSchema.pre('save', function(next) {
