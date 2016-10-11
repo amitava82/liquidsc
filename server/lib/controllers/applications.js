@@ -190,7 +190,7 @@ module.exports = deps => {
             const id = req.params.id;
 
             Application.findByIdAndUpdate(id, {
-                $addToSet: {lenders: {$each: lenders}}
+                lenders
             }, {new: true}).populate(populate)
                 .exec()
                 .then(

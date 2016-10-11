@@ -12,6 +12,7 @@ import DetailsSection from '../application/components/DetailsSection';
 import { getApplication, assignToLenders, changeStatus, createLoanAccount, requestDetails } from '../../redux/modules/applications';
 import { getLenders } from '../../redux/modules/users';
 import { createToast } from '../../redux/modules/toast';
+import CheckboxList from '../../components/CheckboxList';
 
 @connect(state=>state)
 export default class ApplicationDetails extends React.Component {
@@ -28,9 +29,17 @@ export default class ApplicationDetails extends React.Component {
         this.props.dispatch(getLenders());
     }
 
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.applications.viewing != this.props.applications.viewing) {
+            this.setState({
+                lenders: map(nextProps.applications.viewing.lenders, '_id')
+            })
+        }
+    }
+
     @autobind
     assignLenders() {
-        this.props.dispatch(assignToLenders(this.props.params.id, map(this.state.lenders, '_id'))).then(
+        this.props.dispatch(assignToLenders(this.props.params.id,this.state.lenders)).then(
             () => this.props.dispatch(createToast('Assigned to lenders.'))
         )
     }
@@ -57,8 +66,7 @@ export default class ApplicationDetails extends React.Component {
             return (
                 <Col md={3}>
                     <h5>Assign Lenders</h5>
-                    <Select
-                        multi={true}
+                    <CheckboxList
                         value={lenders}
                         options={users.lenders}
                         onChange={this.onLenderSelect}
@@ -67,12 +75,6 @@ export default class ApplicationDetails extends React.Component {
                     />
                     <br />
                     <Button onClick={this.assignLenders}>Submit</Button>
-                    <div>
-                        <h5>Assigned lenders</h5>
-                        {doc.lenders.map(i => (
-                            <p>{i.company}</p>
-                        ))}
-                    </div>
                 </Col>
             )
         } else {

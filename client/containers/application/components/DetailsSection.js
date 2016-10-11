@@ -38,7 +38,7 @@ export default class DetailsSection extends React.Component {
                             <dd>{data.receivableDate}</dd>
                             <dt> RECEIVABLE STATUS</dt>
                             <dd>{data.receivableStatus}</dd>
-                            <dt>STATUS</dt>
+                            <dt>ALCH status</dt>
                             <dd>{data.status}</dd>
                             <dt>Loan account</dt>
                             <dd>{data.account && <Link to={`/admin/accounts/${data.account}`}>Account</Link>}</dd>

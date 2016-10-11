@@ -46,6 +46,7 @@ export default class AdminDashboard extends React.Component {
                     <th>Designation</th>
                     <th>Nature of Business</th>
                     <th>Created</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -60,6 +61,7 @@ export default class AdminDashboard extends React.Component {
                         <td>{i.designation}</td>
                         <td>{i.businessType}</td>
                         <td><UIDate date={i.createdAt}/></td>
+                        <td><button onClick={e => this.approve(i._id)} className="btn btn-default btn-sm">Approve</button></td>
                     </tr>
                 ))}
                 </tbody>
@@ -79,6 +81,7 @@ export default class AdminDashboard extends React.Component {
                     <th>Designation</th>
                     <th>Nature of Business</th>
                     <th>Created</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -93,6 +96,7 @@ export default class AdminDashboard extends React.Component {
                         <td>{i.designation}</td>
                         <td>{i.businessType}</td>
                         <td><UIDate date={i.createdAt}/></td>
+                        <td><button onClick={e => this.approve(i._id)} className="btn btn-default btn-sm">Approve</button></td>
                     </tr>
                 ))}
                 </tbody>
@@ -111,6 +115,7 @@ export default class AdminDashboard extends React.Component {
                     <th>Lender type</th>
                     <th>Designation</th>
                     <th>Created</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -124,6 +129,7 @@ export default class AdminDashboard extends React.Component {
                         <td>{i.lenderType}</td>
                         <td>{i.designation}</td>
                         <td><UIDate date={i.createdAt}/></td>
+                        <td><button onClick={e => this.approve(i._id)} className="btn btn-default btn-sm">Approve</button></td>
                     </tr>
                 ))}
                 </tbody>
