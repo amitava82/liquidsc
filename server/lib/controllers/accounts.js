@@ -24,7 +24,16 @@ module.exports = deps => {
         },
 
         getAccounts(req, res, next) {
-            LoanAccount.find(req.query).populate(['borrower', 'lender']).exec()
+            const query = {};
+            const {role, _id} = req.user;
+
+            if(role == constants.roles.BORROWER) {
+                query.borrower = _id;
+            } else if( role == constants.roles.LENDER) {
+                query.lender = _id;
+            }
+
+            LoanAccount.find(query).populate(['borrower', 'lender']).exec()
                 .then(
                     docs => res.send(docs),
                     next

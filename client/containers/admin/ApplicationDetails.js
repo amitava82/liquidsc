@@ -8,9 +8,11 @@ import Select from 'react-select';
 import { Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 import map from 'lodash/map';
+import UIDate from '../../components/UIDate';
 
 import { getApplication, assignToLenders, rejectApplication, createLoanAccount, requestDetails } from '../../redux/modules/applications';
 import { getLenders } from '../../redux/modules/users';
+import { createToast } from '../../redux/modules/toast';
 
 @connect(state=>state)
 export default class ApplicationDetails extends React.Component {
@@ -29,7 +31,9 @@ export default class ApplicationDetails extends React.Component {
 
     @autobind
     assignLenders() {
-        this.props.dispatch(assignToLenders(this.props.params.id, map(this.state.lenders, '_id')));
+        this.props.dispatch(assignToLenders(this.props.params.id, map(this.state.lenders, '_id'))).then(
+            () => this.props.dispatch(createToast('Assigned to lenders.'))
+        )
     }
 
     @autobind
@@ -132,9 +136,9 @@ export default class ApplicationDetails extends React.Component {
                             <dt>ID</dt>
                             <dd>{viewing._id}</dd>
                             <dt>Created</dt>
-                            <dd>{new Date(viewing.createdAt).toDateString()}</dd>
+                            <dd><UIDate date={viewing.createdAt}/></dd>
                             <dt>Updated</dt>
-                            <dd>{new Date(viewing.updatedAt).toDateString()}</dd>
+                            <dd><UIDate date={viewing.updatedAt}/></dd>
                             <dt>Company</dt>
                             <dd>{viewing.company.company}</dd>
                             <dt>Loan Amount</dt>

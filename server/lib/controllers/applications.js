@@ -50,6 +50,8 @@ module.exports = deps => {
                 query.receivableStatus = 'pending'
             } else if(userRole == constants.roles.LENDER) {
                 query.lenders = {$in: [userId]};
+                query.status = constants.status.PENDING;
+                //query.account
             }
 
             if(id) {
@@ -96,12 +98,13 @@ module.exports = deps => {
                     status: constants.status.PENDING
                 });
 
+                let buyerExists = false;
+
                 User.findOne({email: application.buyerEmail}).exec().then(
                     user => {
-                        if(!user) {
-                            // TODO
-                        } else {
+                        if(user) {
                             application.buyer = user._id;
+                            buyerExists = true;
                         }
                         return user;
                     }
@@ -116,6 +119,13 @@ module.exports = deps => {
                             subject: 'Application created',
                             html: templates.applicationReceived(doc)
                         });
+                        mailer.sendMail({
+                            from: 'noreply@test.com',
+                            to: application.buyerEmail,
+                            subject: 'New application: Validate Rec Doc',
+                            html: templates.verifyRecDoc(doc)
+                        });
+
                         return doc;
                     }
                 ).then(
@@ -237,11 +247,14 @@ module.exports = deps => {
 
         createLoanAccount(req, res, next) {
             const proposalId = req.params.id;
-            Proposal.findById(proposalId).populate(['application']).exec()
+            let proposal = null;
+            let account = null;
+            Proposal.findById(proposalId).populate(['application', 'lender']).exec()
                 .then(
                     prop => {
+                        proposal = prop;
                         return LoanAccount.create({
-                            lender: prop.lender,
+                            lender: prop.lender._id,
                             loanAmount: prop.loanAmount,
                             interestRate: prop.interestRate,
                             tenor: prop.tenor,
@@ -253,10 +266,13 @@ module.exports = deps => {
                     }
                 )
                 .then(
-                    doc => Application.findByIdAndUpdate(doc.application, {
-                        status: constants.status.APPROVED,
-                        account: doc._id
-                    }, {new: true}).populate(populate).exec()
+                    doc => {
+                        account = doc;
+                        return Application.findByIdAndUpdate(doc.application, {
+                            status: constants.status.APPROVED,
+                            account: doc._id
+                        }, {new: true}).populate(populate).exec();
+                    }
                 )
                 .then(
                     doc => Proposal.findByIdAndUpdate(proposalId, {status: 'accepted'}).exec().then(() => doc)
@@ -266,9 +282,10 @@ module.exports = deps => {
                         var mailer = deps.nodemailer;
                         mailer.sendMail({
                             from: 'noreply@test.com',
-                            to: [app.company.email],
+                            to: [app.company.email, proposal.lender.email],
                             subject: 'Loan account created',
-                            html: templates.loanAccountCreated(app)
+                            html: templates.loanAccountCreated({application: app, account: account, proposal: proposal}),
+                            attachments: app.documents.map(i => ({filename: i.fieldname + path.extname(i.filename), path: i.path}))
                         });
                         return app;
                     }

@@ -9,7 +9,7 @@
       "method": "get",
       "handler": "getAccounts",
       "acl": {
-        "role": "ADMIN"
+        "role": ["ADMIN", "BORROWER", "LENDER"]
       }
     },
     {

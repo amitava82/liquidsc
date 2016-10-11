@@ -8,6 +8,7 @@ import Select from 'react-select';
 import { Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 import map from 'lodash/map';
+import UIDate from '../../components/UIDate';
 
 import { getAccount } from '../../redux/modules/loanAccounts';
 
@@ -41,9 +42,9 @@ export default class LoanAccountDetails extends React.Component {
                     <dt>Tenor</dt>
                     <dd>{viewing.tenor} days</dd>
                     <dt>Disbursement Date</dt>
-                    <dd>{viewing.disbursementDate}</dd>
+                    <dd><UIDate date={viewing.disbursementDate} /></dd>
                     <dt>Repayment Date</dt>
-                    <dd>{viewing.repaymentDate}</dd>
+                    <dd><UIDate date={viewing.repaymentDate} /></dd>
                 </dl>
             </div>
         )
