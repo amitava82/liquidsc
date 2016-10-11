@@ -38,7 +38,7 @@ export default class Login extends React.Component {
     render() {
         const {fields: {email, password}, handleSubmit, submitting, error} = this.props;
         return (
-            <div>
+            <div className="col-xs-6">
                 <h3>Login</h3>
                 <form onSubmit={handleSubmit(this.submit)}>
                     {error && <Alert bsStyle="danger">{error}</Alert> }

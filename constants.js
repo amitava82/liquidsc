@@ -8,11 +8,13 @@ module.exports = {
     status: {
         PENDING: 'PENDING',
         APPROVED: 'APPROVED',
-        UPDATE_REQUESTED: 'UPDATE_REQUESTED',
-        LENDER_REVIEWING: 'LENDER_REVIEWING',
-        LENDER_REJECTED: 'LENDER_REJECTED',
-        LENDER_APPROVED: 'LENDER_APPROVED',
+        UNDER_REVIEW: 'UNDER_REVIEW',
+        REJECTED: 'REJECTED'
 
     },
-    adminEmail: process.env.ADMIN_EMAIL || 'amitava82+admin@gmail.com'
+    adminEmail: process.env.ADMIN_EMAIL || 'amitava82+admin@gmail.com',
+    senderEmail: 'noreply@example.com',
+    subjects: {
+
+    }
 };

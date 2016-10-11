@@ -41,15 +41,15 @@ const TENOR = [30, 60, 90, 120, 180].map(i => ({label: i + ' days', value: i}));
         buyerConsent: false
     },
     validate: createValidator({
-        loanAmount: [integer(),required()],
-        receivable: [integer(),required()],
+        loanAmount: [required()],
+        receivable: [required()],
         receivableDate: required(),
         buyerCompany: required(),
         buyerContactPerson: required(),
         buyerEmail: required(),
         isExporter: required(),
         buyerConsent: (val) =>  !val ? 'Required' : null,
-        rateOfInterest: [integer(), required()],
+        rateOfInterest: [required()],
         tenor: required(),
         documents: createValidator({
             receivable: file(),

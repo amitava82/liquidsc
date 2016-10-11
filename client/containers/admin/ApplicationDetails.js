@@ -9,7 +9,7 @@ import { Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 import map from 'lodash/map';
 import DetailsSection from '../application/components/DetailsSection';
-import { getApplication, assignToLenders, rejectApplication, createLoanAccount, requestDetails } from '../../redux/modules/applications';
+import { getApplication, assignToLenders, changeStatus, createLoanAccount, requestDetails } from '../../redux/modules/applications';
 import { getLenders } from '../../redux/modules/users';
 import { createToast } from '../../redux/modules/toast';
 
@@ -51,7 +51,7 @@ export default class ApplicationDetails extends React.Component {
     }
 
     renderAssignAction(doc) {
-        if(doc.receivableStatus == 'approved' && doc.status == 'PENDING') {
+        if(doc.receivableStatus == 'approved' && doc.status == 'UNDER_REVIEW') {
             const {lenders} = this.state;
             const {users} = this.props;
             return (
@@ -63,7 +63,7 @@ export default class ApplicationDetails extends React.Component {
                         options={users.lenders}
                         onChange={this.onLenderSelect}
                         labelKey="company"
-                        valueKey="id"
+                        valueKey="_id"
                     />
                     <br />
                     <Button onClick={this.assignLenders}>Submit</Button>
@@ -85,7 +85,7 @@ export default class ApplicationDetails extends React.Component {
     }
 
     renderProposals(doc) {
-        if(doc.status != 'PENDING') return;
+        if(doc.status != 'UNDER_REVIEW') return;
 
         const offers = doc.proposals.map(i => (
           <div className="well well-sm">
@@ -113,20 +113,29 @@ export default class ApplicationDetails extends React.Component {
         )
     }
 
+    changeStatus(status) {
+        this.props.dispatch(changeStatus(this.props.params.id, status));
+    }
+
     render() {
         const {applications: {viewing}} = this.props;
 
         if(!viewing) return <h5>Loading...</h5>;
 
-        const docs = viewing.documents.map(doc => <div><a target="_blank" href={`/api/applications/${viewing._id}/docs/${doc.fieldname}`}>{doc.fieldname}</a> </div>);
-
         return (
             <div>
                 <h3>
                     <div className="pull-left">Application details</div>
-                    <div className="pull-right">
-                        {viewing.status == 'PENDING' && <Button bsStyle="primary" onClick={this.requestInfo}>Request info</Button>}
-                    </div>
+                    {viewing.status == 'PENDING' ? (
+                        <div className="pull-right">
+                            <Button bsStyle="primary" onClick={this.requestInfo}>Request info</Button>
+                            {' '}
+                            <Button bsStyle="success" onClick={e => this.changeStatus('UNDER_REVIEW')}>Under review</Button>
+                            {' '}
+                            <Button bsStyle="danger" onClick={e => this.changeStatus('REJECTED')}>Reject</Button>
+                        </div>
+                    ) : null}
+
                 </h3>
                 <Row>
                     <DetailsSection data={viewing}>

@@ -48,10 +48,11 @@ module.exports = deps => {
                 query.company = userId;
             } else if(userRole == constants.roles.BUYER) {
                 query.buyerEmail = req.user.email;
-                query.receivableStatus = 'pending'
+                query.receivableStatus = 'pending';
+                query.status = constants.status.UNDER_REVIEW;
             } else if(userRole == constants.roles.LENDER) {
                 query.lenders = {$in: [userId]};
-                query.status = constants.status.PENDING;
+                query.status = constants.status.UNDER_REVIEW;
                 //query.account
             }
 
@@ -140,13 +141,15 @@ module.exports = deps => {
             Application.findByIdAndUpdate(req.params.id, req.body, {new: true}).populate(populate).exec()
                 .then(
                     doc => {
-                        var mailer = deps.nodemailer;
-                        mailer.sendMail({
-                            from: 'noreply@test.com',
-                            to: [doc.company.email],
-                            subject: 'Additional information requested',
-                            html: templates.docRequested(doc)
-                        });
+                        if(req.body.adminComment) {
+                            var mailer = deps.nodemailer;
+                            mailer.sendMail({
+                                from: 'noreply@test.com',
+                                to: [doc.company.email],
+                                subject: 'Additional information requested',
+                                html: templates.docRequested(doc)
+                            });
+                        }
                         return doc;
                     }
                 ).then(

@@ -41,6 +41,9 @@ export default class LoanAccounts extends React.Component {
                 <td>{i.company.company}</td>
                 <td>{i.loanAmount}</td>
                 <td>{i.buyerCompany}</td>
+                <td>{i.receivableStatus}</td>
+                <td>{i.account ? 'approved' : 'pending'}</td>
+                <th>{i.status}</th>
                 <td><Link to={`/admin/applications/${i._id}`}>View</Link></td>
             </tr>
         ));
@@ -51,7 +54,9 @@ export default class LoanAccounts extends React.Component {
                 <div className="pull-right">
                     <select className="form-control" onChange={this.filter} value={this.state.filter}>
                         <option value="PENDING">Pending</option>
+                        <option value="UNDER_REVIEW">Under review</option>
                         <option value="APPROVED">Approved</option>
+                        <option value="REJECTED">Rejected</option>
                     </select>
                 </div>
                 <table className="table table-striped table-bordered">
@@ -61,6 +66,9 @@ export default class LoanAccounts extends React.Component {
                         <th>Company</th>
                         <th>Loan amount</th>
                         <th>Buyer</th>
+                        <th>Buyer Validation</th>
+                        <th>Lender Decision</th>
+                        <th>ALCH Decision</th>
                         <th>Action</th>
                     </tr>
                     </thead>

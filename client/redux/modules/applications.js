@@ -10,7 +10,8 @@ import reject from 'lodash/reject';
 
 import createAction from '../createActions';
 
-const [GET_APPLICATIONS, GET_APPLICATION, CREATE, REJECT_APPLICATION, ASSIGN_LENDER, BUYER_CHANGE_STATUS, SUBMIT_PROPOSAL, CREATE_LOAN_ACCOUNT] =
+const [GET_APPLICATIONS, GET_APPLICATION, CREATE, REJECT_APPLICATION, ASSIGN_LENDER,
+    BUYER_CHANGE_STATUS, SUBMIT_PROPOSAL, CREATE_LOAN_ACCOUNT, UPDATE_APPLICATION] =
     createAction('applications', [
         "GET_APPLICATIONS",
         "GET_APPLICATION",
@@ -19,7 +20,8 @@ const [GET_APPLICATIONS, GET_APPLICATION, CREATE, REJECT_APPLICATION, ASSIGN_LEN
         "ASSIGN_LENDER",
         "BUYER_CHANGE_STATUS",
         "SUBMIT_PROPOSAL",
-        "CREATE_LOAN_ACCOUNT"
+        "CREATE_LOAN_ACCOUNT",
+        "UPDATE_APPLICATION"
     ]);
 
 const initialState = {
@@ -48,6 +50,7 @@ export default function (state = initialState, action) {
             return {...state, data: state.data.map(i => i._id == payload._id ? payload : i)};
 
         case resolve(ASSIGN_LENDER):
+        case resolve(UPDATE_APPLICATION):
             return {...state, viewing: {...state.viewing, ...payload}};
 
         case resolve(CREATE_LOAN_ACCOUNT):
@@ -125,8 +128,15 @@ export const createLoanAccount = (proposalId) => ({
 });
 
 export const requestDetails = (id, adminComment) => ({
-    type: 'UPDATE_APPLICATION',
+    type: UPDATE_APPLICATION,
     payload: {
         promise: api => api.put(`applications/${id}`, {data: {adminComment}})
+    }
+});
+
+export const changeStatus = (id, status) => ({
+    type: UPDATE_APPLICATION,
+    payload: {
+        promise: api => api.put(`applications/${id}`, {data: {status}})
     }
 });
