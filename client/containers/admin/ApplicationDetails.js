@@ -8,7 +8,6 @@ import Select from 'react-select';
 import { Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 import map from 'lodash/map';
-import UIDate from '../../components/UIDate';
 import DetailsSection from '../application/components/DetailsSection';
 import { getApplication, assignToLenders, rejectApplication, createLoanAccount, requestDetails } from '../../redux/modules/applications';
 import { getLenders } from '../../redux/modules/users';
@@ -130,7 +129,9 @@ export default class ApplicationDetails extends React.Component {
                     </div>
                 </h3>
                 <Row>
-                    <DetailsSection data={viewing} />
+                    <DetailsSection data={viewing}>
+                        {this.renderProposals(viewing)}
+                    </DetailsSection>
                     {this.renderAssignAction(viewing)}
                 </Row>
             </div>

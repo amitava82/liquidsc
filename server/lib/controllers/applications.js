@@ -321,6 +321,13 @@ module.exports = deps => {
 
         updateLoanAccount(req, res, next) {
 
+        },
+
+        getProposal(req, res, next) {
+            Proposal.findOne({application: req.params.id, lender: req.user._id}).exec().then(
+                doc => res.send(doc),
+                next
+            )
         }
     }
 };

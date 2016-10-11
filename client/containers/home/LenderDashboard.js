@@ -29,9 +29,7 @@ export default class LenderDashboard extends React.Component {
                 <td>{i.company.company}</td>
                 <td>{i.loanAmount}</td>
                 <td>
-                    <button onClick={e => this.reject(i._id)} className="btn btn-danger">Reject</button>
-                    { ' '}
-                    <Link className="btn btn-primary" to={`/lender/applications/${i._id}`}>Accept</Link>
+                    <Link className="btn btn-primary" to={`/lender/applications/${i._id}`}>View</Link>
                 </td>
             </tr>
         ));

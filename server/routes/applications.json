@@ -66,6 +66,14 @@
       }
     },
     {
+      "path": ":id/proposals",
+      "method": "get",
+      "handler": "getProposal",
+      "acl": {
+        "role": "LENDER"
+      }
+    },
+    {
       "path": ":id/lender/reject",
       "method": "delete",
       "handler": "lenderReject",

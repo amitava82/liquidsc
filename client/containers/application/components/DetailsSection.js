@@ -7,7 +7,7 @@ import autobind from 'autobind-decorator';
 import Select from 'react-select';
 import { Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
-import map from 'lodash/map';
+import UIDate from '../../../components/UIDate';
 
 export default class DetailsSection extends React.Component {
 
@@ -60,6 +60,7 @@ export default class DetailsSection extends React.Component {
                 </Row>
                 <h4>Documents</h4>
                 {docs}
+                {this.props.children}
             </Col>
         )
     }

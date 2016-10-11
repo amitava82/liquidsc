@@ -11,14 +11,14 @@ import { Link } from 'react-router';
 import map from 'lodash/map';
 import { createValidator, required } from '../../utils/validator';
 
+import NumberInput from '../../components/form/NumberInput';
 import Input from '../../components/form/PureInput';
 import Select from '../../components/form/Select';
 import TextArea from '../../components/form/Textarea';
 
 const TENOR = [30, 60, 90, 120, 180].map(i => ({label: i + ' days', value: i}));
 
-import { getApplication, submitProposal } from '../../redux/modules/applications';
-import { getLenders } from '../../redux/modules/users';
+import { submitProposal } from '../../redux/modules/applications';
 
 @reduxForm({
     form: 'proposalForm',
@@ -27,25 +27,19 @@ import { getLenders } from '../../redux/modules/users';
         'interestRate',
         'tenor',
         'comment'
-    ]
+    ],
+    validate: createValidator({
+        loanAmount: required(),
+        interestRate: required(),
+        tenor: required()
+    })
 })
 @connect(state=>state)
 export default class ApplicationDetails extends React.Component {
 
-    constructor(...args) {
-        super(...args);
-        this.state = {
-            lenders: []
-        }
-    }
-
-    componentWillMount() {
-        this.props.dispatch(getApplication(this.props.params.id));
-    }
-
     @autobind
     submit(data) {
-        this.props.dispatch(submitProposal(this.props.params.id, data)).then(
+        return this.props.dispatch(submitProposal(this.props.id, data)).then(
             () => this.props.dispatch(push('/home'))
         )
     }
@@ -59,18 +53,14 @@ export default class ApplicationDetails extends React.Component {
 
         return (
             <div>
-                <h3>Submit proposal</h3>
-                <Row>
-                    <Col md={9}>
-                       <form onSubmit={handleSubmit(this.submit)}>
-                           <Input field={loanAmount} label="Loan amount"/>
-                           <Input field={interestRate} label="Interest rate"/>
-                           <Select field={tenor} options={TENOR} label="Tenor" />
-                           <TextArea field={comment} label="Comments" />
-                           <button className="btn btn-primary">Submit</button>
-                       </form>
-                    </Col>
-                </Row>
+                <h4>Submit Proposal</h4>
+                <form onSubmit={handleSubmit(this.submit)}>
+                    <NumberInput field={loanAmount} label="Loan amount"/>
+                    <NumberInput field={interestRate} label="Interest rate"/>
+                    <Select field={tenor} options={TENOR} label="Tenor" />
+                    <TextArea field={comment} label="Comments" />
+                    <button disabled={submitting} className="btn btn-primary">Submit</button>
+                </form>
             </div>
         )
     }

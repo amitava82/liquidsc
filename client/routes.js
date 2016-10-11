@@ -9,6 +9,7 @@ import Signup from './containers/signup';
 import Application from './containers/application';
 import Admin from './containers/admin';
 import Lender from './containers/lender';
+import LenderAppDetails from './containers/lender/ApplicationDetails';
 import Account from './containers/account';
 
 import NotFound from './containers/misc/NotFound';
@@ -53,7 +54,7 @@ export default (store) => {
                 <Route path="accounts/:account" component={Admin.LoanAccountDetails} />
             </Route>
             <Route path="/lender" onEnter={checkRole('LENDER')}>
-                <Route path="applications/:id" component={Lender.SubmitProposal} />
+                <Route path="applications/:id" component={LenderAppDetails} />
             </Route>
             <Route path="*" component={NotFound}/>
         </Route>

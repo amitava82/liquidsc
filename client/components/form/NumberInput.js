@@ -20,7 +20,7 @@ export default class NumberInput extends React.Component {
         return (
             <div className={classes}>
                 {label && <label>{label}</label>}
-                <Numeric className="form-control" style={false} {...field} />
+                <Numeric className="form-control" style={false} {...field} precision={2} />
                 {field && field.touched && field.error && <div className="text-error help-block sm">{field.error}</div>}
             </div>
         )
