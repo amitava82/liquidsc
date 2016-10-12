@@ -34,7 +34,7 @@ module.exports = deps => {
                 user => {
                     var mailer = deps.nodemailer;
                     mailer.sendMail({
-                        from: 'noreply@test.com',
+                        from: 'support@alchcapital.com',
                         to: user.email,
                         subject: 'Account approved',
                         html: templates.accountActivated(user)

@@ -81,7 +81,7 @@ module.exports = function(deps){
                 User.create(data).then(
                     user => {
                         mailer.sendMail({
-                            from: 'noreply@test.com',
+                            from: 'support@alchcapital.com',
                             to: data.email,
                             subject: 'Registration success',
                             html: templates.signup(user)
@@ -151,7 +151,7 @@ module.exports = function(deps){
                         );
                         var mailer = deps.nodemailer;
                         mailer.sendMail({
-                            from: 'noreply@test.com',
+                            from: 'support@alchcapital.com',
                             to: req.body.email,
                             subject: 'Password reset',
                             html: mail

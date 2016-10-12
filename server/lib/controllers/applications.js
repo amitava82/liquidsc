@@ -116,13 +116,13 @@ module.exports = deps => {
                     doc => {
                         var mailer = deps.nodemailer;
                         mailer.sendMail({
-                            from: 'noreply@test.com',
+                            from: 'support@alchcapital.com',
                             to: constants.adminEmail,
                             subject: 'Application created',
                             html: templates.applicationReceived(doc)
                         });
                         mailer.sendMail({
-                            from: 'noreply@test.com',
+                            from: 'support@alchcapital.com',
                             to: application.buyerEmail,
                             subject: 'New application: Validate Rec Doc',
                             html: templates.verifyRecDoc(doc)
@@ -144,7 +144,7 @@ module.exports = deps => {
                         if(req.body.adminComment) {
                             var mailer = deps.nodemailer;
                             mailer.sendMail({
-                                from: 'noreply@test.com',
+                                from: 'support@alchcapital.com',
                                 to: [doc.company.email],
                                 subject: 'Additional information requested',
                                 html: templates.docRequested(doc)
@@ -198,7 +198,7 @@ module.exports = deps => {
                         const lenders = _.map(doc.lenders, 'email');
                         var mailer = deps.nodemailer;
                         mailer.sendMail({
-                            from: 'noreply@test.com',
+                            from: 'support@alchcapital.com',
                             to: lenders,
                             subject: 'Application received',
                             html: templates.lenderAssigned(doc)
@@ -235,7 +235,7 @@ module.exports = deps => {
                     doc => {
                         var mailer = deps.nodemailer;
                         mailer.sendMail({
-                            from: 'noreply@test.com',
+                            from: 'support@alchcapital.com',
                             to: [constants.adminEmail, doc.company.email],
                             subject: 'Receivable doc status updated',
                             html: templates.recStatusUpdated(doc)
@@ -307,7 +307,7 @@ module.exports = deps => {
                     app => {
                         var mailer = deps.nodemailer;
                         mailer.sendMail({
-                            from: 'noreply@test.com',
+                            from: 'support@alchcapital.com',
                             to: [app.company.email, proposal.lender.email],
                             subject: 'Loan account created',
                             html: templates.loanAccountCreated({application: app, account: account, proposal: proposal}),
