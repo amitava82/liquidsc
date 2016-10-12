@@ -27,7 +27,7 @@ export default class BuyerDashboard extends React.Component {
                 <td>{i.company.company}</td>
                 <td>{i.loanAmount}</td>
                 <td><a href={`/api/applications/${i._id}/docs/receivable`}>View</a></td>
-                <td><UIDate date={i.receivableDate}/></td>
+                <td><UIDate date={i.receivableDate}  time={false} /></td>
                 <td>{i.receivableStatus == 'pending' ? (
                     <div>
                         <button onClick={e => this.changeStatus(i._id, 'rejected')} className="btn btn-danger">Reject</button>

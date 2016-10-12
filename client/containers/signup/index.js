@@ -44,7 +44,7 @@ export default class Signup extends React.Component {
 
         return (
             <div>
-                <h3>Sign up for an account</h3>
+                <h3>Sign up</h3>
                 {content}
             </div>
         )

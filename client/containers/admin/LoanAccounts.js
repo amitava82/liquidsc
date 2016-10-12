@@ -50,8 +50,8 @@ export default class LoanAccounts extends React.Component {
                 <td>{i.loanAmount}</td>
                 <td>{i.interestRate}</td>
                 <td>{i.tenor} days</td>
-                <td><UIDate date={i.disbursementDate}/></td>
-                <td><UIDate date={i.repaymentDate}/></td>
+                <td><UIDate date={i.disbursementDate} time={false} /></td>
+                <td><UIDate date={i.repaymentDate} time={false}/></td>
                 <td><button className="btn btn-primary" onClick={e => this.toggleEdit(i._id)}>Edit</button></td>
             </tr>
         ));
