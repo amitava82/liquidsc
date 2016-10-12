@@ -48,8 +48,8 @@ module.exports = deps => {
                 query.company = userId;
             } else if(userRole == constants.roles.BUYER) {
                 query.buyerEmail = req.user.email;
-                query.receivableStatus = 'pending';
-                query.status = constants.status.UNDER_REVIEW;
+                //query.receivableStatus = 'pending';
+                //query.status = constants.status.UNDER_REVIEW;
             } else if(userRole == constants.roles.LENDER) {
                 query.lenders = {$in: [userId]};
                 query.status = constants.status.APPROVED;
@@ -74,7 +74,7 @@ module.exports = deps => {
                     next
                 )
             } else {
-                Application.find(_.extend(req.query, query)).populate('company').exec().then(
+                Application.find(_.extend(req.query, query)).populate('company').sort({'updatedAt': -1}).exec().then(
                     docs => res.send(docs),
                     next
                 );

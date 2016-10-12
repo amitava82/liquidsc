@@ -8,6 +8,7 @@ import Select from 'react-select';
 import { Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 import map from 'lodash/map';
+import UIDate from '../../components/UIDate';
 
 import UpdateAccount from './UpdateAccount';
 import { loadAccounts, updateAccount } from '../../redux/modules/loanAccounts';
@@ -48,9 +49,9 @@ export default class LoanAccounts extends React.Component {
                 <td>{i.lender.company}</td>
                 <td>{i.loanAmount}</td>
                 <td>{i.interestRate}</td>
-                <td>{i.tenor}</td>
-                <td>{i.disbursementDate}</td>
-                <td>{i.repaymentDate}</td>
+                <td>{i.tenor} days</td>
+                <td><UIDate date={i.disbursementDate}/></td>
+                <td><UIDate date={i.repaymentDate}/></td>
                 <td><button className="btn btn-primary" onClick={e => this.toggleEdit(i._id)}>Edit</button></td>
             </tr>
         ));
@@ -65,7 +66,7 @@ export default class LoanAccounts extends React.Component {
                             <th>Borrower</th>
                             <th>Lender</th>
                             <th>Amount</th>
-                            <td>Rate</td>
+                            <th>Interest %</th>
                             <th>Tenor</th>
                             <th>Disbursement date</th>
                             <th>Repayment date</th>

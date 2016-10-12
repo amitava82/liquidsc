@@ -14,6 +14,7 @@ import { getLenders } from '../../redux/modules/users';
 import { createToast } from '../../redux/modules/toast';
 import CheckboxList from '../../components/CheckboxList';
 
+
 @connect(state=>state)
 export default class ApplicationDetails extends React.Component {
 

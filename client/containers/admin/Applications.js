@@ -7,6 +7,7 @@ import autobind from 'autobind-decorator';
 import { Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 import map from 'lodash/map';
+import UIDate from '../../components/UIDate';
 
 
 import { getApplications } from '../../redux/modules/applications';
@@ -41,8 +42,8 @@ export default class LoanAccounts extends React.Component {
                 <td>{i.company.company}</td>
                 <td>{i.loanAmount}</td>
                 <td>{i.buyerCompany}</td>
-                <td>{i.receivableStatus}</td>
-                <td>{i.account ? 'approved' : 'pending'}</td>
+                <td className="capitalize">{i.receivableStatus}</td>
+                <td className="capitalize">{i.account ? 'approved' : 'pending'}</td>
                 <th>{i.status}</th>
                 <td><Link to={`/admin/applications/${i._id}`}>View</Link></td>
             </tr>

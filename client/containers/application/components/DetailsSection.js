@@ -35,11 +35,11 @@ export default class DetailsSection extends React.Component {
                             <dt>Interest rate</dt>
                             <dd>{data.rateOfInterest}</dd>
                             <dt>Receivable date</dt>
-                            <dd>{data.receivableDate}</dd>
+                            <dd><UIDate date={data.receivableDate}/></dd>
                             <dt> RECEIVABLE STATUS</dt>
-                            <dd>{data.receivableStatus}</dd>
+                            <dd className="capitalize">{data.receivableStatus}</dd>
                             <dt>ALCH status</dt>
-                            <dd>{data.status}</dd>
+                            <dd className="capitalize">{data.status}</dd>
                             <dt>Loan account</dt>
                             <dd>{data.account && <Link to={`/admin/accounts/${data.account}`}>Account</Link>}</dd>
                         </dl>

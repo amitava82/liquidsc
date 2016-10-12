@@ -1,3 +1,7 @@
+.navbar-inverse {
+  background-color: #1A84BC !important;
+}
+
 .flex {
   display: flex;
   &.center {
@@ -22,4 +26,8 @@
     content: "*";
     color: red
   }
+}
+
+.capitalize {
+  text-transform: capitalize;
 }

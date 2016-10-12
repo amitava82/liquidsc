@@ -28,7 +28,7 @@ export default class LenderDashboard extends React.Component {
         const rows = data.map(i => (
             <tr>
                 <td>{i._id}</td>
-                <td>{new Date(i.createdAt).toDateString()}</td>
+                <td><UIDate date={i.createdAt}/></td>
                 <td>{i.company.company}</td>
                 <td>{i.loanAmount}</td>
                 <td>
@@ -59,7 +59,7 @@ export default class LenderDashboard extends React.Component {
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Date</th>
+                                <th>Application date</th>
                                 <th>Company</th>
                                 <th>Amount</th>
                                 <th>Action</th>
@@ -76,7 +76,7 @@ export default class LenderDashboard extends React.Component {
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Date</th>
+                                <th>Created on</th>
                                 <th>Borrower</th>
                                 <th>Amount</th>
                                 <th>Tenor</th>

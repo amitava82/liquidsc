@@ -4,7 +4,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import autobind from 'autobind-decorator';
-
+import UIDate from '../../components/UIDate';
 import { getApplications, buyerChangeStatus } from '../../redux/modules/applications';
 
 @connect(state=>state)
@@ -23,18 +23,18 @@ export default class BuyerDashboard extends React.Component {
         const rows = data.map(i => (
             <tr>
                 <td>{i._id}</td>
-                <td>{new Date(i.createdAt).toDateString()}</td>
+                <td><UIDate date={i.createdAt}/></td>
                 <td>{i.company.company}</td>
                 <td>{i.loanAmount}</td>
                 <td><a href={`/api/applications/${i._id}/docs/receivable`}>View</a></td>
-                <td>{i.receivableStatus}</td>
+                <td><UIDate date={i.receivableDate}/></td>
                 <td>{i.receivableStatus == 'pending' ? (
                     <div>
                         <button onClick={e => this.changeStatus(i._id, 'rejected')} className="btn btn-danger">Reject</button>
                         {' '}
                         <button onClick={e => this.changeStatus(i._id, 'approved')} className="btn btn-primary">Approve</button>
                     </div>
-                ) : null}</td>
+                ) : <span className="capitalize">{i.receivableStatus}</span>}</td>
             </tr>
         ));
 
@@ -45,11 +45,11 @@ export default class BuyerDashboard extends React.Component {
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Date</th>
-                        <th>Company</th>
+                        <th>Application date</th>
+                        <th>Borrower</th>
                         <th>Amount</th>
                         <th>Doc</th>
-                        <th>Status</th>
+                        <th>Receivable date</th>
                         <th>Action</th>
                     </tr>
                     </thead>
