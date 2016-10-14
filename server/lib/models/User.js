@@ -64,6 +64,14 @@ module.exports = function (deps) {
 
         businessType: String,
 
+        country: String,
+
+        city: String,
+
+        address: String,
+
+        phoneCode: String,
+
         resetToken: {
             type: String,
             index: 1

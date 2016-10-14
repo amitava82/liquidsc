@@ -1,0 +1,18 @@
+{
+  "middleware": [
+    "ensureLoggedIn"
+  ],
+  "path": "/api/analytics",
+  "routes": [
+    {
+      "path": "",
+      "method": "get",
+      "handler": "getAnalytics",
+      "acl": {
+        "role": [
+          "ADMIN"
+        ]
+      }
+    }
+  ]
+}

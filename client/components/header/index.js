@@ -40,7 +40,12 @@ export default class Header extends React.Component {
                     <LinkContainer to="/admin/accounts" key={4}>
                         <NavItem>Accounts</NavItem>
                     </LinkContainer>
-                )
+                );
+                items.push(
+                    <LinkContainer to="/admin/analytics" key={5}>
+                        <NavItem>Analytics</NavItem>
+                    </LinkContainer>
+                );
             } else if(user.role == 'LENDER') {
 
             }

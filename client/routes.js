@@ -53,6 +53,7 @@ export default (store) => {
                 <Route path="applications/:id" component={Admin.ApplicationDetails} />
                 <Route path="accounts" component={Admin.LoanAccounts} />
                 <Route path="accounts/:account" component={Admin.LoanAccountDetails} />
+                <Route path="analytics" component={Admin.Analytics} />
             </Route>
             <Route path="/lender" onEnter={checkRole('LENDER')}>
                 <Route path="applications/:id" component={LenderAppDetails} />

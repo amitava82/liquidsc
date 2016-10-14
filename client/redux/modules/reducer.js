@@ -8,6 +8,7 @@ import session from './session';
 import users from './users';
 import applications from './applications';
 import loanAccounts from './loanAccounts';
+import analytics from './analytics';
 
 export default combineReducers({
     errorMessage,
@@ -16,6 +17,7 @@ export default combineReducers({
     users,
     applications,
     loanAccounts,
+    analytics,
     routing: routerReducer,
     form: formReducer
 });

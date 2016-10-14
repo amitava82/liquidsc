@@ -17,7 +17,21 @@ const ROLE_OPTIONS = [
 
 @reduxForm({
     form: 'signup',
-    fields: ['email', 'password', 'role', 'company', 'pan', 'phone', 'contactPerson', 'designation', 'businessType'],
+    fields: [
+        'email',
+        'password',
+        'role',
+        'company',
+        'pan',
+        'phone',
+        'contactPerson',
+        'designation',
+        'businessType',
+        'country',
+        'city',
+        'address',
+        'phoneCode'
+    ],
     validate: createValidator({
         email: [required(), email],
         password: required(),
@@ -28,6 +42,10 @@ const ROLE_OPTIONS = [
         contactPerson: required(),
         designation: required(),
         businessType: required(),
+        country: required(),
+        city: required(),
+        address: required(),
+        phoneCode: required(),
 
     }),
     initialValues: {
@@ -53,11 +71,11 @@ export default class BuyerSupplier extends React.Component {
 
     render() {
         const {
-            fields: {email, password, role, company, pan, phone, contactPerson, designation, businessType},
+            fields: {email, password, role, company, pan, phone, contactPerson, designation, businessType, address, city, country, phoneCode},
             handleSubmit, submitting, error} = this.props;
 
         return (
-            <div>
+            <div  className="col-xs-6">
                 {this.state.success ? (
                     <Alert bsStyle="success">Your application received and pending approval.</Alert>
                 ) : (
@@ -68,10 +86,14 @@ export default class BuyerSupplier extends React.Component {
                         <Input field={email} label="Email" type="email" />
                         <Input type="password" field={password} label="Password" />
                         <Input field={pan} label="PAN" />
+                        <Input field={phoneCode} label="Phone country code" />
                         <Input field={phone} label="Contact number" />
                         <Input field={contactPerson} label="Contact person" />
                         <Input field={designation} label="Designation" />
                         <Input field={businessType} label="Nature of Business" />
+                        <Input field={address} label="Address" />
+                        <Input field={city} label="City" />
+                        <Input field={country} label="Country" />
                         <Button disabled={submitting} type="submit" bsStyle="primary">Register</Button>
                     </form>
                 )}

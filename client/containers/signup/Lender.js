@@ -24,6 +24,10 @@ const LENDER_TYPES = 'Accredited Investor Individual Company Bank NBFC Fund Othe
         'designation',
         'phone',
         'comments',
+        'country',
+        'city',
+        'address',
+        'phoneCode'
     ],
     validate: createValidator({
         email: [required(), email],
@@ -33,7 +37,11 @@ const LENDER_TYPES = 'Accredited Investor Individual Company Bank NBFC Fund Othe
         fullName: required(),
         lenderType: required(),
         phone: required(),
-        designation: required()
+        designation: required(),
+        country: required(),
+        city: required(),
+        address: required(),
+        phoneCode: required()
     }),
     initialValues: {
         role: 'LENDER'
@@ -57,11 +65,11 @@ export default class Lender extends React.Component {
 
     render() {
         const {
-            fields: {email, password, company, fullName, phone, lenderType, designation, comments},
+            fields: {email, password, company, fullName, phone, lenderType, designation, comments, address, city, country, phoneCode},
             handleSubmit, submitting, error} = this.props;
 
         return (
-            <div>
+            <div className="col-xs-6">
                 {this.state.success ? (
                     <Alert bsStyle="success">Your application received and pending approval.</Alert>
                 ) : (
@@ -71,9 +79,14 @@ export default class Lender extends React.Component {
                         <Input field={email} label="Email" type="email" />
                         <Input type="password" field={password} label="Password" />
                         <Input field={fullName} label="Full name" />
+                        <Input field={phoneCode} label="Phone country code" />
                         <Input field={phone} label="Contact number" />
                         <Select field={lenderType} options={LENDER_TYPES} label="Lender type" required />
                         <Input field={designation} label="Designation" />
+                        <Input field={address} label="Address" />
+                        <Input field={city} label="City" />
+                        <Input field={country} label="Country" />
+
                         <Input field={comments} label="Comments" />
                         <Button disabled={submitting} type="submit" bsStyle="primary">Register</Button>
                     </form>
