@@ -42,6 +42,9 @@ export default class AdminDashboard extends React.Component {
                     <th>Company</th>
                     <th>PAN</th>
                     <th>Phone</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>Country</th>
                     <th>Contact person</th>
                     <th>Designation</th>
                     <th>Nature of Business</th>
@@ -56,7 +59,10 @@ export default class AdminDashboard extends React.Component {
                         <td>{i.email}</td>
                         <td>{i.company}</td>
                         <td>{i.pan}</td>
-                        <td>{i.phone}</td>
+                        <td>{i.phoneCode}-{i.phone}</td>
+                        <td>{i.address}</td>
+                        <td>{i.city}</td>
+                        <td>{i.country}</td>
                         <td>{i.contactPerson}</td>
                         <td>{i.designation}</td>
                         <td>{i.businessType}</td>
@@ -77,6 +83,9 @@ export default class AdminDashboard extends React.Component {
                     <th>Company</th>
                     <th>PAN</th>
                     <th>Phone</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>Country</th>
                     <th>Contact person</th>
                     <th>Designation</th>
                     <th>Nature of Business</th>
@@ -91,7 +100,10 @@ export default class AdminDashboard extends React.Component {
                         <td>{i.email}</td>
                         <td>{i.company}</td>
                         <td>{i.pan}</td>
-                        <td>{i.phone}</td>
+                        <td>{i.phoneCode}-{i.phone}</td>
+                        <td>{i.address}</td>
+                        <td>{i.city}</td>
+                        <td>{i.country}</td>
                         <td>{i.contactPerson}</td>
                         <td>{i.designation}</td>
                         <td>{i.businessType}</td>
@@ -112,6 +124,9 @@ export default class AdminDashboard extends React.Component {
                     <th>Company</th>
                     <th>Full name</th>
                     <th>Phone</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>Country</th>
                     <th>Lender type</th>
                     <th>Designation</th>
                     <th>Created</th>
@@ -125,7 +140,10 @@ export default class AdminDashboard extends React.Component {
                         <td>{i.email}</td>
                         <td>{i.company}</td>
                         <td>{i.fullName}</td>
-                        <td>{i.phone}</td>
+                        <td>{i.phoneCode}-{i.phone}</td>
+                        <td>{i.address}</td>
+                        <td>{i.city}</td>
+                        <td>{i.country}</td>
                         <td>{i.lenderType}</td>
                         <td>{i.designation}</td>
                         <td><UIDate date={i.createdAt}/></td>
