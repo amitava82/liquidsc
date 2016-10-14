@@ -4,6 +4,7 @@ import {push} from 'react-router-redux';
 import autobind from 'autobind-decorator';
 import {logout} from './redux/modules/session';
 import Toastr from './utils/toastr';
+import Footer from './components/footer';
 import Header from './components/header';
 import { events } from '../constants';
 
@@ -23,11 +24,12 @@ export default class App extends React.Component {
     render() {
         const {session: {isLoggedIn}} = this.props;
         return (
-            <div id="main">
+            <div id="main" className="flex column">
                 <Header onLogout={this.logout}/>
-                <main className="site-content container">
+                <main className="site-content container flex-item">
                     {this.props.children}
                 </main>
+                <Footer/>
                 <Toastr />
             </div>
         );

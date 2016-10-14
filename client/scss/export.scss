@@ -4,11 +4,19 @@
 @import "home";
 @import "admin";
 @import '~react-select/scss/default.scss';
-
+@import "footer";
 .react-datepicker {
   font-size: 14px !important;
 }
 
+#main {
+  height: 100vh;
+}
+
 .react-datepicker__day-name, .react-datepicker__day {
   width: 25px !important;
+}
+
+.site-content {
+  padding-bottom: 30px;
 }

@@ -6,17 +6,30 @@ import autobind from 'autobind-decorator';
 import {connect} from 'react-redux';
 import { Link } from 'react-router';
 import filter from 'lodash/filter';
-import { Navbar, Nav, NavItem, Tabs, Tab } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, Tabs, Tab, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import UIDate from '../../components/UIDate';
+import SearchBar from '../../components/Searchbar';
 
 import { getUsers } from '../../redux/modules/users';
 
 @connect(state => state)
 export default class Users extends React.Component {
 
+    constructor(...args) {
+        super(...args);
+        this.state = {
+            showSearch : false
+        }
+    }
+
     componentWillMount() {
         this.props.dispatch(getUsers({approved: true}));
+    }
+
+    @autobind
+    toggleSearch() {
+        this.setState({showSearch: !this.state.showSearch});
     }
 
     render () {
@@ -154,7 +167,17 @@ export default class Users extends React.Component {
         return (
             <div>
                 <Tabs defaultActiveKey={1}>
-                    <Tab eventKey={1} title="Buyers">{buyerTable}</Tab>
+                    <Tab eventKey={1} title="Buyers">
+                        <div className="text-right">
+                            <Button bsStyle="default" onClick={this.toggleSearch}>{this.state.showSearch ? 'Hide': 'Search'}</Button>
+                        </div>
+                        {this.state.showSearch ? (
+                            <div className="well">
+                                <SearchBar/>
+                            </div>
+                        ) : null}
+                        {buyerTable}
+                    </Tab>
                     <Tab eventKey={2} title="Borrowers">{borrowerTable}</Tab>
                     <Tab eventKey={3} title="Lenders">{lenderTable}</Tab>
                 </Tabs>

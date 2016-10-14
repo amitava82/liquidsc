@@ -1,7 +1,7 @@
 import React from 'react';
 import {Route, IndexRoute, IndexRedirect, Redirect} from 'react-router';
 
-
+import Index from './containers/index';
 import Home from './containers/home';
 import Login from './containers/login';
 import Reset from './containers/forgot/PasswordReset';
@@ -41,7 +41,7 @@ export default (store) => {
 
     return (
         <Route path="/" component={App}>
-            <IndexRedirect to="/login" />
+            <IndexRoute component={Index} />
             <Route path="login" component={Login}/>
             <Route path="forgot" component={Reset}/>
             <Route path="signup" component={Signup}/>

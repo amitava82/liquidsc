@@ -1,5 +1,13 @@
 .navbar-inverse {
-  background-color: #1A84BC !important;
+  background-color: #56a887 !important;
+  margin-bottom: 0 !important;
+  .navbar {
+
+  }
+
+  .navbar-nav>.active>a, .navbar-nav>.active>a:focus {
+    background-color: lighten(#56a887, 10%) !important;
+  }
 }
 
 .flex {
@@ -30,4 +38,18 @@
 
 .capitalize {
   text-transform: capitalize;
+}
+
+.hero {
+  background-image: linear-gradient(to bottom,#56a887 0, #69be9c 100%);
+  padding: 80px;
+  text-align: center;
+  color: white;
+  //position: absolute;
+  //left: 0;
+  //right: 0;
+
+  h1,h2 {
+    color: inherit;
+  }
 }

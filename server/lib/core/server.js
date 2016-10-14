@@ -41,6 +41,10 @@ module.exports = function (dependencies, callback) {
     //app.use(dependencies.passport.initialize());
    // app.use(dependencies.passport.session());
 
+    app.get('/privacy', (req, res) => {
+        res.render('privacy', {title: 'Privacy Policy'});
+    });
+
 
     //delete cache buster
     app.use(function (req, res, next) {

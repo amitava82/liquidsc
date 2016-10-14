@@ -26,7 +26,7 @@ export default class Select extends Component {
     }
 
     render() {
-        const {field, options, label, ...rest} = this.props;
+        const {field, options, label, selectLabel, ...rest} = this.props;
 
         const optionsList = options.map(i => {
             return <option key={i.value} value={i.value}>{i.label}</option>
@@ -36,7 +36,7 @@ export default class Select extends Component {
             <div className="form-group select">
                 {label && <label>{label}</label>}
                 <select className="form-control" {...field} {...rest} onChange={this.onChange}>
-                    <option value="">Select</option>
+                    <option value="">{ selectLabel || 'Select'}</option>
                     {optionsList}
                 </select>
                 {field && field.touched && field.error && <div className="text-error">{field.error}</div>}
