@@ -16,7 +16,7 @@ export default class Index extends React.Component {
                         <div className="well text-center home-card">
                             <h2>Buyer</h2>
                             <div className="flex-item">
-                                <div>Reduce WCR through improved Days payable Outstanding(”DPO”).</div>
+                                <div>Extend Payable days and improve WCR.</div>
                                 <div>Improve supplier relationships by ensuring supplier ‘liquidity’.</div>
                                 <div>Enhance cash flows and profitability.</div>
                             </div>
