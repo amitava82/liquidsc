@@ -9,6 +9,7 @@ var engine = require('ejs-mate');
 var mongoose = require('mongoose');
 var constants = require('../../../constants');
 var morgan = require('morgan');
+var queryParser = require('express-query-int');
 
 
 module.exports = function (dependencies, callback) {
@@ -34,6 +35,7 @@ module.exports = function (dependencies, callback) {
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
     app.use(cookieParser());
+    app.use(queryParser());
 
     app.use(dependencies.middleware.authenticate, logErrors);
 

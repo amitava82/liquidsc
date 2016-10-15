@@ -34,13 +34,6 @@ export default class LoanAccounts extends React.Component {
     }
 
     @autobind
-    filter(e) {
-        const val = e.target.value;
-        this.props.dispatch(getApplications({status: val}));
-        this.setState({filter: val});
-    }
-
-    @autobind
     toggleSearch() {
         this.setState({showSearch: !this.state.showSearch});
     }

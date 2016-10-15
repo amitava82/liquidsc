@@ -28,11 +28,19 @@ const initialState = {
 const [LOAD_ACCOUNTS, GET_ACCOUNT, UPDATE] = createAction('accounts', ['LOAD_ACCOUNTS', 'GET_ACCOUNT', 'UPDATE']);
 
 export default function (state = initialState, action) {
-    const {payload, type} = action;
+    const {payload, type, meta} = action;
 
     switch (type) {
         case resolve(LOAD_ACCOUNTS):
-            return {...state, data: payload};
+            return {...state,
+                query: meta.query,
+                data: payload.docs,
+                total: payload.total,
+                limit: payload.limit,
+                pages: payload.pages,
+                page: payload.page,
+                loading: false
+            };
 
         case resolve(UPDATE):
             return {...state, data: state.data.map(i => i._id == payload._id ? payload : i)};
@@ -55,10 +63,11 @@ export const getAccount = (id) => ({
     }
 });
 
-export const loadAccounts = () => ({
+export const loadAccounts = (query) => ({
     type: LOAD_ACCOUNTS,
     payload: {
-        promise: api => api.get('accounts')
+        promise: api => api.get('accounts', {params:query }),
+        query
     }
 });
 

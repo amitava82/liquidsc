@@ -5,13 +5,22 @@ import React from 'react';
 import {connect} from 'react-redux';
 import autobind from 'autobind-decorator';
 import Select from 'react-select';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Table, Pagination } from 'react-bootstrap';
 import { Link } from 'react-router';
 import map from 'lodash/map';
 import UIDate from '../../components/UIDate';
+import SearchBar, {buildQuery} from '../../components/Searchbar';
 
 import UpdateAccount from './UpdateAccount';
 import { loadAccounts, updateAccount } from '../../redux/modules/loanAccounts';
+
+const FILTERS = [
+    {label: 'ID', value: '_id'},
+    {label: 'Borrower', value: 'borrower.company'},
+    {label: 'Lender', value: 'lender.company'},
+    {label: 'Amount', value: 'loanAmount'},
+    {label: 'Tenor', value: 'tenor'}
+];
 
 @connect(state=>state)
 export default class LoanAccounts extends React.Component {
@@ -19,7 +28,8 @@ export default class LoanAccounts extends React.Component {
     constructor(...args) {
         super(...args);
         this.state = {
-            editing: null
+            editing: null,
+            showSearch : false
         }
     }
 
@@ -39,8 +49,24 @@ export default class LoanAccounts extends React.Component {
         this.props.dispatch(loadAccounts());
     }
 
+    @autobind
+    toggleSearch() {
+        this.setState({showSearch: !this.state.showSearch});
+    }
+
+    @autobind
+    doSearch(query) {
+        const q = buildQuery(query);
+        this.props.dispatch(loadAccounts(q));
+    }
+
+    @autobind
+    gotoPage(page) {
+        this.props.dispatch(loadAccounts({...this.props.users.query, page: page}));
+    }
+
     render() {
-        const {loanAccounts: {data}} = this.props;
+        const {loanAccounts: {data, page, pages}} = this.props;
 
         const rows = data.map(i => (
             <tr key={i._id}>
@@ -56,9 +82,42 @@ export default class LoanAccounts extends React.Component {
             </tr>
         ));
 
+        const searchContent = (
+            <div>
+                <div className="text-right">
+                    <Button bsStyle="default" onClick={this.toggleSearch}>{this.state.showSearch ? 'Hide': 'Search'}</Button>
+                </div>
+                {
+                    this.state.showSearch ? (
+                        <div className="well">
+                            <SearchBar onSearch={this.doSearch} filters={FILTERS} />
+                        </div>
+                    ) : null
+                }
+            </div>
+        );
+
+        const paginationContent = (
+            <div>
+                <Pagination
+                    prev
+                    next
+                    first
+                    last
+                    boundaryLinks
+                    items={pages}
+                    maxButtons={5}
+                    activePage={Number(page)}
+                    onSelect={this.gotoPage} />
+            </div>
+        );
+
         return (
             <div>
                 <h3>Loan Accounts</h3>
+                <div style={{marginBottom: 10}}>
+                    {searchContent}
+                </div>
                 <table className="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -77,6 +136,7 @@ export default class LoanAccounts extends React.Component {
                         {rows}
                     </tbody>
                 </table>
+                {paginationContent}
                 {this.state.editing && <UpdateAccount onHide={e => this.toggleEdit(null)} onSubmit={this.updateAccount} />}
             </div>
         )

@@ -97,6 +97,15 @@ module.exports = deps => {
                 Application.aggregate(agg).then(
                     result => {
                         const r = result[0];
+
+                        if(!r) return res.send({
+                            total: 0,
+                            page: 1,
+                            pages: 1,
+                            limit: 10,
+                            docs: []
+                        });
+
                         const data = {
                             total: r.count,
                             page: page,
