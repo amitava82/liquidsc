@@ -4,13 +4,20 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import autobind from 'autobind-decorator';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Table, Pagination } from 'react-bootstrap';
 import { Link } from 'react-router';
 import map from 'lodash/map';
 import UIDate from '../../components/UIDate';
-
+import SearchBar, {buildQuery} from '../../components/Searchbar';
 
 import { getApplications } from '../../redux/modules/applications';
+
+const FILTERS = [
+    {label: 'ID', value: '_id'},
+    {label: 'Company name', value: 'company.company'},
+    {label: 'Buyer Decision', value: 'receivableStatus', options: ['approved', 'pending', 'rejected']},
+    {label: 'Status', value: 'status',  options: ['APPROVED', 'PENDING', 'REJECTED']}
+];
 
 @connect(state=>state)
 export default class LoanAccounts extends React.Component {
@@ -18,12 +25,12 @@ export default class LoanAccounts extends React.Component {
     constructor(...args) {
         super(...args);
         this.state = {
-            filter: 'PENDING'
+            showSearch : false
         }
     }
 
     componentWillMount() {
-        this.props.dispatch(getApplications({status: this.state.filter}));
+        this.props.dispatch(getApplications({}));
     }
 
     @autobind
@@ -33,8 +40,24 @@ export default class LoanAccounts extends React.Component {
         this.setState({filter: val});
     }
 
+    @autobind
+    toggleSearch() {
+        this.setState({showSearch: !this.state.showSearch});
+    }
+
+    @autobind
+    doSearch(query) {
+        const q = buildQuery(query);
+        this.props.dispatch(getApplications(q));
+    }
+
+    @autobind
+    gotoPage(page) {
+        this.props.dispatch(getApplications({...this.props.users.query, page: page}));
+    }
+
     render() {
-        const {applications: {data}} = this.props;
+        const {applications: {data, page, pages}} = this.props;
 
         const appRows = data.map(i => (
             <tr key={i._id}>
@@ -49,18 +72,45 @@ export default class LoanAccounts extends React.Component {
             </tr>
         ));
 
+
+        const searchContent = (
+            <div>
+                <div className="text-right">
+                    <Button bsStyle="default" onClick={this.toggleSearch}>{this.state.showSearch ? 'Hide': 'Search'}</Button>
+                </div>
+                {
+                    this.state.showSearch ? (
+                        <div className="well">
+                            <SearchBar onSearch={this.doSearch} filters={FILTERS} />
+                        </div>
+                    ) : null
+                }
+            </div>
+        );
+
+        const paginationContent = (
+            <div>
+                <Pagination
+                    prev
+                    next
+                    first
+                    last
+                    boundaryLinks
+                    items={pages}
+                    maxButtons={5}
+                    activePage={Number(page)}
+                    onSelect={this.gotoPage} />
+            </div>
+        );
+
+
         return (
             <div>
                 <h3>Applications</h3>
-                <div className="pull-right">
-                    <select className="form-control" onChange={this.filter} value={this.state.filter}>
-                        <option value="PENDING">Pending</option>
-                        <option value="UNDER_REVIEW">Under review</option>
-                        <option value="APPROVED">Approved</option>
-                        <option value="REJECTED">Rejected</option>
-                    </select>
+                <div style={{marginBottom: 10}}>
+                    {searchContent}
                 </div>
-                <table className="table table-striped table-bordered">
+                <Table striped bordered condensed hover>
                     <thead>
                     <tr>
                         <th>ID</th>
@@ -76,7 +126,8 @@ export default class LoanAccounts extends React.Component {
                     <tbody>
                     {appRows}
                     </tbody>
-                </table>
+                </Table>
+                {paginationContent}
             </div>
         )
     }

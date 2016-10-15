@@ -28,11 +28,18 @@ const initialState = {
     data: [],
     viewing: null,
     loading: false,
-    error: null
+    error: null,
+    query: {},
+    limit: 10,
+    total: 0,
+    pages: 1,
+    page: 1,
+    sortBy: 'company',
+    order: 1
 };
 
 export default function (state = initialState, action) {
-    const {payload, type} = action;
+    const {payload, type, meta} = action;
     switch (type) {
         case GET_APPLICATION:
             return {...state, viewing: null};
@@ -41,7 +48,15 @@ export default function (state = initialState, action) {
             return {...state, viewing: payload};
 
         case resolve(GET_APPLICATIONS):
-            return {...state, data: payload};
+            return {...state,
+                query: meta.query,
+                data: payload.docs,
+                total: payload.total,
+                limit: payload.limit,
+                pages: payload.pages,
+                page: payload.page,
+                loading: false
+            };
 
         case resolve(CREATE):
             return {...state, data: [...state.data, payload]};
@@ -81,7 +96,8 @@ export const createApplication = data => {
 export const getApplications = query => ({
     type: GET_APPLICATIONS,
     payload: {
-        promise: api => api.get('applications', {params: query})
+        promise: api => api.get('applications', {params: query}),
+        query
     }
 });
 

@@ -43,7 +43,7 @@ export default class Analytics extends React.Component {
         const rejected = get(find(data.appStatus, {_id: 'REJECTED'}), 'count', 0);
 
         return (
-            <div>
+            <div style={{marginTop: 20}}>
                 <Row>
                     <Col xs={3}>
                         <div className="card">

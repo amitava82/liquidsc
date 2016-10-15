@@ -74,8 +74,41 @@ module.exports = deps => {
                     next
                 )
             } else {
-                Application.find(_.extend(req.query, query)).populate('company').sort({'updatedAt': -1}).exec().then(
-                    docs => res.send(docs),
+                const q = req.query;
+                const page = q.page || 1;
+                delete q.page;
+                const limit = 10;
+                const skip = (page -1) * limit;
+
+                const agg = [
+                    {$lookup: {
+                        from: 'users',
+                        localField: 'company',
+                        foreignField: '_id',
+                        as: 'company'
+                    }},
+                    {
+                        $match: _.extend(q, query)
+                    },
+                    {$skip: skip},
+                    {$group: {_id: null, count: {$sum: 1}, docs: {$push: '$$ROOT'}}}
+                ];
+
+                Application.aggregate(agg).then(
+                    result => {
+                        const r = result[0];
+                        const data = {
+                            total: r.count,
+                            page: page,
+                            pages: Math.floor(r.count/limit) || 1,
+                            limit: limit,
+                            docs: r.docs.map(i => {
+                                i.company = i.company[0];
+                                return i;
+                            })
+                        };
+                        res.send(data);
+                    },
                     next
                 );
             }

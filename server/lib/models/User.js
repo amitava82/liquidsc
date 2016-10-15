@@ -2,6 +2,7 @@
  * Created by amitava on 10/02/16.
  */
 var mongoose = require('mongoose');
+var mongoosePaginate = require('mongoose-paginate');
 var ObjId = mongoose.Schema.Types.ObjectId;
 var passwordHelper = require('../helpers/password');
 var Promise = require('bluebird');
@@ -98,6 +99,8 @@ module.exports = function (deps) {
             this._id = uid(this.role, 1);
         next();
     });
+
+    userSchema.plugin(mongoosePaginate);
 
     return mongoose.model(model, userSchema);
 };

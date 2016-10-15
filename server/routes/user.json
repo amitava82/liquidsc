@@ -5,12 +5,18 @@
     {
       "path": "",
       "method": "get",
-      "handler": "getUsers"
+      "handler": "getUsers",
+      "acl": {
+        "role": "ADMIN"
+      }
     },
     {
       "path": ":id",
       "method": "get",
-      "handler": "getUsers"
+      "handler": "getUsers",
+      "acl": {
+        "role": "ADMIN"
+      }
     },
     {
       "path": "profile",

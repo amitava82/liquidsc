@@ -16,7 +16,15 @@ const initialState = {
     data: [],
     lenders: [],
     loading: false,
-    error: null
+    error: null,
+    query: {},
+    limit: 10,
+    total: 0,
+    pages: 1,
+    page: 1,
+    sortBy: 'company',
+    order: 1
+
 };
 
 export default function (state = initialState, action) {
@@ -26,7 +34,15 @@ export default function (state = initialState, action) {
             return {...state, loading: true, error: null};
 
         case resolve(GET_USERS):
-            return {...state, data: payload, loading: false};
+            return {...state,
+                query: meta.query,
+                data: payload.docs,
+                total: payload.total,
+                limit: payload.limit,
+                pages: payload.pages,
+                page: payload.page,
+                loading: false
+            };
 
         case resolve(APPROVE_USER):
             return {...state, data: reject(state.data, {_id: meta.id})};
@@ -40,10 +56,11 @@ export default function (state = initialState, action) {
     }
 }
 
-export const getUsers = query => ({
+export const getUsers = (query, page) => ({
     type: GET_USERS,
     payload: {
-        promise: api => api.get('users', {params: query})
+        promise: api => api.get('users', {params: query}),
+        query
     }
 });
 

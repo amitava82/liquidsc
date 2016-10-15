@@ -15,7 +15,14 @@ const initialState = {
     data: [],
     viewing: null,
     loading: false,
-    error: null
+    error: null,
+    query: {},
+    limit: 10,
+    total: 0,
+    pages: 1,
+    page: 1,
+    sortBy: 'company',
+    order: 1
 };
 
 const [LOAD_ACCOUNTS, GET_ACCOUNT, UPDATE] = createAction('accounts', ['LOAD_ACCOUNTS', 'GET_ACCOUNT', 'UPDATE']);

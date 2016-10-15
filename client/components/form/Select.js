@@ -4,6 +4,7 @@
 import React, {Component, PropTypes} from 'react';
 import sortBy from 'lodash/sortBy';
 import autobind from 'autobind-decorator';
+import classNames from 'classnames';
 
 export default class Select extends Component {
     static propTypes = {
@@ -32,14 +33,16 @@ export default class Select extends Component {
             return <option key={i.value} value={i.value}>{i.label}</option>
         });
 
+        const classes = classNames('form-group select', {'has-error': field && field.touched && field.error});
+
         return (
-            <div className="form-group select">
+            <div className={classes}>
                 {label && <label>{label}</label>}
                 <select className="form-control" {...field} {...rest} onChange={this.onChange}>
                     <option value="">{ selectLabel || 'Select'}</option>
                     {optionsList}
                 </select>
-                {field && field.touched && field.error && <div className="text-error">{field.error}</div>}
+                {field && field.touched && field.error && <div className="text-error help-block sm">{field.error}</div>}
             </div>
         );
     }

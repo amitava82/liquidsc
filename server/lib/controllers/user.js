@@ -18,7 +18,10 @@ module.exports = deps => {
                     next
                 )
             } else {
-                User.find(req.query).exec().then(
+                const q = req.query;
+                const page = q.page || 1;
+                delete q.page;
+                User.paginate(req.query, {page}).then(
                     docs => res.send(docs),
                     next
                 )

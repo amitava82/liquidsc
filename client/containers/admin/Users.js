@@ -6,10 +6,11 @@ import autobind from 'autobind-decorator';
 import {connect} from 'react-redux';
 import { Link } from 'react-router';
 import filter from 'lodash/filter';
-import { Navbar, Nav, NavItem, Tabs, Tab, Button } from 'react-bootstrap';
+import each from 'lodash/forEach';
+import { Navbar, Nav, NavItem, Tabs, Tab, Button, Pagination, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import UIDate from '../../components/UIDate';
-import SearchBar from '../../components/Searchbar';
+import SearchBar, {buildQuery} from '../../components/Searchbar';
 
 import { getUsers } from '../../redux/modules/users';
 
@@ -19,12 +20,13 @@ export default class Users extends React.Component {
     constructor(...args) {
         super(...args);
         this.state = {
+            key: 'BUYER',
             showSearch : false
         }
     }
 
     componentWillMount() {
-        this.props.dispatch(getUsers({approved: true}));
+        this.props.dispatch(getUsers({approved: true, role: this.state.key}));
     }
 
     @autobind
@@ -32,19 +34,32 @@ export default class Users extends React.Component {
         this.setState({showSearch: !this.state.showSearch});
     }
 
-    render () {
-        const {users: {data}} = this.props;
+    @autobind
+    doSearch(query) {
+        const q = buildQuery(query);
+        this.props.dispatch(getUsers({approved: true, ...q, role: this.state.key}));
+    }
 
-        const buyers = filter(data, {role: 'BUYER'});
-        const borrowers = filter(data, {role: 'BORROWER'});
-        const lenders = filter(data, {role: 'LENDER'});
+    @autobind
+    gotoPage(page) {
+        this.props.dispatch(getUsers({...this.props.users.query, page: page}));
+    }
+
+    @autobind
+    handleSelect(key) {
+        this.setState({key});
+        this.props.dispatch(getUsers({role: key, page: 1}));
+    }
+
+    render () {
+        const {users: {data, page, pages}} = this.props;
 
         const style= {
             marginTop: 10
         };
 
         const buyerTable = (
-            <table className="table table-bordered" style={style}>
+            <Table striped bordered condensed hover style={style}>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -63,7 +78,7 @@ export default class Users extends React.Component {
                     </tr>
                 </thead>
                 <tbody>
-                {buyers.map(i => (
+                {data.map(i => (
                     <tr key={i._id}>
                         <td>{i._id}</td>
                         <td>{i.email}</td>
@@ -81,11 +96,11 @@ export default class Users extends React.Component {
                     </tr>
                 ))}
                 </tbody>
-            </table>
+            </Table>
         );
 
         const borrowerTable = (
-            <table className="table table-bordered" style={style}>
+            <Table striped bordered condensed hover style={style}>
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -104,7 +119,7 @@ export default class Users extends React.Component {
                 </tr>
                 </thead>
                 <tbody>
-                {borrowers.map(i => (
+                {data.map(i => (
                     <tr key={i._id}>
                         <td>{i._id}</td>
                         <td>{i.email}</td>
@@ -122,11 +137,11 @@ export default class Users extends React.Component {
                     </tr>
                 ))}
                 </tbody>
-            </table>
+            </Table>
         );
 
         const lenderTable = (
-            <table className="table table-bordered" style={style}>
+            <Table striped bordered condensed hover style={style}>
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -144,7 +159,7 @@ export default class Users extends React.Component {
                 </tr>
                 </thead>
                 <tbody>
-                {lenders.map(i => (
+                {data.map(i => (
                     <tr key={i._id}>
                         <td>{i._id}</td>
                         <td>{i.email}</td>
@@ -161,26 +176,54 @@ export default class Users extends React.Component {
                     </tr>
                 ))}
                 </tbody>
-            </table>
+            </Table>
+        );
+
+        const searchContent = (
+            <div>
+                <div className="text-right">
+                    <Button bsStyle="default" onClick={this.toggleSearch}>{this.state.showSearch ? 'Hide': 'Search'}</Button>
+                </div>
+                {
+                    this.state.showSearch ? (
+                        <div className="well">
+                            <SearchBar onSearch={this.doSearch} />
+                        </div>
+                    ) : null
+                }
+            </div>
+        );
+
+        const paginationContent = (
+            <div>
+                <Pagination
+                    prev
+                    next
+                    first
+                    last
+                    boundaryLinks
+                    items={pages}
+                    maxButtons={5}
+                    activePage={Number(page)}
+                    onSelect={this.gotoPage} />
+            </div>
         );
 
         return (
             <div>
-                <Tabs defaultActiveKey={1}>
-                    <Tab eventKey={1} title="Buyers">
-                        <div className="text-right">
-                            <Button bsStyle="default" onClick={this.toggleSearch}>{this.state.showSearch ? 'Hide': 'Search'}</Button>
-                        </div>
-                        {this.state.showSearch ? (
-                            <div className="well">
-                                <SearchBar/>
-                            </div>
-                        ) : null}
+                {searchContent}
+                <Tabs defaultActiveKey={1} animation={false} activeKey={this.state.key} onSelect={this.handleSelect}>
+                    <Tab eventKey="BUYER" title="Buyers">
                         {buyerTable}
                     </Tab>
-                    <Tab eventKey={2} title="Borrowers">{borrowerTable}</Tab>
-                    <Tab eventKey={3} title="Lenders">{lenderTable}</Tab>
+                    <Tab eventKey="BORROWER" title="Borrowers">
+                        {borrowerTable}
+                        </Tab>
+                    <Tab eventKey="LENDER" title="Lenders">
+                        {lenderTable}
+                    </Tab>
                 </Tabs>
+                {paginationContent}
             </div>
         )
 
