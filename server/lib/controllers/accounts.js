@@ -28,9 +28,9 @@ module.exports = deps => {
             const {role, _id} = req.user;
 
             if(role == constants.roles.BORROWER) {
-                query.borrower = _id;
+                query['borrower._id'] = _id;
             } else if( role == constants.roles.LENDER) {
-                query.lender = _id;
+                query['lender._id'] = _id;
             }
 
             const q = req.query;

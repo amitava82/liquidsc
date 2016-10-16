@@ -10,7 +10,7 @@
       "handler": "getAnalytics",
       "acl": {
         "role": [
-          "ADMIN"
+          "ADMIN", "BORROWER", "LENDER"
         ]
       }
     }

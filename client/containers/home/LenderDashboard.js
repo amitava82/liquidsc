@@ -5,7 +5,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import autobind from 'autobind-decorator';
 import {Link} from 'react-router';
-import {Navbar, Nav, NavItem, Tabs, Tab} from 'react-bootstrap';
+import {Navbar, Nav, NavItem, Tabs, Tab, Pagination} from 'react-bootstrap';
 import UIDate from '../../components/UIDate';
 import {getApplications} from '../../redux/modules/applications';
 import {loadAccounts} from '../../redux/modules/loanAccounts';
@@ -22,8 +22,18 @@ export default class LenderDashboard extends React.Component {
 
     }
 
+    @autobind
+    gotoPage(page) {
+        this.props.dispatch(getApplications({page: page}));
+    }
+
+    @autobind
+    gotoPageLoanAccount(page) {
+        this.props.dispatch(loadAccounts({page: page}));
+    }
+
     render() {
-        const {applications: {data}, loanAccounts} = this.props;
+        const {applications: {data, page, pages }, loanAccounts} = this.props;
 
         const rows = data.map(i => (
             <tr>
@@ -55,7 +65,7 @@ export default class LenderDashboard extends React.Component {
                 <Tabs defaultActiveKey={1}>
                     <Tab eventKey={1} title="Applications">
                         <br/>
-                        <table className="table table-striped table-bordered">
+                        <table className="table table-striped table-bordered table-condensed">
                             <thead>
                             <tr>
                                 <th>ID</th>
@@ -69,10 +79,22 @@ export default class LenderDashboard extends React.Component {
                             {rows}
                             </tbody>
                         </table>
+                        <div>
+                            <Pagination
+                                prev
+                                next
+                                first
+                                last
+                                boundaryLinks
+                                items={pages}
+                                maxButtons={5}
+                                activePage={Number(page)}
+                                onSelect={this.gotoPage} />
+                        </div>
                     </Tab>
                     <Tab eventKey={2} title="Loan Accounts">
                         <br/>
-                        <table className="table table-striped table-bordered">
+                        <table className="table table-striped table-bordered  table-condensed">
                             <thead>
                             <tr>
                                 <th>ID</th>
@@ -89,6 +111,18 @@ export default class LenderDashboard extends React.Component {
                             {accountRows}
                             </tbody>
                         </table>
+                        <div>
+                            <Pagination
+                                prev
+                                next
+                                first
+                                last
+                                boundaryLinks
+                                items={loanAccounts.pages}
+                                maxButtons={5}
+                                activePage={Number(loanAccounts.page)}
+                                onSelect={this.gotoPageLoanAccount} />
+                        </div>
                     </Tab>
                 </Tabs>
             </ div >

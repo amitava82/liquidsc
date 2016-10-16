@@ -118,7 +118,7 @@ export default class LoanAccounts extends React.Component {
                 <div style={{marginBottom: 10}}>
                     {searchContent}
                 </div>
-                <table className="table table-bordered table-striped">
+                <table className="table table-bordered table-striped table-condensed table-hover">
                     <thead>
                         <tr>
                             <th>ID</th>

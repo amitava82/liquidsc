@@ -5,7 +5,7 @@ import autobind from 'autobind-decorator';
 import UIDate from '../../components/UIDate';
 import { getApplications } from '../../redux/modules/applications';
 import { loadAccounts } from '../../redux/modules/loanAccounts';
-import { Navbar, Nav, NavItem, Tabs, Tab } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, Tabs, Tab, Pagination } from 'react-bootstrap';
 import UploadDocModal  from './UploadDocModal';
 
 @connect(state=>state)
@@ -27,8 +27,19 @@ export default class SupplierDashboard extends React.Component {
         this.setState({uploading: id});
     }
 
+    @autobind
+    gotoPage(page) {
+        this.props.dispatch(getApplications({page: page}));
+    }
+
+    @autobind
+    gotoPageLoanAccount(page) {
+        this.props.dispatch(loadAccounts({page: page}));
+    }
+
+
     render() {
-        const {applications: {data}, loanAccounts} = this.props;
+        const {applications: {data, page, pages}, loanAccounts} = this.props;
         const rows = data.map(i => (
             <tr>
                 <td>{i._id}</td>
@@ -54,6 +65,7 @@ export default class SupplierDashboard extends React.Component {
             </tr>
         ));
 
+
         return (
             <div>
                 <Tabs defaultActiveKey={1}>
@@ -75,6 +87,18 @@ export default class SupplierDashboard extends React.Component {
                             {rows}
                             </tbody>
                         </table>
+                        <div>
+                            <Pagination
+                                prev
+                                next
+                                first
+                                last
+                                boundaryLinks
+                                items={pages}
+                                maxButtons={5}
+                                activePage={Number(page)}
+                                onSelect={this.gotoPage} />
+                        </div>
                     </Tab>
                     <Tab eventKey={2} title="Loan Accounts">
                         <br/>
@@ -95,6 +119,18 @@ export default class SupplierDashboard extends React.Component {
                             {accountRows}
                             </tbody>
                         </table>
+                        <div>
+                            <Pagination
+                                prev
+                                next
+                                first
+                                last
+                                boundaryLinks
+                                items={loanAccounts.pages}
+                                maxButtons={5}
+                                activePage={Number(loanAccounts.page)}
+                                onSelect={this.gotoPageLoanAccount} />
+                        </div>
                     </Tab>
                 </Tabs>
                 {this.state.uploading && <UploadDocModal id={this.state.uploading} onHide={e => this.toggleUpload(null)} />}

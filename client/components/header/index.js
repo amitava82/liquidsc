@@ -24,7 +24,12 @@ export default class Header extends React.Component {
                     <LinkContainer to="/application/create" key={1}>
                         <NavItem>New Loan</NavItem>
                     </LinkContainer>
-                )
+                );
+                items.push(
+                    <LinkContainer to="/analytics" key={6}>
+                        <NavItem>Analytics</NavItem>
+                    </LinkContainer>
+                );
             } else if(user.role == 'ADMIN') {
                 items.push(
                     <LinkContainer to="/admin/users" key={2}>
@@ -47,7 +52,11 @@ export default class Header extends React.Component {
                     </LinkContainer>
                 );
             } else if(user.role == 'LENDER') {
-
+                items.push(
+                    <LinkContainer to="/analytics" key={6}>
+                        <NavItem>Analytics</NavItem>
+                    </LinkContainer>
+                );
             }
         }
         return items;

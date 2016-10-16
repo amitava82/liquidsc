@@ -11,6 +11,7 @@ import Admin from './containers/admin';
 import Lender from './containers/lender';
 import LenderAppDetails from './containers/lender/ApplicationDetails';
 import Account from './containers/account';
+import Analytics from './containers/analytics';
 
 import NotFound from './containers/misc/NotFound';
 
@@ -58,6 +59,7 @@ export default (store) => {
             <Route path="/lender" onEnter={checkRole('LENDER')}>
                 <Route path="applications/:id" component={LenderAppDetails} />
             </Route>
+            <Route path="analytics" component={Analytics} onEnter={ensureLoggedIn} />
             <Route path="*" component={NotFound}/>
         </Route>
     );

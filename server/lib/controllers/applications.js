@@ -45,7 +45,7 @@ module.exports = deps => {
             const userRole = req.user.role;
             const userId = req.user._id;
             if(userRole == constants.roles.BORROWER) {
-                query.company = userId;
+                query['company._id'] = userId;
             } else if(userRole == constants.roles.BUYER) {
                 query.buyerEmail = req.user.email;
                 //query.receivableStatus = 'pending';

@@ -7,8 +7,10 @@ import get from 'lodash/get';
 import { connect } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
 import accounting from 'accounting';
+import {PieChart, Pie, Legend, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 import { loadAnalytics } from '../../redux/modules/analytics';
+const COLORS = ['#0088FE', '#FF8042', '#00C49F', '#FFBB28'];
 
 function calcPc(num, total) {
     return evenRound((num/total) * 100, 1);
@@ -41,6 +43,12 @@ export default class Analytics extends React.Component {
         const pending = get(find(data.appStatus, {_id: 'PENDING'}), 'count', 0);
         const approved = data.totalLoanAcc;
         const rejected = get(find(data.appStatus, {_id: 'REJECTED'}), 'count', 0);
+
+        const applicationChartData = [
+            {name: 'Pending', value: calcPc(pending, data.totalAppCount)},
+            {name: 'Approved', value: calcPc(approved, data.totalAppCount)},
+            {name: 'Rejected', value: calcPc(rejected, data.totalAppCount)},
+        ];
 
         return (
             <div style={{marginTop: 20}}>
@@ -86,12 +94,15 @@ export default class Analytics extends React.Component {
                         <div className="card">
                             <h5>Applications %</h5>
                             <div className="card-content">
-                                <h4>Pending</h4>
-                                <h2 className="text-success">{calcPc(pending, data.totalAppCount)}%</h2>
-                                <h4>Approved</h4>
-                                <h2 className="text-success">{calcPc(approved, data.totalAppCount)}%</h2>
-                                <h4>Rejected</h4>
-                                <h2 className="text-success">{calcPc(rejected, data.totalAppCount)}%</h2>
+                                <ResponsiveContainer>
+                                    <PieChart>
+                                        <Pie labelLine={false} isAnimationActive={true} data={applicationChartData} cx="50%" cy="50%" outerRadius={80}>
+                                            {applicationChartData.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)}
+                                        </Pie>
+                                        <Tooltip/>
+                                        <Legend/>
+                                    </PieChart>
+                                </ResponsiveContainer>
                             </div>
                         </div>
                     </Col>

@@ -4,6 +4,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import autobind from 'autobind-decorator';
+import { Pagination } from 'react-bootstrap';
 import UIDate from '../../components/UIDate';
 import { getApplications, buyerChangeStatus } from '../../redux/modules/applications';
 
@@ -18,8 +19,13 @@ export default class BuyerDashboard extends React.Component {
         this.props.dispatch(buyerChangeStatus(id, status));
     }
 
+    @autobind
+    gotoPage(page) {
+        this.props.dispatch(getApplications({page: page}));
+    }
+
     render() {
-        const {applications: {data}} = this.props;
+        const {applications: {data, page, pages}} = this.props;
         const rows = data.map(i => (
             <tr>
                 <td>{i._id}</td>
@@ -57,6 +63,18 @@ export default class BuyerDashboard extends React.Component {
                     {rows}
                     </tbody>
                 </table>
+                <div>
+                    <Pagination
+                        prev
+                        next
+                        first
+                        last
+                        boundaryLinks
+                        items={pages}
+                        maxButtons={5}
+                        activePage={Number(page)}
+                        onSelect={this.gotoPage} />
+                </div>
             </div>
         )
     }

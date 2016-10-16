@@ -75,6 +75,7 @@
     "react-router-scroll": "^0.2.0",
     "react-select": "^1.0.0-beta13",
     "react-simple-modal": "^1.1.5",
+    "recharts": "^0.15.2",
     "redux": "^3.5.2",
     "redux-form": "^5.3.1",
     "redux-thunk": "^2.1.0",
