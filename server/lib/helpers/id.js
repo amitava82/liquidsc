@@ -5,13 +5,13 @@
 var shortid = require('shortid');
 
 const types = {
-    ADMIN: 1,
-    BUYER: 2,
-    LENDER: 3,
-    BORROWER: 4,
-    proposal: 7,
-    app: 8,
-    loan: 9
+    ADMIN: 'A',
+    BUYER: 'B',
+    LENDER: 'L',
+    BORROWER: 'S',
+    proposal: 'P',
+    app: 'X',
+    loan: 'L'
 };
 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 

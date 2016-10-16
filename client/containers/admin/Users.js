@@ -48,7 +48,7 @@ export default class Users extends React.Component {
     @autobind
     handleSelect(key) {
         this.setState({key});
-        this.props.dispatch(getUsers({role: key, page: 1}));
+        this.props.dispatch(getUsers({role: key, page: 1, approved: true}));
     }
 
     render () {

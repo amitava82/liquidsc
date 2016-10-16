@@ -21,7 +21,7 @@ module.exports = deps => {
                 const q = req.query;
                 const page = q.page || 1;
                 delete q.page;
-                User.paginate(req.query, {page}).then(
+                User.paginate(q, {page}).then(
                     docs => res.send(docs),
                     next
                 )
