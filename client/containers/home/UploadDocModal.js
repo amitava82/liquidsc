@@ -9,7 +9,7 @@ import { Modal, Button } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import autobind from 'autobind-decorator';
 import { reduxForm } from 'redux-form';
-
+import { createValidator, required } from '../../utils/validator';
 import File from '../../components/form/File';
 import Input from '../../components/form/PureInput';
 
@@ -21,7 +21,10 @@ const api = new Api();
     fields: [
         'documents[].type',
         'documents[].file',
-    ]
+    ],
+    validate: createValidator({
+        documents: docs => docs.map(createValidator({type: required(), file: required()}))
+    })
 })
 export default class UpdateAccount extends React.Component {
 

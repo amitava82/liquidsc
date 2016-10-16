@@ -13,11 +13,11 @@ var uuid = require('uuid');
 var mkdirp = require('mkdirp');
 var constants = require('../../../constants');
 
+const USER_PROPS =  'company email';
 const populate = [
-    {path: 'company'},
-    {path: 'lenders'},
-    {path: 'buyer'},
-    {path: 'proposals.lender', model: 'User'}
+    {path: 'company', select: USER_PROPS},
+    {path: 'lenders', select: USER_PROPS},
+    {path: 'buyer', select: USER_PROPS}
 ];
 
 module.exports = deps => {
@@ -36,6 +36,23 @@ module.exports = deps => {
         }
     });
     var uploader = multer({ storage: storage });
+
+    function scopeQuery(req) {
+        const id = req.params.id;
+        const query = {};
+        if(id) {
+            query._id = id;
+        }
+        const userRole = req.user.role;
+        const userId = req.user._id;
+        if(userRole == constants.roles.BORROWER) {
+            query.company = userId;
+        } else if(userRole == constants.roles.BUYER) {
+            query.buyerEmail = req.user.email;
+        } else if(userRole == constants.roles.LENDER) {
+            query.lenders = {$in: [userId]};
+        }
+    }
 
     return {
 
@@ -57,20 +74,48 @@ module.exports = deps => {
             }
 
             if(id) {
-                Application.aggregate([
+                const query = {
+                    _id: id
+                };
+                if(userRole == constants.roles.BORROWER) {
+                    query.company = userId;
+                } else if(userRole == constants.roles.BUYER) {
+                    query.buyerEmail = req.user.email;
+                } else if(userRole == constants.roles.LENDER) {
+                    query.lenders = {$in: [userId]};
+                }
+
+                const agg = [
                     {
-                        $match: {_id: id}
-                    },
-                    {$lookup: {
+                        $match: query
+                    }
+                ];
+                if(userRole == constants.roles.ADMIN) {
+                    agg.push({$lookup: {
                         from: 'proposals',
                         localField: '_id',
                         foreignField: 'application',
                         as: 'proposals'
-                    }}
-                ]).then(
-                    doc => Application.populate(doc, populate)
+                    }})
+                }
+                Application.aggregate(agg).then(
+                    doc => {
+                        const _populate = _.clone(populate);
+                        if(userRole == constants.roles.ADMIN) {
+                            _populate.push({path: 'proposals.lender', model: 'User', select: USER_PROPS})
+                        }
+                        return Application.populate(doc, _populate);
+                    }
                 ).then(
-                    doc => res.send(doc[0]),
+                    docs => {
+                        const doc = docs[0];
+                        if(!doc) return res.status(404).end();
+
+                        if(userRole == constants.roles.BUYER) {
+                            doc.documents = _.filter(doc.documents, {fieldname: 'receivable'});
+                        }
+                        res.send(doc);
+                    },
                     next
                 )
             } else {
@@ -90,6 +135,7 @@ module.exports = deps => {
                     {
                         $match: _.extend(q, query)
                     },
+                    {$sort: {createdAt: -1}},
                     {$skip: skip},
                     {$group: {_id: null, count: {$sum: 1}, docs: {$push: '$$ROOT'}}}
                 ];
@@ -112,7 +158,10 @@ module.exports = deps => {
                             pages: Math.floor(r.count/limit) || 1,
                             limit: limit,
                             docs: r.docs.map(i => {
-                                i.company = i.company[0];
+                                i.company = _.pick(i.company[0], ['company']);
+                                if(userRole == constants.roles.BUYER) {
+                                    i.documents = _.filter(i.documents, {fieldname: 'receivable'});
+                                }
                                 return i;
                             })
                         };
@@ -180,27 +229,67 @@ module.exports = deps => {
         ],
 
         updateApplication(req, res, next) {
-            Application.findByIdAndUpdate(req.params.id, req.body, {new: true}).populate(populate).exec()
-                .then(
-                    doc => {
-                        if(req.body.adminComment) {
-                            var mailer = deps.nodemailer;
-                            mailer.sendMail({
-                                from: 'support@alchcapital.com',
-                                to: [doc.company.email],
-                                subject: 'Additional information requested',
-                                html: templates.docRequested(doc)
-                            });
-                        }
-                        return doc;
+            const {role} = req.user;
+            const data = req.body;
+            const q = scopeQuery(req);
+            let updateData = {};
+
+            if(role == constants.roles.BUYER) {
+                updateData = _.pick(data, 'receivableStatus');
+            } else {
+                updateData = data;
+            }
+
+            Application.findOne(q).exec().then(
+                doc => {
+                    if(!doc) throw new Error('Not found');
+
+                    return  Application.findByIdAndUpdate(req.params.id, updateData, {new: true}).populate(populate).exec()
+                }
+            ).then(
+                doc => {
+                    var mailer = deps.nodemailer;
+                    if(updateData.adminComment) {
+                        mailer.sendMail({
+                            from: 'support@alchcapital.com',
+                            to: [doc.company.email],
+                            subject: 'Additional information requested',
+                            html: templates.docRequested(doc)
+                        });
+                    } else if (updateData.receivableStatus == 'approved') {
+                        mailer.sendMail({
+                            from: 'support@alchcapital.com',
+                            to: [constants.adminEmail, doc.company.email],
+                            subject: 'Receivable doc status updated',
+                            html: templates.recStatusUpdated(doc)
+                        });
                     }
-                ).then(
-                    doc => res.send(doc),
-                    next
-                )
+                    return doc;
+                }
+            ).then(
+                doc => {
+                    if(role == constants.roles.BUYER) {
+                        doc.documents = _.filter(doc.documents, {fieldname: 'receivable'});
+                    }
+                    res.send(doc)
+                },
+                next
+            );
         },
 
         uploadDocs: [
+            (req, res, next) => {
+              Application.findOne(scopeQuery(req)).exec().then(
+                  doc => {
+                      if(!doc) {
+                          res.status(404).send('Not found');
+                      } else {
+                          next();
+                      }
+                  },
+                  next
+              )
+            },
             (req, res, next) => {
                 req.instance = req.instance || {};
                 req.instance.id = req.params.id;
@@ -256,39 +345,30 @@ module.exports = deps => {
 
         getDoc(req, res, next) {
             const {id, doc} = req.params;
-            Application.findById(id).exec().then(
-                f => {
-                    const file = _.find(f.documents, {fieldname: doc});
+            const {role, _id, email} = req.user;
 
+            if(role == constants.roles.BUYER && doc != 'receivable') {
+                return res.status(404).send('Not found');
+            }
+
+            const query = {_id: id};
+            if(role == constants.roles.BUYER) {
+                query.buyerEmail = email;
+            } else if(role == constants.roles.LENDER) {
+                query.lenders = {$in: [_id]};
+            } else if(role == constants.roles.BORROWER) {
+                query.company = _id;
+            }
+
+            Application.findOne(query).exec().then(
+                f => {
+                   if(!f) return res.status(404).send('Not found');
+
+                    const file = _.find(f.documents, {fieldname: doc});
                     res.sendFile(file.path);
                 },
                 next
             )
-        },
-
-        updateBuyerStatus(req, res, next) {
-            const {status, id} = req.params;
-            Application.findOneAndUpdate(
-                {buyerEmail: req.user.email, _id: id},
-                {receivableStatus: status, buyer: req.user._id}, {new: true})
-                .populate(populate)
-                .exec()
-                .then(
-                    doc => {
-                        var mailer = deps.nodemailer;
-                        mailer.sendMail({
-                            from: 'support@alchcapital.com',
-                            to: [constants.adminEmail, doc.company.email],
-                            subject: 'Receivable doc status updated',
-                            html: templates.recStatusUpdated(doc)
-                        });
-                        return doc;
-                    }
-                )
-                .then(
-                    doc => res.send(doc),
-                    next
-                );
         },
 
         submitProposal(req, res, next) {

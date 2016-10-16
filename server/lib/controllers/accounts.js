@@ -9,16 +9,25 @@ var ObjId = mongoose.Types.ObjectId;
 var templates = require('../../../templates');
 var constants = require('../../../constants');
 
+const USER_PROPS = ['_id', 'company', 'fullName'];
+
 module.exports = deps => {
     const LoanAccount = mongoose.models.LoanAccount;
     const Proposal = mongoose.models.Proposal;
 
     return {
-
         getAccount(req, res, next) {
             LoanAccount.findById(req.params.id).populate(['borrower', 'lender']).exec()
                 .then(
-                    docs => res.send(docs),
+                    doc => {
+                        const {role, _id} = req.user;
+                        if(role == constants.roles.BORROWER) {
+                            if(doc.borrowser._id !== _id) throw new Error('No access');
+                        } else if(role == constants.roles.LENDER) {
+                            if(doc.lender._id !== _id) throw new Error('No access');
+                        }
+                        res.send(doc);
+                    },
                     next
                 )
         },
@@ -55,6 +64,7 @@ module.exports = deps => {
                 {
                     $match: _.extend(q, query)
                 },
+                {$sort: {createdAt: -1}},
                 {$skip: skip},
                 {$group: {_id: null, count: {$sum: 1}, docs: {$push: '$$ROOT'}}}
             ];
@@ -78,11 +88,12 @@ module.exports = deps => {
                             pages: Math.floor(r.count/limit) || 1,
                             limit: limit,
                             docs: r.docs.map(i => {
-                                i.lender = i.lender[0];
-                                i.borrower = i.borrower[0];
+                                i.lender = _.pick(i.lender[0], USER_PROPS);
+                                i.borrower = _.pick(i.borrower[0], USER_PROPS);
                                 return i;
                             })
                         };
+
                         res.send(data);
                     },
                     next

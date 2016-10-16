@@ -41,6 +41,7 @@ export default class LenderDashboard extends React.Component {
                 <td><UIDate date={i.createdAt}/></td>
                 <td>{i.company.company}</td>
                 <td>{i.loanAmount}</td>
+                <th>{i.account ? 'Approved' : 'Pending'}</th>
                 <td>
                     <Link className="btn btn-primary" to={`/lender/applications/${i._id}`}>View</Link>
                 </td>
@@ -72,6 +73,7 @@ export default class LenderDashboard extends React.Component {
                                 <th>Application date</th>
                                 <th>Company</th>
                                 <th>Amount</th>
+                                <th>Lender decision</th>
                                 <th>Action</th>
                             </tr>
                             </thead>

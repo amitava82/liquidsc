@@ -125,7 +125,7 @@ export const assignToLenders = (id, lenders) => ({
 export const buyerChangeStatus = (id, status) => ({
    type:  BUYER_CHANGE_STATUS,
     payload: {
-       promise: api => api.post(`applications/${id}/buyer/${status}`)
+       promise: api => api.put(`applications/${id}`, {data: {receivableStatus: status}})
     }
 });
 

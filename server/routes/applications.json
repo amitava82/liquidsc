@@ -15,7 +15,10 @@
     {
       "path": ":id",
       "method": "put",
-      "handler": "updateApplication"
+      "handler": "updateApplication",
+      "acl": {
+        "role": ["ADMIN", "BUYER"]
+      }
     },
     {
       "path": "",
@@ -39,14 +42,6 @@
       "handler": "assignToLenders",
       "acl": {
         "role": "ADMIN"
-      }
-    },
-    {
-      "path": ":id/buyer/:status",
-      "method": "post",
-      "handler": "updateBuyerStatus",
-      "acl": {
-        "role": "BUYER"
       }
     },
     {
