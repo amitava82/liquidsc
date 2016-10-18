@@ -58,6 +58,7 @@ export default class SupplierDashboard extends React.Component {
                 <td>{i._id}</td>
                 <td><UIDate date={i.createdAt} time={false} /></td>
                 <td>{i.loanAmount}</td>
+                <td>{(i.loanAmount * (1.25/100)).toFixed(0)}</td>
                 <td>
                     <table className="table">
                         <thead>
@@ -132,6 +133,7 @@ export default class SupplierDashboard extends React.Component {
                                 <th>ID</th>
                                 <th>Created on</th>
                                 <th>Amount</th>
+                                <th>Processing fees</th>
                                 <th>Lenders</th>
                             </tr>
                             </thead>

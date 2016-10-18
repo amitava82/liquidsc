@@ -78,6 +78,7 @@ export default class LoanAccounts extends React.Component {
                 <td>{i._id}</td>
                 <td>{i.borrower.company}</td>
                 <td>{i.loanAmount}</td>
+                <td>{(i.loanAmount * (1.25/100)).toFixed(0)}</td>
                 <td>
                     <table className="table">
                         <thead>
@@ -153,6 +154,7 @@ export default class LoanAccounts extends React.Component {
                             <th>ID</th>
                             <th>Borrower</th>
                             <th>Loan Amount</th>
+                            <th>Processing fees</th>
                             <th>Lenders</th>
                         </tr>
                     </thead>
