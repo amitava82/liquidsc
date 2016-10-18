@@ -55,7 +55,7 @@ module.exports = deps => {
                     totalAppCount,
                     appStatus,
                     totalLoanAcc,
-                    totalLoanAmount: totalLoanAmount[0].total
+                    totalLoanAmount: _.get(totalLoanAmount[0], 'total', 0)
                 });
             }).catch(next);
 
