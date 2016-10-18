@@ -5,14 +5,14 @@ import React from 'react';
 import {connect} from 'react-redux';
 import autobind from 'autobind-decorator';
 import accounting from 'accounting';
-import { Row, Col, Button, Table, Pagination } from 'react-bootstrap';
+import { Row, Col, Button, Table, Pagination, Label } from 'react-bootstrap';
 import { Link } from 'react-router';
 import map from 'lodash/map';
 import UIDate from '../../components/UIDate';
 import SearchBar, {buildQuery} from '../../components/Searchbar';
 
 import UpdateAccount from './UpdateAccount';
-import { loadAccounts, updateAccount } from '../../redux/modules/loanAccounts';
+import { loadAccounts, updateAccount, settleAccount } from '../../redux/modules/loanAccounts';
 
 const pc = (amt, total) => accounting.toFixed((amt * 100)/total);
 
@@ -70,6 +70,11 @@ export default class LoanAccounts extends React.Component {
         this.props.dispatch(loadAccounts({...this.props.users.query, page: page}));
     }
 
+    @autobind
+    settle(id) {
+        this.props.dispatch(settleAccount(id));
+    }
+
     render() {
         const {loanAccounts: {data, page, pages}} = this.props;
 
@@ -103,11 +108,14 @@ export default class LoanAccounts extends React.Component {
                                     <td>{l.tenor}</td>
                                     <td><UIDate date={l.disbursementDate} time={false} /></td>
                                     <td><UIDate date={l.repaymentDate} time={false}/></td>
-                                    <td><button className="btn btn-primary btn-sm" onClick={e => this.toggleEdit(i._id, l._id)}>Edit</button></td>
+                                    <td><Button bsStyle="default" className="btn-sm" onClick={e => this.toggleEdit(i._id, l._id)}>Edit</Button></td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+                </td>
+                <td>
+                    {i.settled ? <Label bsStyle="success">Yes</Label> : <Button bsStyle="primary" onClick={e => this.settle(i._id)} className="btn-sm">Settle</Button>}
                 </td>
             </tr>
         ));
@@ -156,6 +164,7 @@ export default class LoanAccounts extends React.Component {
                             <th>Loan Amount</th>
                             <th>Processing fees</th>
                             <th>Lenders</th>
+                            <th>Settled</th>
                         </tr>
                     </thead>
                     <tbody>

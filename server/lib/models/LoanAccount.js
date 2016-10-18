@@ -59,6 +59,11 @@ module.exports = function (deps) {
             ref: 'Application',
             required: true,
             index: {unique: true}
+        },
+
+        settled: {
+            type: Boolean,
+            default: false
         }
     }, {timestamps: true});
 

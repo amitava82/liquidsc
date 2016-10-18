@@ -104,7 +104,8 @@ module.exports = deps => {
                         application: {$arrayElemAt: ['$application', 0]},
                         borrower: {$arrayElemAt: ['$borrower', 0]},
                         loanAmount: '$loanAmount',
-                        createdAt: '$createdAt'
+                        createdAt: '$createdAt',
+                        settled: '$settled'
                     }
                 },
                 {
@@ -114,7 +115,8 @@ module.exports = deps => {
                         application: {$first: '$application'},
                         borrower: {$first: '$borrower'},
                         loanAmount: {$first: '$loanAmount'},
-                        createdAt: {$first: '$createdAt'}
+                        createdAt: {$first: '$createdAt'},
+                        settled: {$first: '$settled'}
                     }
                 },
                 {
@@ -184,6 +186,14 @@ module.exports = deps => {
                     next
                 )
 
+        },
+
+        settle(req, res, next) {
+            LoanAccount.findByIdAndUpdate(req.params.id, {settled: true}, {new: true}).populate(populate).exec()
+                .then(
+                    doc => res.send(doc),
+                    next
+                )
         }
     }
 };
