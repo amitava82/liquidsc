@@ -5,10 +5,13 @@ import React from 'react';
 import autobind from 'autobind-decorator';
 import { reduxForm, reset } from 'redux-form';
 import find from 'lodash/find';
+import moment from 'moment';
 import Select from './form/Select';
 import Input from './form/PureInput';
+import DateInput from './form/DatePicker';
 import NumberInput from './form/NumberInput';
 import each from 'lodash/each';
+import isDate from 'lodash/isDate';
 import { Button, FormControl, Row, Col, Glyphicon } from 'react-bootstrap';
 import { createValidator, required } from '../utils/validator';
 
@@ -63,12 +66,14 @@ export default class Searchbar extends React.Component {
     }
 
     renderInput(filter, filterOptions) {
-        const {field, options} = filter;
+        const {field, options, type} = filter;
         const f = find(filterOptions, {value: field.value});
         if(f && f.options) {
             return <Select field={filter.value} options={f.options.map(i => ({label: i, value: i}))}/>
-        }
-        return <Input field={filter.value} placeholder="search text" />;
+        } else if (f && f.type == 'date') {
+            return <DateInput field={filter.value} />;
+        }else
+            return <Input field={filter.value} placeholder="search text" />;
     }
 
     render() {
@@ -107,18 +112,20 @@ export default class Searchbar extends React.Component {
 export function buildQuery(query) {
     const q = {};
     each(query, (val) => {
+        let value = val.value;
+        value = isDate(value) ? moment(value).format('YYYY-MM-DD') : value;
         switch (val.operator) {
             case '=':
-                q[val.field] = val.value;
+                q[val.field] = value;
                 break;
             case 'contains':
-                q[val.field] = {$regex: val.value, $options: 'i'};
+                q[val.field] = {$regex: value, $options: 'i'};
                 break;
             case 'gt':
-                q[val.field] = {$gt: val.value};
+                q[val.field] = {$gt: value};
                 break;
             case 'lt':
-                q[val.field] = {$lt: val.value};
+                q[val.field] = {$lt: value};
                 break;
         }
     });

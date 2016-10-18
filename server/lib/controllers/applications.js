@@ -138,6 +138,10 @@ module.exports = deps => {
                 )
             } else {
                 const q = req.query;
+                if(q.account) {
+                    q.account = {$exists: q.account == 'approved'} ;
+                }
+
                 const page = q.page || 1;
                 delete q.page;
                 const limit = 10;

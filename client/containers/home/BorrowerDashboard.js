@@ -7,6 +7,7 @@ import { getApplications } from '../../redux/modules/applications';
 import { loadAccounts } from '../../redux/modules/loanAccounts';
 import { Navbar, Nav, NavItem, Tabs, Tab, Pagination } from 'react-bootstrap';
 import UploadDocModal  from './UploadDocModal';
+import {pc} from '../../utils';
 
 @connect(state=>state)
 export default class SupplierDashboard extends React.Component {
@@ -55,13 +56,36 @@ export default class SupplierDashboard extends React.Component {
         const accountRows = loanAccounts.data.map(i => (
             <tr key={i._id}>
                 <td>{i._id}</td>
-                <td><UIDate date={i.createdAt}/></td>
-                <td>{i.lender.company}</td>
+                <td><UIDate date={i.createdAt} time={false} /></td>
                 <td>{i.loanAmount}</td>
-                <td>{i.interestRate}</td>
-                <td>{i.tenor}</td>
-                <td><UIDate date={i.disbursementDate} time={false}/></td>
-                <td><UIDate date={i.repaymentDate} time={false} /></td>
+                <td>
+                    <table className="table">
+                        <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Amount</th>
+                            <th>Percent</th>
+                            <th>Interest Rate</th>
+                            <th>Tenor</th>
+                            <th>Disbursement date</th>
+                            <th>Repayment date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {i.lenders.map(l => (
+                            <tr key={l._id}>
+                                <td>{l.lender.company}</td>
+                                <td>{l.loanAmount}</td>
+                                <td>{pc(l.loanAmount, i.loanAmount)}%</td>
+                                <td>{l.interestRate}</td>
+                                <td>{l.tenor}</td>
+                                <td><UIDate date={l.disbursementDate} time={false} /></td>
+                                <td><UIDate date={l.repaymentDate} time={false}/></td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </td>
             </tr>
         ));
 
@@ -71,7 +95,7 @@ export default class SupplierDashboard extends React.Component {
                 <Tabs defaultActiveKey={1}>
                     <Tab eventKey={1} title="Applications">
                         <br/>
-                        <table className="table table-striped table-bordered">
+                        <table className="table table-striped">
                             <thead>
                             <tr>
                                 <th>ID</th>
@@ -102,17 +126,13 @@ export default class SupplierDashboard extends React.Component {
                     </Tab>
                     <Tab eventKey={2} title="Loan Accounts">
                         <br/>
-                        <table className="table table-striped table-bordered">
+                        <table className="table table-striped">
                             <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Created on</th>
-                                <th>Lender</th>
                                 <th>Amount</th>
-                                <th>Tenor</th>
-                                <th>Rate</th>
-                                <th>Disbursement Date</th>
-                                <th>Repayment Date</th>
+                                <th>Lenders</th>
                             </tr>
                             </thead>
                             <tbody>

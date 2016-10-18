@@ -37,6 +37,8 @@ module.exports = function (dependencies, callback) {
     app.use(cookieParser());
     app.use(queryParser({
         parser: function(value, radix, name) {
+            if(value.constructor === Object) return value;
+
             if (value.match(/^[0-9]+$/) != null) {
                 return parseInt(value, radix);
             } else {

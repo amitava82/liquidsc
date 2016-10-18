@@ -50,6 +50,14 @@ module.exports = deps => {
             }
 
             const q = req.query;
+
+            if(q['lenders.disbursementDate']) {
+                q['lenders.disbursementDate'] = moment.utc(q['lenders.disbursementDate']).toDate()
+            }
+            if(q['lenders.repaymentDate']) {
+                q['lenders.repaymentDate'] = moment.utc(q['lenders.repaymentDate']).toDate()
+            }
+
             const page = q.page || 1;
             delete q.page;
             const limit = 10;
@@ -95,7 +103,8 @@ module.exports = deps => {
                         },
                         application: {$arrayElemAt: ['$application', 0]},
                         borrower: {$arrayElemAt: ['$borrower', 0]},
-                        loanAmount: '$loanAmount'
+                        loanAmount: '$loanAmount',
+                        createdAt: '$createdAt'
                     }
                 },
                 {
@@ -104,7 +113,8 @@ module.exports = deps => {
                         lenders: {$push: '$lender'},
                         application: {$first: '$application'},
                         borrower: {$first: '$borrower'},
-                        loanAmount: {$first: '$loanAmount'}
+                        loanAmount: {$first: '$loanAmount'},
+                        createdAt: {$first: '$createdAt'}
                     }
                 },
                 {
@@ -115,26 +125,6 @@ module.exports = deps => {
                 {$group: {_id: null, count: {$sum: 1}, docs: {$push: '$$ROOT'}}}
             ];
 
-            const agg = [
-                {$lookup: {
-                    from: 'users',
-                    localField: 'borrower',
-                    foreignField: '_id',
-                    as: 'borrower'
-                }},
-                {$lookup: {
-                    from: 'users',
-                    localField: 'lender',
-                    foreignField: '_id',
-                    as: 'lender'
-                }},
-                {
-                    $match: _.extend(q, query)
-                },
-                {$sort: {createdAt: -1}},
-                {$skip: skip},
-                {$group: {_id: null, count: {$sum: 1}, docs: {$push: '$$ROOT'}}}
-            ];
 
             LoanAccount.aggregate(agg2)
                 .then(
@@ -155,10 +145,15 @@ module.exports = deps => {
                             pages: Math.floor(r.count/limit) || 1,
                             limit: limit,
                             docs: r.docs.map(i => {
-                                i.lenders = _.map(i.lenders, l => {
-                                    l.lender = _.pick(l.lender, USER_PROPS);
-                                    return l;
-                                });
+                                if(role == constants.roles.LENDER) {
+                                    const lender = _.find(i.lenders, l => l.lender._id == _id);
+                                    i.lenders = [lender];
+                                } else {
+                                    i.lenders = _.map(i.lenders, l => {
+                                        l.lender = _.pick(l.lender, USER_PROPS);
+                                        return l;
+                                    });
+                                }
                                 i.borrower = _.pick(i.borrower, USER_PROPS);
                                 return i;
                             })

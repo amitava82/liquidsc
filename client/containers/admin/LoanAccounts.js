@@ -19,9 +19,11 @@ const pc = (amt, total) => accounting.toFixed((amt * 100)/total);
 const FILTERS = [
     {label: 'ID', value: '_id'},
     {label: 'Borrower', value: 'borrower.company'},
-    {label: 'Lender', value: 'lender.company'},
+    {label: 'Lender', value: 'lenders.lender.company'},
     {label: 'Amount', value: 'loanAmount'},
-    {label: 'Tenor', value: 'tenor'}
+    {label: 'Tenor', value: 'lenders.tenor'},
+    {label: 'Disbursement', value: 'lenders.disbursementDate', type: 'date'},
+    {label: 'Repayment', value: 'lenders.repaymentDate', type: 'date'}
 ];
 
 @connect(state=>state)

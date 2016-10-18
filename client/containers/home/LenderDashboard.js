@@ -51,13 +51,13 @@ export default class LenderDashboard extends React.Component {
         const accountRows = loanAccounts.data.map(i => (
             <tr key={i._id}>
                 <td>{i._id}</td>
-                <td><UIDate date={i.createdAt}/></td>
+                <td><UIDate date={i.createdAt} time={false} /></td>
                 <td>{i.borrower.company}</td>
-                <td>{i.loanAmount}</td>
-                <td>{i.interestRate}</td>
-                <td>{i.tenor}</td>
-                <td><UIDate date={i.disbursementDate} time={false}/></td>
-                <td><UIDate date={i.repaymentDate} time={false}/></td>
+                <td>{i.lenders[0].loanAmount}</td>
+                <td>{i.lenders[0].interestRate}</td>
+                <td>{i.lenders[0].tenor}</td>
+                <td><UIDate date={i.lenders[0].disbursementDate} time={false}/></td>
+                <td><UIDate date={i.lenders[0].repaymentDate} time={false}/></td>
             </tr>
         ));
 
@@ -66,7 +66,7 @@ export default class LenderDashboard extends React.Component {
                 <Tabs defaultActiveKey={1}>
                     <Tab eventKey={1} title="Applications">
                         <br/>
-                        <table className="table table-striped table-bordered table-condensed">
+                        <table className="table table-striped">
                             <thead>
                             <tr>
                                 <th>ID</th>
@@ -96,15 +96,15 @@ export default class LenderDashboard extends React.Component {
                     </Tab>
                     <Tab eventKey={2} title="Loan Accounts">
                         <br/>
-                        <table className="table table-striped table-bordered  table-condensed">
+                        <table className="table table-striped">
                             <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Created on</th>
                                 <th>Borrower</th>
                                 <th>Amount</th>
-                                <th>Tenor</th>
                                 <th>Rate</th>
+                                <th>Tenor</th>
                                 <th>Disbursement Date</th>
                                 <th>Repayment Date</th>
                             </tr>

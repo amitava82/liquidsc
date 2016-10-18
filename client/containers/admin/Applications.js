@@ -16,7 +16,8 @@ const FILTERS = [
     {label: 'ID', value: '_id'},
     {label: 'Company name', value: 'company.company'},
     {label: 'Buyer Decision', value: 'receivableStatus', options: ['approved', 'pending', 'rejected']},
-    {label: 'Status', value: 'status',  options: ['APPROVED', 'PENDING', 'REJECTED']}
+    {label: 'Lender decision', value: 'account', options: ['approved', 'pending']},
+    {label: 'ALCH decision', value: 'status',  options: ['APPROVED', 'PENDING', 'REJECTED']}
 ];
 
 @connect(state=>state)
