@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import {connect} from 'react-redux';
+import moment from 'moment';
 import cx from 'classnames';
 import autobind from 'autobind-decorator';
 import accounting from 'accounting';
@@ -100,7 +101,7 @@ export default class LoanAccounts extends React.Component {
                     </td>
                 </tr>
             );
-            //const _class =
+
             allRows.push(
                 <tr id={i._id} style={{display: 'none'}}>
                     <td colSpan="5">
@@ -115,6 +116,7 @@ export default class LoanAccounts extends React.Component {
                                     <th>Tenor</th>
                                     <th>Disbursement date</th>
                                     <th>Repayment date</th>
+                                    <th>Account Overdue</th>
                                     <th>Settled</th>
                                     <th></th>
                                 </tr>
@@ -129,6 +131,9 @@ export default class LoanAccounts extends React.Component {
                                         <td>{l.tenor}</td>
                                         <td><UIDate date={l.disbursementDate} time={false} /></td>
                                         <td><UIDate date={l.repaymentDate} time={false}/></td>
+                                        <td>
+                                            {l.settled ? 'No' : moment(l.repaymentDate).isBefore(moment()) ? <Label bsStyle="danger">Yes</Label> : 'No'}
+                                        </td>
                                         <td>
                                             {l.settled ? <Label bsStyle="success">Yes</Label> : <Button bsStyle="primary" onClick={e => this.settle(i._id, l._id)} className="btn-sm">Settle</Button>}
                                         </td>

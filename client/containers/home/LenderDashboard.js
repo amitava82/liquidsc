@@ -103,7 +103,7 @@ export default class LenderDashboard extends React.Component {
                                 <th>Created on</th>
                                 <th>Borrower</th>
                                 <th>Amount</th>
-                                <th>Rate</th>
+                                <th>Interest %</th>
                                 <th>Tenor</th>
                                 <th>Disbursement Date</th>
                                 <th>Repayment Date</th>
