@@ -110,7 +110,10 @@ export default class ApplicationDetails extends React.Component {
             <div>
                 <h4 className="flex center">
                     <div className="flex-item">Proposals</div>
-                    <div><Button bsStyle="primary" onClick={this.createLoanAccount}>Create Loan account</Button></div></h4>
+                    {offers.length ? (
+                        <div><Button bsStyle="primary" onClick={this.createLoanAccount}>Create Loan account</Button></div>
+                    ) : null}
+                </h4>
                 {offers}
             </div>
         )

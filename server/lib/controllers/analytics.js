@@ -81,11 +81,13 @@ module.exports = deps => {
                     {$group: {_id: '$status', count: {$sum: 1}}}
                 ]));
             } else if(role == constants.roles.LENDER) {
-                promises.push(Application.count({lenders: {$in: [_id]}}).exec());
-                promises.push(LoanAccount.count({lender: _id}).exec());
+                promises.push(Application.count({account: {$exists: false}, lenders: {$in: [_id]}}).exec());
+                promises.push(LoanAccount.count({'lenders.lender': _id}).exec());
                 promises.push( LoanAccount.aggregate([
-                    {$match: {lender: _id}},
-                    {$group: {_id: '', total: {$sum: '$loanAmount'}}},
+                    {$match: {'lenders.lender': _id}},
+                    {$unwind: '$lenders'},
+                    {$match: {'lenders.lender': _id}},
+                    {$group: {_id: '', total: {$sum: '$lenders.loanAmount'}}},
                     {$project: {
                         _id: 0,
                         total: '$total'
@@ -102,11 +104,11 @@ module.exports = deps => {
                     totalAppCount,
                     appStatus,
                     totalLoanAcc,
-                    totalLoanAmount: totalLoanAmount[0].total
+                    totalLoanAmount: _.get(totalLoanAmount[0], 'total', 0)
                 });
             }).catch(next)
         }
-    }
+    };
 
     return handlers;
 };

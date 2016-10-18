@@ -84,7 +84,7 @@ module.exports = deps => {
             } else if(userRole == constants.roles.BUYER) {
                 query.buyerEmail = req.user.email;
                 //query.receivableStatus = 'pending';
-                //query.status = constants.status.UNDER_REVIEW;
+                query.status = constants.status.UNDER_REVIEW;
             } else if(userRole == constants.roles.LENDER) {
                 query.lenders = {$in: [userId]};
                 query.status = constants.status.APPROVED;

@@ -96,7 +96,7 @@ export default class Analytics extends React.Component {
                             <div className="card-content">
                                 <ResponsiveContainer>
                                     <PieChart>
-                                        <Pie labelLine={false} isAnimationActive={true} data={applicationChartData} cx="50%" cy="50%" outerRadius={80}>
+                                        <Pie label labelLine={true} isAnimationActive={true} data={applicationChartData} cx="50%" cy="50%" outerRadius={80}>
                                             {applicationChartData.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)}
                                         </Pie>
                                         <Tooltip/>

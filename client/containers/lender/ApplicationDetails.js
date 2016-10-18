@@ -40,6 +40,22 @@ export default class ApplicationDetails extends React.Component {
 
         if(!viewing) return <h5>Loading...</h5>;
 
+        let proposalContent = null;
+
+        if(proposal) {
+            proposalContent = (
+                <div>
+                    <h4>Submitted proposal</h4>
+                    <p><strong>Amount: </strong> {proposal.loanAmount}</p>
+                    <p><strong>Rate: </strong> {proposal.interestRate}%</p>
+                    <p><strong>Tenor: </strong> {proposal.tenor} days</p>
+                    <p><strong>Status: </strong> {proposal.status}</p>
+                </div>
+            )
+        } else if( !viewing.account ) {
+            proposalContent = <SubmitProposal id={this.props.params.id} />
+        }
+
         return (
             <div>
                 <h3>Application details</h3>
@@ -48,17 +64,7 @@ export default class ApplicationDetails extends React.Component {
                     <Col md={3}>
                         {loading ? (
                             <h5>Loading...</h5>
-                        ) : proposal ? (
-                            <div>
-                                <h4>Submitted proposal</h4>
-                                <p><strong>Amount: </strong> {proposal.loanAmount}</p>
-                                <p><strong>Rate: </strong> {proposal.interestRate}%</p>
-                                <p><strong>Tenor: </strong> {proposal.tenor} days</p>
-                                <p><strong>Status: </strong> {proposal.status}</p>
-                            </div>
-                        ) : (
-                            <SubmitProposal id={this.props.params.id} />
-                        )}
+                        ) : proposalContent }
 
                     </Col>
                 </Row>
