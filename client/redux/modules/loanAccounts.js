@@ -71,9 +71,9 @@ export const loadAccounts = (query) => ({
     }
 });
 
-export const updateAccount = (id, disbursementDate) => ({
+export const updateAccount = (id, loanId, disbursementDate) => ({
     type: UPDATE,
     payload: {
-        promise: api => api.put(`accounts/${id}`, {data: {disbursementDate}})
+        promise: api => api.put(`accounts/${id}`, {data: {loanId, disbursementDate}})
     }
 });

@@ -59,7 +59,7 @@ export default class Users extends React.Component {
         };
 
         const buyerTable = (
-            <Table striped bordered condensed hover style={style}>
+            <Table striped  hover style={style}>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -100,7 +100,7 @@ export default class Users extends React.Component {
         );
 
         const borrowerTable = (
-            <Table striped bordered condensed hover style={style}>
+            <Table striped  hover style={style}>
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -141,7 +141,7 @@ export default class Users extends React.Component {
         );
 
         const lenderTable = (
-            <Table striped bordered condensed hover style={style}>
+            <Table striped  hover style={style}>
                 <thead>
                 <tr>
                     <th>ID</th>

@@ -3,14 +3,12 @@
  */
 import React from 'react';
 import {connect} from 'react-redux';
-import autobind from 'autobind-decorator';
-import Select from 'react-select';
-import { Row, Col, Button } from 'react-bootstrap';
-import { Link } from 'react-router';
-import map from 'lodash/map';
+import accounting from 'accounting';
 import UIDate from '../../components/UIDate';
 
 import { getAccount } from '../../redux/modules/loanAccounts';
+
+const pc = (amt, total) => accounting.toFixed((amt * 100)/total);
 
 @connect(state => state)
 export default class LoanAccountDetails extends React.Component {
@@ -32,20 +30,38 @@ export default class LoanAccountDetails extends React.Component {
                     <dt>ID</dt>
                     <dd>{viewing._id}</dd>
                     <dt>Created</dt>
-                    <dd>{new Date(viewing.createdAt).toDateString()}</dd>
+                    <dd><UIDate date={viewing.createdAt} time={false} /></dd>
                     <dt>Borrower</dt>
                     <dd>{viewing.borrower.company}</dd>
-                    <dt>Lender</dt>
-                    <dd>{viewing.lender.company}</dd>
-                    <dt> Amount</dt>
+                    <dt>Loan amount</dt>
                     <dd>{viewing.loanAmount}</dd>
-                    <dt>Tenor</dt>
-                    <dd>{viewing.tenor} days</dd>
-                    <dt>Disbursement Date</dt>
-                    <dd><UIDate date={viewing.disbursementDate} /></dd>
-                    <dt>Repayment Date</dt>
-                    <dd><UIDate date={viewing.repaymentDate} /></dd>
                 </dl>
+                <table className="table">
+                    <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Amount</th>
+                        <th>Percentage</th>
+                        <th>Rate %</th>
+                        <th>Tenor</th>
+                        <th>Disbursement date</th>
+                        <th>Repayment date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {viewing.lenders.map(l => (
+                        <tr key={l._id}>
+                            <td>{l.lender.company}</td>
+                            <td>{l.loanAmount}</td>
+                            <td>{pc(l.loanAmount, viewing.loanAmount)}%</td>
+                            <td>{l.interestRate}</td>
+                            <td>{l.tenor} days</td>
+                            <td><UIDate date={l.disbursementDate} time={false} /></td>
+                            <td><UIDate date={l.repaymentDate} time={false}/></td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
             </div>
         )
     }

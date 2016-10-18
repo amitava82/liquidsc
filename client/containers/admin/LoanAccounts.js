@@ -4,7 +4,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import autobind from 'autobind-decorator';
-import Select from 'react-select';
+import accounting from 'accounting';
 import { Row, Col, Button, Table, Pagination } from 'react-bootstrap';
 import { Link } from 'react-router';
 import map from 'lodash/map';
@@ -13,6 +13,8 @@ import SearchBar, {buildQuery} from '../../components/Searchbar';
 
 import UpdateAccount from './UpdateAccount';
 import { loadAccounts, updateAccount } from '../../redux/modules/loanAccounts';
+
+const pc = (amt, total) => accounting.toFixed((amt * 100)/total);
 
 const FILTERS = [
     {label: 'ID', value: '_id'},
@@ -29,18 +31,19 @@ export default class LoanAccounts extends React.Component {
         super(...args);
         this.state = {
             editing: null,
+            docId: null,
             showSearch : false
         }
     }
 
     @autobind
-    toggleEdit(id) {
-        this.setState({editing: id});
+    toggleEdit(accId, docId) {
+        this.setState({editing: accId, docId});
     }
 
     @autobind
     updateAccount(date) {
-        this.props.dispatch(updateAccount(this.state.editing, date)).then(
+        this.props.dispatch(updateAccount(this.state.editing, this.state.docId, date)).then(
             () => this.setState({editing: null})
         );
     }
@@ -72,13 +75,37 @@ export default class LoanAccounts extends React.Component {
             <tr key={i._id}>
                 <td>{i._id}</td>
                 <td>{i.borrower.company}</td>
-                <td>{i.lender.company}</td>
                 <td>{i.loanAmount}</td>
-                <td>{i.interestRate}</td>
-                <td>{i.tenor} days</td>
-                <td><UIDate date={i.disbursementDate} time={false} /></td>
-                <td><UIDate date={i.repaymentDate} time={false}/></td>
-                <td><button className="btn btn-primary" onClick={e => this.toggleEdit(i._id)}>Edit</button></td>
+                <td>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Company</th>
+                                <th>Amount</th>
+                                <th>Percent</th>
+                                <th>Interest Rate</th>
+                                <th>Tenor</th>
+                                <th>Disbursement date</th>
+                                <th>Repayment date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {i.lenders.map(l => (
+                                <tr key={l._id}>
+                                    <td>{l.lender.company}</td>
+                                    <td>{l.loanAmount}</td>
+                                    <td>{pc(l.loanAmount, i.loanAmount)}%</td>
+                                    <td>{l.interestRate}</td>
+                                    <td>{l.tenor}</td>
+                                    <td><UIDate date={l.disbursementDate} time={false} /></td>
+                                    <td><UIDate date={l.repaymentDate} time={false}/></td>
+                                    <td><button className="btn btn-primary btn-sm" onClick={e => this.toggleEdit(i._id, l._id)}>Edit</button></td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </td>
             </tr>
         ));
 
@@ -118,18 +145,13 @@ export default class LoanAccounts extends React.Component {
                 <div style={{marginBottom: 10}}>
                     {searchContent}
                 </div>
-                <table className="table table-bordered table-striped table-condensed table-hover">
+                <table className="table table-condensed">
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Borrower</th>
-                            <th>Lender</th>
-                            <th>Amount</th>
-                            <th>Interest %</th>
-                            <th>Tenor</th>
-                            <th>Disbursement date</th>
-                            <th>Repayment date</th>
-                            <th></th>
+                            <th>Loan Amount</th>
+                            <th>Lenders</th>
                         </tr>
                     </thead>
                     <tbody>

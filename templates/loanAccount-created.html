@@ -6,27 +6,26 @@
 </head>
 <body>
     <h1>Loan account created</h1>
+    <h5>Amount: <%= account.loanAmount %></h5>
     <table>
-        <tr>
-            <td>Account ID</td>
-            <td> <%= account._id %> </td>
-        </tr>
-        <tr>
-            <td>Lender</td>
-            <td> <%= proposal.lender.email %> </td>
-        </tr>
-        <tr>
-            <td>Amount</td>
-            <td> <%= account.loanAmount %> </td>
-        </tr>
-        <tr>
-            <td>Interest rate</td>
-            <td> <%= account.interestRate %>% </td>
-        </tr>
-        <tr>
-            <td>Tenor</td>
-            <td> <%= account.tenor %> days</td>
-        </tr>
+        <thead>
+            <tr>
+                <th>Lender</th>
+                <th>Amount</th>
+                <th>Rate %</th>
+                <th>Tenor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% _.forEach(account.lenders, function(lender) { %>
+                <tr>
+                    <td><%= lender.lender.company %></td>
+                    <td><%= lender.lender.loanAmount %></td>
+                    <td><%= lender.lender.interestRate %></td>
+                    <td><%= lender.lender.tenor %></td>
+                </tr>
+            <% }); %>
+        </tbody>
     </table>
 </body>
 </html>

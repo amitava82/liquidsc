@@ -35,7 +35,15 @@ module.exports = function (dependencies, callback) {
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
     app.use(cookieParser());
-    app.use(queryParser());
+    app.use(queryParser({
+        parser: function(value, radix, name) {
+            if (value.match(/^[0-9]+$/) != null) {
+                return parseInt(value, radix);
+            } else {
+                return NaN;
+            }
+        }
+    }));
 
     app.use(dependencies.middleware.authenticate, logErrors);
 

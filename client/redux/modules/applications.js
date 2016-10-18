@@ -136,10 +136,10 @@ export const submitProposal = (id, data) => ({
     }
 });
 
-export const createLoanAccount = (proposalId) => ({
+export const createLoanAccount = (id) => ({
     type: CREATE_LOAN_ACCOUNT,
     payload: {
-        promise: api => api.post(`applications/proposals/${proposalId}/approve`)
+        promise: api => api.post(`applications/${id}/account`)
     }
 });
 

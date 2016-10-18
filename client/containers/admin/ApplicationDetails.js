@@ -83,34 +83,34 @@ export default class ApplicationDetails extends React.Component {
         }
     }
 
-    createLoanAccount(id) {
-        this.props.dispatch(createLoanAccount(id));
+    @autobind
+    createLoanAccount() {
+        this.props.dispatch(createLoanAccount(this.props.params.id));
     }
 
     renderProposals(doc) {
         if(doc.status != 'APPROVED' || doc.account) return;
 
-        const offers = doc.proposals.map(i => (
-          <div className="well well-sm">
+        const offers = doc.proposals.map((i, idx) => (
+          <div className="well well-sm" key={idx}>
               <Row>
-                  <Col xs={6}>
+                  <Col xs={4}>
                       <h5>{i.lender.company}</h5>
                       <p>{i.comment}</p>
                   </Col>
-                  <Col xs={4}>
-                      <div><strong>Loan amount: </strong> <span>{i.loanAmount}</span></div>
-                      <div><strong>Interest rate:</strong> <span>{i.interestRate}</span></div>
-                      <div><strong>Tenor</strong> <span>{i.tenor}</span></div>
+                  <Col xs={3}>
+                      <strong>Loan amount: </strong> <span>{i.loanAmount}</span>
                   </Col>
-                  <Col xs={2}>
-                    <Button bsStyle="primary" onClick={e => this.createLoanAccount(i._id)}>Select</Button>
-                  </Col>
+                  <Col xs={3}><strong>Interest rate:</strong> <span>{i.interestRate}</span></Col>
+                  <Col xs={2}><strong>Tenor</strong> <span>{i.tenor}</span></Col>
               </Row>
           </div>
         ));
         return (
             <div>
-                <h4>Proposals</h4>
+                <h4 className="flex center">
+                    <div className="flex-item">Proposals</div>
+                    <div><Button bsStyle="primary" onClick={this.createLoanAccount}>Create Loan account</Button></div></h4>
                 {offers}
             </div>
         )

@@ -54,6 +54,24 @@ module.exports = deps => {
         }
     }
 
+    function getDistribution(proposals, required) {
+        const lenders = [];
+        let amount = 0;
+        _.forEach(proposals, p => {
+            const bal = required - amount;
+            if(p.amount >= bal) {
+                lenders.push({id: p.id, amount: bal});
+                return false;
+            } else {
+                const amt = p.amount;
+                lenders.push({id: p.id, amount: amt});
+                amount = amount + amt;
+            }
+        });
+
+        return lenders;
+    }
+
     return {
 
         getApplications(req, res, next) {
@@ -394,48 +412,94 @@ module.exports = deps => {
         },
 
         createLoanAccount(req, res, next) {
-            const proposalId = req.params.id;
+            const appId = req.params.id;
             let proposal = null;
             let account = null;
-            Proposal.findById(proposalId).populate(['application', 'lender']).exec()
+            let application = null;
+            Application.findById(appId).populate(['company']).exec()
                 .then(
-                    prop => {
-                        proposal = prop;
-                        return LoanAccount.create({
-                            lender: prop.lender._id,
-                            loanAmount: prop.loanAmount,
-                            interestRate: prop.interestRate,
-                            tenor: prop.tenor,
-                            application: prop.application._id,
-                            borrower: prop.application.company
-                        }).then(
-                            doc => LoanAccount.populate(doc, 'borrower')
-                        );
+                    app => {
+                        if(app.account) throw new Error('Loan account exists for this application');
+                        return app;
                     }
-                )
-                .then(
-                    doc => {
-                        account = doc;
-                        return Application.findByIdAndUpdate(doc.application, {
-                            status: constants.status.APPROVED,
-                            account: doc._id
-                        }, {new: true}).populate(populate).exec();
-                    }
-                )
-                .then(
-                    doc => Proposal.findByIdAndUpdate(proposalId, {status: 'accepted'}).exec().then(() => doc)
                 )
                 .then(
                     app => {
+                        application = app;
+                        return Proposal.find({application: appId}).sort({
+                            interestRate: 1,
+                            loanAmount: -1,
+                            tenor: -1,
+                            createdAt: 1
+                        }).lean().exec()
+                    }
+                )
+                .then(
+                    proposals => {
+                        const requiredAmount = application.loanAmount;
+                        let amount = 0;
+                        const loanAccount = new LoanAccount({
+                            borrower: application.company._id,
+                            application: appId
+                        });
+
+                        _.forEach(proposals, p => {
+                            const bal = requiredAmount - amount;
+                            if(p.loanAmount >= bal) {
+                                loanAccount.lenders.push({
+                                    lender: p.lender,
+                                    loanAmount: bal,
+                                    interestRate: p.interestRate,
+                                    tenor: p.tenor,
+
+                                });
+                                amount = amount + bal;
+                                return false;
+                            } else {
+                                const amt = p.loanAmount;
+                                loanAccount.lenders.push({
+                                    lender: p.lender,
+                                    loanAmount: amt,
+                                    interestRate: p.interestRate,
+                                    tenor: p.tenor,
+
+                                });
+                                amount = amount + amt;
+                            }
+                        });
+
+                        loanAccount.loanAmount = amount;
+
+                        return loanAccount.save();
+                    }
+                )
+                .then(
+                    loanAccount => {
+                        return LoanAccount.populate(loanAccount, [{path: 'lenders.lender', select: 'email company'}])
+                    }
+                )
+                .then(
+                    loanAccount => {
+                        const emails = _.map(loanAccount.lenders, l => {
+                            return l.lender.email;
+                        });
+                        emails.push(application.company.email);
                         var mailer = deps.nodemailer;
                         mailer.sendMail({
                             from: 'support@alchcapital.com',
-                            to: [app.company.email, proposal.lender.email],
+                            to: emails,
                             subject: 'Loan account created',
-                            html: templates.loanAccountCreated({application: app, account: account, proposal: proposal}),
-                            attachments: app.documents.map(i => ({filename: i.fieldname + path.extname(i.filename), path: i.path}))
+                            html: templates.loanAccountCreated({application: application, account: loanAccount}),
+                            attachments: application.documents.map(i => ({filename: i.fieldname + path.extname(i.filename), path: i.path}))
                         });
-                        return app;
+                        return loanAccount;
+                    }
+                )
+                .then(
+                    loanAccount => {
+                        return Application.findByIdAndUpdate(appId, {
+                            account: loanAccount._id
+                        }, {new: true}).populate(populate).exec();
                     }
                 )
                 .then(

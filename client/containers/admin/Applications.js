@@ -103,7 +103,7 @@ export default class LoanAccounts extends React.Component {
                 <div style={{marginBottom: 10}}>
                     {searchContent}
                 </div>
-                <Table striped bordered condensed hover>
+                <Table striped  hover>
                     <thead>
                     <tr>
                         <th>ID</th>

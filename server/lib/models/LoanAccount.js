@@ -13,6 +13,32 @@ var uid = require('../helpers/id');
 module.exports = function (deps) {
     const model = 'LoanAccount';
 
+    const lenderSchema = mongoose.Schema({
+        lender: {
+            type: String,
+            ref: 'User',
+            required: true
+        },
+        loanAmount: {
+            type: Number,
+            required: true
+        },
+        interestRate: {
+            type: Number,
+            required: true
+        },
+        tenor: {
+            type: Number,
+            required: true
+        },
+        disbursementDate: {
+            type: Date
+        },
+        repaymentDate: {
+            type: Date
+        },
+    });
+
     const loanSchema = mongoose.Schema({
         _id: {
             type: String
@@ -24,34 +50,9 @@ module.exports = function (deps) {
             required: true
         },
 
-        lender: {
-            type: String,
-            ref: 'User',
-            required: true
-        },
+        lenders: [ lenderSchema ],
 
-        loanAmount: {
-            type: Number,
-            required: true
-        },
-
-        interestRate: {
-            type: Number,
-            required: true
-        },
-
-        tenor: {
-            type: Number,
-            required: true
-        },
-
-        disbursementDate: {
-            type: Date
-        },
-
-        repaymentDate: {
-            type: Date
-        },
+        loanAmount: Number,
 
         application: {
             type: String,
