@@ -83,7 +83,7 @@ export default class SupplierDashboard extends React.Component {
                             <table className="table table-condensed table-striped">
                                 <thead>
                                 <tr>
-                                    <th>Company</th>
+                                    <th>Lender</th>
                                     <th>Amount</th>
                                     <th>Allocation %</th>
                                     <th>Interest %</th>

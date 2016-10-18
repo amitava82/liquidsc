@@ -72,11 +72,6 @@ export default class LoanAccounts extends React.Component {
         this.props.dispatch(loadAccounts({...this.props.users.query, page: page}));
     }
 
-    @autobind
-    settle(id, loan) {
-        this.props.dispatch(settleAccount(id, loan));
-    }
-
     toggleDetails(id) {
         const e = document.getElementById(id);
         e.style.display = e.style.display == 'none' ? 'table-row' : 'none';
@@ -109,7 +104,8 @@ export default class LoanAccounts extends React.Component {
                             <table className="table table-condensed table-striped">
                                 <thead>
                                 <tr>
-                                    <th>Company</th>
+                                    <th>Lender</th>
+                                    <th>Lender ID</th>
                                     <th>Amount</th>
                                     <th>Allocation %</th>
                                     <th>Interest %</th>
@@ -125,6 +121,7 @@ export default class LoanAccounts extends React.Component {
                                 {i.lenders.map(l => (
                                     <tr key={l._id}>
                                         <td>{l.lender.company}</td>
+                                        <td>{l.lender._id}</td>
                                         <td>{l.loanAmount}</td>
                                         <td>{pc(l.loanAmount, i.loanAmount)}%</td>
                                         <td>{l.interestRate}</td>
@@ -135,7 +132,7 @@ export default class LoanAccounts extends React.Component {
                                             {l.settled ? 'No' : moment(l.repaymentDate).isBefore(moment()) ? <Label bsStyle="danger">Yes</Label> : 'No'}
                                         </td>
                                         <td>
-                                            {l.settled ? <Label bsStyle="success">Yes</Label> : <Button bsStyle="primary" onClick={e => this.settle(i._id, l._id)} className="btn-sm">Settle</Button>}
+                                            {l.settled ? <Label bsStyle="success">Yes</Label> : 'No'}
                                         </td>
                                         <td><Button bsStyle="default" className="btn-sm" onClick={e => this.toggleEdit(i._id, l._id)}>Edit</Button></td>
                                     </tr>
