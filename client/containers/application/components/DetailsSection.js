@@ -32,7 +32,7 @@ export default class DetailsSection extends React.Component {
                             <dd>{data.loanAmount}</dd>
                             <dt>Tenor</dt>
                             <dd>{data.tenor} days</dd>
-                            <dt>Interest rate</dt>
+                            <dt>Interest %</dt>
                             <dd>{data.rateOfInterest}</dd>
                             <dt>Receivable date</dt>
                             <dd><UIDate date={data.receivableDate}/></dd>

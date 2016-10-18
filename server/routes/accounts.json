@@ -29,7 +29,7 @@
       }
     },
     {
-      "path": ":id/settle",
+      "path": ":id/:loan/settle",
       "method": "put",
       "handler": "settle",
       "acl": {

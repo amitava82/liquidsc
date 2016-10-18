@@ -99,13 +99,13 @@ module.exports = deps => {
                             interestRate: '$lenders.interestRate',
                             disbursementDate: '$lenders.disbursementDate',
                             repaymentDate: '$lenders.repaymentDate',
-                            lender: {$arrayElemAt: ['$lenderObj', 0]}
+                            lender: {$arrayElemAt: ['$lenderObj', 0]},
+                            settled: '$lenders.settled'
                         },
                         application: {$arrayElemAt: ['$application', 0]},
                         borrower: {$arrayElemAt: ['$borrower', 0]},
                         loanAmount: '$loanAmount',
-                        createdAt: '$createdAt',
-                        settled: '$settled'
+                        createdAt: '$createdAt'
                     }
                 },
                 {
@@ -115,8 +115,7 @@ module.exports = deps => {
                         application: {$first: '$application'},
                         borrower: {$first: '$borrower'},
                         loanAmount: {$first: '$loanAmount'},
-                        createdAt: {$first: '$createdAt'},
-                        settled: {$first: '$settled'}
+                        createdAt: {$first: '$createdAt'}
                     }
                 },
                 {
@@ -189,11 +188,18 @@ module.exports = deps => {
         },
 
         settle(req, res, next) {
-            LoanAccount.findByIdAndUpdate(req.params.id, {settled: true}, {new: true}).populate(populate).exec()
-                .then(
-                    doc => res.send(doc),
-                    next
-                )
+            const {id, loan} = req.params;
+            LoanAccount.findById(id).populate(populate).exec().then(
+                acc => {
+                    const _loan = acc.lenders.id(loan);
+                    _loan.settled = true;
+
+                    return acc.save();
+                }
+            ).then(
+                doc => res.send(doc),
+                next
+            );
         }
     }
 };

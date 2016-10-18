@@ -53,3 +53,14 @@
     color: inherit;
   }
 }
+
+.collapsible-table {
+  border: 1px solid #ccc;
+
+  > .table {
+    margin-bottom: 0;
+    > thead {
+      background: #eee;
+    }
+  }
+}

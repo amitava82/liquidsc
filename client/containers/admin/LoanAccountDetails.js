@@ -41,8 +41,8 @@ export default class LoanAccountDetails extends React.Component {
                     <tr>
                         <th>Company</th>
                         <th>Amount</th>
-                        <th>Percentage</th>
-                        <th>Rate %</th>
+                        <th>Allocation %</th>
+                        <th>Interest %</th>
                         <th>Tenor</th>
                         <th>Disbursement date</th>
                         <th>Repayment date</th>

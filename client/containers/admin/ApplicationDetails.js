@@ -7,6 +7,7 @@ import autobind from 'autobind-decorator';
 import Select from 'react-select';
 import { Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
+import UIDate from '../../components/UIDate';
 import map from 'lodash/map';
 import DetailsSection from '../application/components/DetailsSection';
 import { getApplication, assignToLenders, changeStatus, createLoanAccount, requestDetails } from '../../redux/modules/applications';
@@ -94,15 +95,16 @@ export default class ApplicationDetails extends React.Component {
         const offers = doc.proposals.map((i, idx) => (
           <div className="well well-sm" key={idx}>
               <Row>
-                  <Col xs={4}>
+                  <Col xs={3}>
                       <h5>{i.lender.company}</h5>
                       <p>{i.comment}</p>
                   </Col>
-                  <Col xs={3}>
+                  <Col xs={2}>
                       <strong>Loan amount: </strong> <span>{i.loanAmount}</span>
                   </Col>
-                  <Col xs={3}><strong>Interest rate:</strong> <span>{i.interestRate}</span></Col>
-                  <Col xs={2}><strong>Tenor</strong> <span>{i.tenor}</span></Col>
+                  <Col xs={2}><strong>Interest %</strong> <span>{i.interestRate}</span></Col>
+                  <Col xs={2}><strong>Tenor</strong> <span>{i.tenor} days</span></Col>
+                  <Col xs={3}><UIDate date={i.createdAt} /></Col>
               </Row>
           </div>
         ));

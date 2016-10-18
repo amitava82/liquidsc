@@ -37,6 +37,10 @@ module.exports = function (deps) {
         repaymentDate: {
             type: Date
         },
+        settled: {
+            type: Boolean,
+            default: false
+        }
     });
 
     const loanSchema = mongoose.Schema({
@@ -59,11 +63,6 @@ module.exports = function (deps) {
             ref: 'Application',
             required: true,
             index: {unique: true}
-        },
-
-        settled: {
-            type: Boolean,
-            default: false
         }
     }, {timestamps: true});
 
