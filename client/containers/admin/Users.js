@@ -223,6 +223,7 @@ export default class Users extends React.Component {
                         {lenderTable}
                     </Tab>
                 </Tabs>
+                <br/>
                 {paginationContent}
             </div>
         )

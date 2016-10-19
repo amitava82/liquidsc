@@ -38,18 +38,22 @@ export default class Login extends React.Component {
     render() {
         const {fields: {email, password}, handleSubmit, submitting, error} = this.props;
         return (
-            <div className="col-xs-6">
-                <h3>Login</h3>
-                <form onSubmit={handleSubmit(this.submit)}>
-                    {error && <Alert bsStyle="danger">{error}</Alert> }
-                    <Input field={email} label="Email" />
-                    <Input type="password" field={password} label="Password" />
-                    <div className="form-group">
-                        <Link to="/forgot">Forgot password?</Link>
-                    </div>
-                    <Button disabled={submitting} type="submit" bsStyle="primary">Submit</Button>
-                    &nbsp; <Link to="/signup" className="brn btn-default">Signup for an account</Link>
-                </form>
+            <div className="col-xs-6 col-xs-offset-3 form-container">
+                <div className="form-header">
+                    <h3>Login</h3>
+                </div>
+                <div className="form-content">
+                    <form onSubmit={handleSubmit(this.submit)}>
+                        {error && <Alert bsStyle="danger">{error}</Alert> }
+                        <Input field={email} label="Email" />
+                        <Input type="password" field={password} label="Password" />
+                        <div className="form-group">
+                            <Link to="/forgot">Forgot password?</Link>
+                        </div>
+                        <Button bsSize="large" block disabled={submitting} type="submit" bsStyle="primary">Submit</Button>
+                        <Link to="/signup" className="btn btn-default btn-outlined btn-block">Signup for an account</Link>
+                    </form>
+                </div>
             </div>
         )
     }

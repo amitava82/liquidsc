@@ -75,7 +75,7 @@ export default class BuyerSupplier extends React.Component {
             handleSubmit, submitting, error} = this.props;
 
         return (
-            <div  className="col-xs-6">
+            <div>
                 {this.state.success ? (
                     <Alert bsStyle="success">Your application received and pending approval.</Alert>
                 ) : (
@@ -94,7 +94,7 @@ export default class BuyerSupplier extends React.Component {
                         <Input field={address} label="Address" />
                         <Input field={city} label="City" />
                         <Input field={country} label="Country" />
-                        <Button disabled={submitting} type="submit" bsStyle="primary">Register</Button>
+                        <Button bsSize="large" block disabled={submitting} type="submit" bsStyle="primary">Register</Button>
                     </form>
                 )}
             </div>

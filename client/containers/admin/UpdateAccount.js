@@ -43,7 +43,6 @@ export default class UpdateAccount extends React.Component {
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button>Close</Button>
                     <Button bsStyle="primary" onClick={this.submit}>Save changes</Button>
                 </Modal.Footer>
             </Modal>

@@ -13,33 +13,33 @@ export default class Index extends React.Component {
                 <br/>
                 <Row className="flex">
                     <Col xs={4}>
-                        <div className="well text-center home-card">
+                        <div className=" home-card">
                             <h2>Buyer</h2>
                             <div className="flex-item">
                                 <div>Extend Payable days and improve WCR.</div>
                                 <div>Improve supplier relationships by ensuring supplier ‘liquidity’.</div>
                                 <div>Enhance cash flows and profitability.</div>
                             </div>
-                           <div>
+                           <div className="text-center">
                                <Link className="btn btn-primary btn-lg" to="/signup">Register</Link>
                            </div>
                         </div>
                     </Col>
                     <Col xs={4}>
-                        <div className="well text-center home-card">
+                        <div className="home-card">
                             <h2>Supplier</h2>
                             <div className="flex-item">
-                                <div>Generation of flexible and predictable cash flows.</div>
-                                <div>Lower working capital costs.</div>
-                                <div>Enhance cash flows and profitability.</div>
+                                <div>Reduce cost of financing & optimize working capital cycle</div>
+                                <div>Leverage pooled assets for improving profitability.</div>
+                                <div>Unlock liquidity & enhance cashflows.</div>
                             </div>
-                            <div>
+                            <div className="text-center">
                                 <Link className="btn btn-primary btn-lg" to="/signup">Register</Link>
                             </div>
                         </div>
                     </Col>
                     <Col xs={4}>
-                        <div className="well text-center home-card">
+                        <div className="home-card">
                             <h2>Lender</h2>
                             <div className="flex-item">
                                 <div>Access to Asset Backed( i.e. Receivables) lending opportunities.</div>
@@ -47,7 +47,7 @@ export default class Index extends React.Component {
                                 <div>Flexibility to diversify risk through investing in pooled receivables.</div>
                                 <div>*lending to businesses is subject to risk and only permitted for Accredited Investors.</div>
                             </div>
-                           <div>
+                           <div className="text-center">
                                <Link className="btn btn-primary btn-lg" to="/signup">Register</Link>
                            </div>
                         </div>

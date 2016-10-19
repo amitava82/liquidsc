@@ -40,9 +40,17 @@ export default (store) => {
         cb();
     };
 
+    const redirect = (nextState, replace, cb) => {
+        const {session: {isLoggedIn, user}} = store.getState();
+        if(isLoggedIn) {
+            replace({pathname: '/home'});
+        }
+        cb();
+    };
+
     return (
         <Route path="/" component={App}>
-            <IndexRoute component={Index} />
+            <IndexRoute component={Index} onEnter={redirect} />
             <Route path="login" component={Login}/>
             <Route path="forgot" component={Reset}/>
             <Route path="signup" component={Signup}/>

@@ -69,7 +69,7 @@ export default class Lender extends React.Component {
             handleSubmit, submitting, error} = this.props;
 
         return (
-            <div className="col-xs-6">
+            <div>
                 {this.state.success ? (
                     <Alert bsStyle="success">Your application received and pending approval.</Alert>
                 ) : (
@@ -88,7 +88,7 @@ export default class Lender extends React.Component {
                         <Input field={country} label="Country" />
 
                         <Input field={comments} label="Comments" />
-                        <Button disabled={submitting} type="submit" bsStyle="primary">Register</Button>
+                        <Button  bsSize="large" block disabled={submitting} type="submit" bsStyle="primary">Register</Button>
                     </form>
                 )}
             </div>

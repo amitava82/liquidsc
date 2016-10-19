@@ -5,7 +5,7 @@ import React from 'react';
 import find from 'lodash/find';
 import get from 'lodash/get';
 import { connect } from 'react-redux';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Table } from 'react-bootstrap';
 import accounting from 'accounting';
 import {PieChart, Pie, Legend, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
@@ -52,45 +52,68 @@ export default class Analytics extends React.Component {
 
         return (
             <div style={{marginTop: 20}}>
+                <div className="flex center">
+                    <h3 className="flex-item">{data.totalLoanAcc} Loan accounts</h3>
+                    <h3 className="strong">{accounting.formatMoney(data.totalLoanAmount)} Loan funded</h3>
+                </div>
+                <hr/>
                 <Row>
-                    <Col xs={3}>
-                        <div className="card">
-                            <h5>Registration</h5>
-                            <div className="card-content">
-                                <h4>New</h4>
-                                <h2 className="text-success">{get(data, 'newUsersCount', 0)}</h2>
-                                <h4>Pending</h4>
-                                <h2 className="text-success">{get(data, 'pendingUsersCount', 0)}</h2>
-                            </div>
-                        </div>
+                    <Col xs={6}>
+                        <Table>
+                            <caption>Registration</caption>
+                            <thead>
+                                <tr>
+                                    <th>New</th>
+                                    <th>Pending</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{get(data, 'newUsersCount', 0)}</td>
+                                    <td>{get(data, 'pendingUsersCount', 0)}</td>
+                                </tr>
+                            </tbody>
+                        </Table>
                     </Col>
-                    <Col xs={3}>
-                        <div className="card">
-                            <h5>Users</h5>
-                            <div className="card-content">
-                                <h4>Buyer</h4>
-                                <h2 className="text-success">{get(find(data.usersTypeCount, {_id: 'BUYER'}), 'count', 0)}</h2>
-                                <h4>Seller</h4>
-                                <h2 className="text-success">{get(find(data.usersTypeCount, {_id: 'BORROWER'}), 'count', 0)}</h2>
-                                <h4>Lender</h4>
-                                <h2 className="text-success">{get(find(data.usersTypeCount, {_id: 'LENDER'}), 'count', 0)}</h2>
-                            </div>
-                        </div>
+                    <Col xs={6}>
+                        <Table>
+                            <caption>Users</caption>
+                            <thead>
+                            <tr>
+                                <th>Buyer</th>
+                                <th>Seller</th>
+                                <th>Lender</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{get(find(data.usersTypeCount, {_id: 'BUYER'}), 'count', 0)}</td>
+                                <td>{get(find(data.usersTypeCount, {_id: 'BORROWER'}), 'count', 0)}</td>
+                                <td>{get(find(data.usersTypeCount, {_id: 'LENDER'}), 'count', 0)}</td>
+                            </tr>
+                            </tbody>
+                        </Table>
                     </Col>
-                    <Col xs={3}>
-                        <div className="card">
-                            <h5>Applications</h5>
-                            <div className="card-content">
-                                <h4>Pending</h4>
-                                <h2 className="text-success">{pending}</h2>
-                                <h4>Approved</h4>
-                                <h2 className="text-success">{approved}</h2>
-                                <h4>Rejected</h4>
-                                <h2 className="text-success">{rejected}</h2>
-                            </div>
-                        </div>
+                    <Col xs={6}>
+                        <Table>
+                            <caption>Applications</caption>
+                            <thead>
+                            <tr>
+                                <th>Pending</th>
+                                <th>Approved</th>
+                                <th>Rejected</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{pending}</td>
+                                <td>{approved}</td>
+                                <td>{rejected}</td>
+                            </tr>
+                            </tbody>
+                        </Table>
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={6}>
                         <div className="card">
                             <h5>Applications %</h5>
                             <div className="card-content">
@@ -103,19 +126,6 @@ export default class Analytics extends React.Component {
                                         <Legend/>
                                     </PieChart>
                                 </ResponsiveContainer>
-                            </div>
-                        </div>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={4}>
-                        <div className="card">
-                            <h5>Loan Account</h5>
-                            <div className="card-content">
-                                <h4>Total</h4>
-                                <h2 className="text-success">{data.totalLoanAcc}</h2>
-                                <h4>Total Loan Funded</h4>
-                                <h2 className="text-success">{accounting.formatMoney(data.totalLoanAmount)}</h2>
                             </div>
                         </div>
                     </Col>

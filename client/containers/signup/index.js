@@ -31,9 +31,9 @@ export default class Signup extends React.Component {
         const {type} = this.state;
         let content = (
             <div>
-                <Button onClick={e => this.setState({type: 'lender'})} bsStyle="primary">Register for Lender account</Button>
-                {' '}
-                <Button onClick={e => this.setState({type: 'buyer'})} bsStyle="primary">Register for Buyer/Supplier</Button>
+                <Button bsSize="large" block onClick={e => this.setState({type: 'lender'})} bsStyle="primary">Register for Lender account</Button>
+                <br />
+                <Button bsSize="large" block onClick={e => this.setState({type: 'buyer'})} bsStyle="primary">Register for Buyer/Supplier</Button>
             </div>
         );
         if(type == 'buyer') {
@@ -43,9 +43,13 @@ export default class Signup extends React.Component {
         }
 
         return (
-            <div>
-                <h3>Sign up</h3>
-                {content}
+            <div  className="col-xs-6 col-xs-offset-3 form-container">
+                <div  className="text-center form-header">
+                    <h3>Sign up</h3>
+                </div>
+                <div className="form-content">
+                    {content}
+                </div>
             </div>
         )
     }

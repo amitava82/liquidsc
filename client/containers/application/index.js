@@ -83,34 +83,36 @@ export default class Application extends React.Component {
         const fees = (loanAmount.value * (1.25/100)).toFixed(2);
 
         return (
-            <div className="col-xs-6">
-                <h3>Create new Loan application</h3>
-                {this.state.success ? (
-                    <Alert bsStyle="success">Your application have been received.</Alert>
-                ) : (
-                    <form onSubmit={handleSubmit(this.submit)}>
-                        {error && <Alert bsStyle="danger">{error}</Alert> }
-                        <NumberInput field={receivable} label="Receivable Value" min={0} required />
-                        <DatePicker field={receivableDate} label="Receivable Payment Date" required />
-                        <File field={documents.report} label="Select latest annual report" required />
-                        <File field={documents.pan} label="Select PAN document" required />
-                        <File field={documents.coi} label="Select certificate of incorporation document" required />
-                        <File field={documents.receivable} label="Select receivable document" required />
-                        <Input field={buyerCompany} label="Buyer company name" required />
-                        <Input field={buyerContactPerson} label="Buyer contact person" required />
-                        <Input field={buyerEmail} type="email" label="Buyer email" required />
-                        <Checkbox field={isExporter} label="Is the Co an Exporter" />
-                        <Checkbox field={buyerConsent} label="Consent to check Receivable validity from Buyer" required />
-                        <NumberInput field={loanAmount} label="Loan amount" min={0} required />
-                        <NumberInput field={rateOfInterest} label="Rate of interest" min={0} required />
-                        <Select field={tenor} options={TENOR} label="Tenor of Loan" required />
-                        <p>
-                            <label className="text-info">Processing fees (1.25%): <strong>{fees}</strong></label>
+            <div className="col-xs-6 col-xs-offset-3 form-container">
+                <div className="form-header"><h3>Create new Loan application</h3></div>
+                <div className="form-content">
+                    {this.state.success ? (
+                        <Alert bsStyle="success">Your application have been received.</Alert>
+                    ) : (
+                        <form onSubmit={handleSubmit(this.submit)}>
+                            {error && <Alert bsStyle="danger">{error}</Alert> }
+                            <NumberInput field={receivable} label="Receivable Value" min={0} required />
+                            <DatePicker field={receivableDate} label="Receivable Payment Date" required />
+                            <File field={documents.report} label="Select latest annual report" required />
+                            <File field={documents.pan} label="Select PAN document" required />
+                            <File field={documents.coi} label="Select certificate of incorporation document" required />
+                            <File field={documents.receivable} label="Select receivable document" required />
+                            <Input field={buyerCompany} label="Buyer company name" required />
+                            <Input field={buyerContactPerson} label="Buyer contact person" required />
+                            <Input field={buyerEmail} type="email" label="Buyer email" required />
+                            <Checkbox field={isExporter} label="Is the Co an Exporter" />
+                            <Checkbox field={buyerConsent} label="Consent to check Receivable validity from Buyer" required />
+                            <NumberInput field={loanAmount} label="Loan amount" min={0} required />
+                            <NumberInput field={rateOfInterest} label="Rate of interest" min={0} required />
+                            <Select field={tenor} options={TENOR} label="Tenor of Loan" required />
+                            <p>
+                                <label className="text-info">Processing fees (1.25%): <strong>{fees}</strong></label>
 
-                        </p>
-                        <Button disabled={submitting} type="submit" bsStyle="primary">Submit</Button>
-                    </form>
-                )}
+                            </p>
+                            <Button bsSize="large" block disabled={submitting} type="submit" bsStyle="primary">Submit</Button>
+                        </form>
+                    )}
+                </div>
             </div>
         )
     }
