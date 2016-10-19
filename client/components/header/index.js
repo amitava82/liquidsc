@@ -67,7 +67,7 @@ export default class Header extends React.Component {
 
         return (
             <div className="header">
-                <Navbar  expanded={session.showNav} onToggle={this.onToggle} inverse>
+                <Navbar id="rubix-nav-header" expanded={session.showNav} onToggle={this.onToggle}  fixedTop fluid>
                     <Navbar.Header>
                         <Navbar.Brand>
                             <Link to="/">LiquidSC</Link>

@@ -149,9 +149,9 @@ export default class ApplicationDetails extends React.Component {
 
         return (
             <div>
-                <h3>
-                    <div className="pull-left">Application details</div>
-                    <div className="pull-right actions">
+                <h3 className="flex center">
+                    <div className="flex-item">Application details</div>
+                    <div className="actions">
                         {this.renderActions(viewing)}
                     </div>
                 </h3>

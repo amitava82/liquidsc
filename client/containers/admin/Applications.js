@@ -100,7 +100,7 @@ export default class LoanAccounts extends React.Component {
 
         return (
             <div>
-                <h3>Applications</h3>
+                <h3>Loan Opportunities and Bid Status</h3>
                 <div style={{marginBottom: 10}}>
                     {searchContent}
                 </div>

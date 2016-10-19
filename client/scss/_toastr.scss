@@ -1,4 +1,8 @@
 #toast-container{
+    $success: #1ac262;
+    $error: #fb1f3f;
+    $warn: orange;
+    $info: #3276b1;
     position: fixed;
     bottom: 0;
     left: 10px;
