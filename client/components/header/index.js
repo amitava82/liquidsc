@@ -2,7 +2,7 @@ import React from 'react';
 import autobind from 'autobind-decorator';
 import {connect} from 'react-redux';
 import { Link } from 'react-router';
-import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import { showNav } from '../../redux/modules/session';
@@ -67,7 +67,7 @@ export default class Header extends React.Component {
 
         return (
             <div className="header">
-                <Navbar id="rubix-nav-header" expanded={session.showNav} onToggle={this.onToggle}  fixedTop fluid>
+                <Navbar expanded={session.showNav} onToggle={this.onToggle}  fixedTop inverse>
                     <Navbar.Header>
                         <Navbar.Brand>
                             <Link to="/">LiquidSC</Link>
@@ -83,7 +83,9 @@ export default class Header extends React.Component {
                         </Nav>
                         <Nav pullRight>
                             {session.isLoggedIn ? (
-                                <NavItem href="/api/auth/logout?redirect=/">Log out</NavItem>
+                                <NavDropdown title={session.user.name || session.user.company || session.user.email}>
+                                    <MenuItem href="/api/auth/logout?redirect=/">Log out</MenuItem>
+                                </NavDropdown>
                             ): (
                                 <LinkContainer to="/login">
                                     <NavItem>Login</NavItem>

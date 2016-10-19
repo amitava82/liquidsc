@@ -18,6 +18,7 @@ const ROLE_OPTIONS = [
 @reduxForm({
     form: 'signup',
     fields: [
+        'name',
         'email',
         'password',
         'role',
@@ -30,9 +31,12 @@ const ROLE_OPTIONS = [
         'country',
         'city',
         'address',
-        'phoneCode'
+        'phoneCode',
+        'sector',
+        'subSector'
     ],
     validate: createValidator({
+        name: required(),
         email: [required(), email],
         password: required(),
         role: required(),
@@ -45,7 +49,7 @@ const ROLE_OPTIONS = [
         country: required(),
         city: required(),
         address: required(),
-        phoneCode: required(),
+        phoneCode: required()
 
     }),
     initialValues: {
@@ -71,7 +75,9 @@ export default class BuyerSupplier extends React.Component {
 
     render() {
         const {
-            fields: {email, password, role, company, pan, phone, contactPerson, designation, businessType, address, city, country, phoneCode},
+            fields: {
+                name, email, password, role, company, pan, phone, contactPerson,
+                designation, businessType, address, city, country, phoneCode, sector, subSector},
             handleSubmit, submitting, error} = this.props;
 
         return (
@@ -82,8 +88,11 @@ export default class BuyerSupplier extends React.Component {
                     <form onSubmit={handleSubmit(this.submit)}>
                         {error && <Alert bsStyle="danger">{error}</Alert> }
                         <RadioGroup options={ROLE_OPTIONS} field={role} label="What's your role?" />
-                        <Input field={company} label="Company name" />
+                        <Input field={name} label="Your name" />
                         <Input field={email} label="Email" type="email" />
+                        <Input field={company} label="Company name" />
+                        <Input field={sector} label="Sector" />
+                        <Input field={subSector} label="Sub-sector" />
                         <Input type="password" field={password} label="Password" />
                         <Input field={pan} label="PAN" />
                         <Input field={phoneCode} label="Phone country code" />

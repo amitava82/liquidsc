@@ -10,11 +10,12 @@ import { signup } from '../../redux/modules/session';
 import { createToast } from '../../redux/modules/toast';
 import { createValidator, required, email } from '../../utils/validator';
 
-const LENDER_TYPES = 'Accredited Investor Individual Company Bank NBFC Fund Others'.split(' ').map(i => ({label: i, value: i}));
+const LENDER_TYPES = 'Accredited Investor,Individual,Company,Bank,NBFC,Fund,Others'.split(',').map(i => ({label: i, value: i}));
 
 @reduxForm({
     form: 'signup',
     fields: [
+        'name',
         'email',
         'password',
         'role',
@@ -30,6 +31,7 @@ const LENDER_TYPES = 'Accredited Investor Individual Company Bank NBFC Fund Othe
         'phoneCode'
     ],
     validate: createValidator({
+        name: required(),
         email: [required(), email],
         password: required(),
         role: required(),
@@ -65,7 +67,7 @@ export default class Lender extends React.Component {
 
     render() {
         const {
-            fields: {email, password, company, fullName, phone, lenderType, designation, comments, address, city, country, phoneCode},
+            fields: {name, email, password, company, fullName, phone, lenderType, designation, comments, address, city, country, phoneCode},
             handleSubmit, submitting, error} = this.props;
 
         return (
@@ -75,6 +77,7 @@ export default class Lender extends React.Component {
                 ) : (
                     <form onSubmit={handleSubmit(this.submit)}>
                         {error && <Alert bsStyle="danger">{error}</Alert> }
+                        <Input field={name} label="Your name" />
                         <Input field={company} label="Company Name/Individual Name" />
                         <Input field={email} label="Email" type="email" />
                         <Input type="password" field={password} label="Password" />

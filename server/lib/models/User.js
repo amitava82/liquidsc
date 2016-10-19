@@ -20,6 +20,11 @@ module.exports = function (deps) {
             type: String
         },
 
+        name: {
+            type: String,
+            required: true
+        },
+
         email: {
             type: String,
             required: true,
@@ -54,6 +59,10 @@ module.exports = function (deps) {
         company: String,
 
         lenderType: String,
+
+        sector: String,
+
+        subSector: String,
 
         designation: String,
 
