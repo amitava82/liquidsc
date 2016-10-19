@@ -158,9 +158,21 @@ export default class AdminDashboard extends React.Component {
             <div>
                 <h3>New Users registrations</h3>
                 <Tabs defaultActiveKey={1}>
-                    <Tab eventKey={1} title="Buyers">{buyerTable}</Tab>
-                    <Tab eventKey={2} title="Borrowers">{borrowerTable}</Tab>
-                    <Tab eventKey={3} title="Lenders">{lenderTable}</Tab>
+                    <Tab eventKey={1} title="Buyers">
+                        <div className="table-responsive">
+                            {buyerTable}
+                        </div>
+                    </Tab>
+                    <Tab eventKey={2} title="Borrowers">
+                        <div className="table-responsive">
+                            {borrowerTable}
+                        </div>
+                    </Tab>
+                    <Tab eventKey={3} title="Lenders">
+                        <div className="table-responsive">
+                            {lenderTable}
+                        </div>
+                    </Tab>
                 </Tabs>
             </div>
         );
