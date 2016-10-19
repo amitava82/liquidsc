@@ -10,16 +10,14 @@ import UIDate from '../../components/UIDate';
 import {getApplications} from '../../redux/modules/applications';
 import {loadAccounts} from '../../redux/modules/loanAccounts';
 
+import LenderOverview from './LenderOverview';
+
 @connect(state=>state)
 export default class LenderDashboard extends React.Component {
 
     componentWillMount() {
         this.props.dispatch(getApplications());
         this.props.dispatch(loadAccounts());
-    }
-
-    reject(id) {
-
     }
 
     @autobind
@@ -64,7 +62,10 @@ export default class LenderDashboard extends React.Component {
         return (
             <div>
                 <Tabs defaultActiveKey={1}>
-                    <Tab eventKey={1} title="Applications">
+                    <Tab eventKey={1} title="Overview">
+                        <LenderOverview />
+                    </Tab>
+                    <Tab eventKey={2} title="Loan Opportunities & Bid Status">
                         <br/>
                         <table className="table table-striped">
                             <thead>
@@ -94,7 +95,7 @@ export default class LenderDashboard extends React.Component {
                                 onSelect={this.gotoPage} />
                         </div>
                     </Tab>
-                    <Tab eventKey={2} title="Loan Accounts">
+                    <Tab eventKey={3} title="Loans Portfolio">
                         <br/>
                         <table className="table table-striped">
                             <thead>

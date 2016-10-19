@@ -19,6 +19,11 @@ export default class Header extends React.Component {
         const {session: {user}} = this.props;
         const items = [];
         if(user) {
+            items.push(
+                <LinkContainer to="/home">
+                    <NavItem>Home</NavItem>
+                </LinkContainer>
+            );
             if(user.role == 'BORROWER') {
                 items.push(
                     <LinkContainer to="/application/create" key={1}>
@@ -52,11 +57,11 @@ export default class Header extends React.Component {
                     </LinkContainer>
                 );
             } else if(user.role == 'LENDER') {
-                items.push(
-                    <LinkContainer to="/analytics" key={6}>
-                        <NavItem>Analytics</NavItem>
-                    </LinkContainer>
-                );
+                // items.push(
+                //     <LinkContainer to="/analytics" key={6}>
+                //         <NavItem>Analytics</NavItem>
+                //     </LinkContainer>
+                // );
             }
         }
         return items;
@@ -76,9 +81,6 @@ export default class Header extends React.Component {
                     </Navbar.Header>
                     <Navbar.Collapse>
                         <Nav>
-                            <LinkContainer to="/home">
-                                <NavItem>Home</NavItem>
-                            </LinkContainer>
                             {this.renderMenus()}
                         </Nav>
                         <Nav pullRight>
