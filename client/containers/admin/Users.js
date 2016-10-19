@@ -63,8 +63,11 @@ export default class Users extends React.Component {
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Name</th>
                         <th>Email</th>
                         <th>Company</th>
+                        <th>Sector</th>
+                        <th>Sub-sector</th>
                         <th>PAN</th>
                         <th>Phone</th>
                         <th>Address</th>
@@ -81,8 +84,11 @@ export default class Users extends React.Component {
                 {data.map(i => (
                     <tr key={i._id}>
                         <td>{i._id}</td>
+                        <td>{i.name}</td>
                         <td>{i.email}</td>
                         <td>{i.company}</td>
+                        <td>{i.sector}</td>
+                        <td>{i.subSector}</td>
                         <td>{i.pan}</td>
                         <td>{i.phoneCode}-{i.phone}</td>
                         <td>{i.address}</td>
@@ -104,8 +110,11 @@ export default class Users extends React.Component {
                 <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Name</th>
                     <th>Email</th>
                     <th>Company</th>
+                    <th>Sector</th>
+                    <th>Sub-sector</th>
                     <th>PAN</th>
                     <th>Phone</th>
                     <th>Address</th>
@@ -122,8 +131,11 @@ export default class Users extends React.Component {
                 {data.map(i => (
                     <tr key={i._id}>
                         <td>{i._id}</td>
+                        <td>{i.name}</td>
                         <td>{i.email}</td>
                         <td>{i.company}</td>
+                        <td>{i.sector}</td>
+                        <td>{i.subSector}</td>
                         <td>{i.pan}</td>
                         <td>{i.phoneCode}-{i.phone}</td>
                         <td>{i.address}</td>
@@ -143,38 +155,38 @@ export default class Users extends React.Component {
         const lenderTable = (
             <Table striped  hover style={style} responsive>
                 <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Email</th>
-                    <th>Company</th>
-                    <th>Full name</th>
-                    <th>Phone</th>
-                    <th>Address</th>
-                    <th>City</th>
-                    <th>Country</th>
-                    <th>Lender type</th>
-                    <th>Designation</th>
-                    <th>Created</th>
-                    <th>Approved</th>
-                </tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Company</th>
+                        <th>Full name</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>Country</th>
+                        <th>Lender type</th>
+                        <th>Designation</th>
+                        <th>Created</th>
+                        <th>Approved</th>
+                    </tr>
                 </thead>
                 <tbody>
-                {data.map(i => (
-                    <tr key={i._id}>
-                        <td>{i._id}</td>
-                        <td>{i.email}</td>
-                        <td>{i.company}</td>
-                        <td>{i.fullName}</td>
-                        <td>{i.phoneCode}-{i.phone}</td>
-                        <td>{i.address}</td>
-                        <td>{i.city}</td>
-                        <td>{i.country}</td>
-                        <td>{i.lenderType}</td>
-                        <td>{i.designation}</td>
-                        <td><UIDate date={i.createdAt}/></td>
-                        <td><UIDate date={i.approvedAt}/></td>
-                    </tr>
-                ))}
+                    {data.map(i => (
+                        <tr key={i._id}>
+                            <td>{i._id}</td>
+                            <td>{i.email}</td>
+                            <td>{i.company}</td>
+                            <td>{i.fullName}</td>
+                            <td>{i.phoneCode}-{i.phone}</td>
+                            <td>{i.address}</td>
+                            <td>{i.city}</td>
+                            <td>{i.country}</td>
+                            <td>{i.lenderType}</td>
+                            <td>{i.designation}</td>
+                            <td><UIDate date={i.createdAt}/></td>
+                            <td><UIDate date={i.approvedAt}/></td>
+                        </tr>
+                    ))}
                 </tbody>
             </Table>
         );

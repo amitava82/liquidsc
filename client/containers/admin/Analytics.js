@@ -43,9 +43,11 @@ export default class Analytics extends React.Component {
         const pending = get(find(data.appStatus, {_id: 'PENDING'}), 'count', 0);
         const approved = data.totalLoanAcc;
         const rejected = get(find(data.appStatus, {_id: 'REJECTED'}), 'count', 0);
+        const reviewing = get(find(data.appStatus, {_id: 'UNDER_REVIEW'}), 'count', 0);
 
         const applicationChartData = [
             {name: 'Pending', value: calcPc(pending, data.totalAppCount)},
+            {name: 'Under review', value: calcPc(reviewing, data.totalAppCount)},
             {name: 'Approved', value: calcPc(approved, data.totalAppCount)},
             {name: 'Rejected', value: calcPc(rejected, data.totalAppCount)},
         ];
