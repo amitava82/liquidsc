@@ -40,7 +40,7 @@ export default class LenderDashboard extends React.Component {
                 <td><UIDate date={i.createdAt}/></td>
                 <td>{i.company.company}</td>
                 <td>{i.loanAmount}</td>
-                <td>{i.proposals ? 'Bid placed' : 'No Bid'}</td>
+                <td>{i.bidAccepted ? 'Bid accepted' : i.proposals ? 'Bid placed' : 'No Bid'}</td>
                 <td>{moment(i.lenders[0].createdAt).add(30, 'd').diff(moment(), 'd')}</td>
                 <td>
                     <Link className="btn btn-primary" to={`/lender/applications/${i._id}`}>View</Link>
