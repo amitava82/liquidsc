@@ -105,6 +105,7 @@ module.exports = deps => {
                         application: {$arrayElemAt: ['$application', 0]},
                         borrower: {$arrayElemAt: ['$borrower', 0]},
                         loanAmount: '$loanAmount',
+                        feesRate: '$feesRate',
                         createdAt: '$createdAt'
                     }
                 },
@@ -115,6 +116,7 @@ module.exports = deps => {
                         application: {$first: '$application'},
                         borrower: {$first: '$borrower'},
                         loanAmount: {$first: '$loanAmount'},
+                        feesRate: {$first: '$feesRate'},
                         createdAt: {$first: '$createdAt'}
                     }
                 },
@@ -174,10 +176,12 @@ module.exports = deps => {
             LoanAccount.findById(req.params.id).populate(populate).exec()
                 .then(
                     doc => {
-                        const loan = doc.lenders.id(loanId);
-                        const payDate = moment(disDate).add(loan.tenor, 'days').toDate();
-                        loan.disbursementDate = disDate;
-                        loan.repaymentDate = payDate;
+                        if(loanId && disDate) {
+                            const loan = doc.lenders.id(loanId);
+                            const payDate = moment(disDate).add(loan.tenor, 'days').toDate();
+                            loan.disbursementDate = disDate;
+                            loan.repaymentDate = payDate;
+                        }
                         if(feesRate) doc.feesRate = feesRate;
                         return doc.save();
                     }

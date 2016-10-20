@@ -12,9 +12,10 @@ import { Link } from 'react-router';
 import map from 'lodash/map';
 import UIDate from '../../components/UIDate';
 import SearchBar, {buildQuery} from '../../components/Searchbar';
+import { calcInterest } from '../../utils';
 
 import UpdateAccount from './UpdateAccount';
-import { loadAccounts, updateAccount, settleAccount } from '../../redux/modules/loanAccounts';
+import { loadAccounts, updateAccount, settleAccount, changeFees } from '../../redux/modules/loanAccounts';
 
 const pc = (amt, total) => accounting.toFixed((amt * 100)/total);
 
@@ -82,6 +83,13 @@ export default class LoanAccounts extends React.Component {
         this.setState({visibleRow: this.state.visibleRow == id ? '' : id});
     }
 
+    editFees(id) {
+        const f = prompt('Please enter processing fees %', 1.25);
+        if(f) {
+            this.props.dispatch(changeFees(id, f));
+        }
+    }
+
     render() {
         const {loanAccounts: {data, page, pages}} = this.props;
 
@@ -94,7 +102,7 @@ export default class LoanAccounts extends React.Component {
                     <td>{i._id}</td>
                     <td>{i.borrower.company}</td>
                     <td>{i.loanAmount}</td>
-                    <td>{fees}</td>
+                    <td>{fees}  <Glyphicon  glyph="pencil" onClick={e => this.editFees(i._id)} /></td>
                     <td>{(i.loanAmount * (fees/100)).toFixed(0)}</td>
                     <td>
                         <Button bsStyle="primary" bsSize="xs" onClick={e => this.toggleDetails(i._id)}>
@@ -116,6 +124,7 @@ export default class LoanAccounts extends React.Component {
                                     <th>Amount</th>
                                     <th>Allocation %</th>
                                     <th>Interest %</th>
+                                    <th>Interest</th>
                                     <th>Tenor</th>
                                     <th>Disbursement date</th>
                                     <th>Repayment date</th>
@@ -132,6 +141,7 @@ export default class LoanAccounts extends React.Component {
                                         <td>{l.loanAmount}</td>
                                         <td>{pc(l.loanAmount, i.loanAmount)}%</td>
                                         <td>{l.interestRate}</td>
+                                        <td>{calcInterest(l.loanAmount, l.interestRate, l.tenor)}</td>
                                         <td>{l.tenor}</td>
                                         <td><UIDate date={l.disbursementDate} time={false} /></td>
                                         <td><UIDate date={l.repaymentDate} time={false}/></td>
@@ -196,7 +206,7 @@ export default class LoanAccounts extends React.Component {
                 <div style={{marginBottom: 10}}>
                     {searchContent}
                 </div>
-                <table className="table">
+                <Table responsive>
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -210,7 +220,7 @@ export default class LoanAccounts extends React.Component {
                     <tbody>
                         {allRows}
                     </tbody>
-                </table>
+                </Table>
                 {paginationContent}
                 {this.state.editing && <UpdateAccount onHide={e => this.toggleEdit(null)} onSubmit={this.updateAccount} />}
             </div>

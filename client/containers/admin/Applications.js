@@ -61,7 +61,6 @@ export default class LoanAccounts extends React.Component {
                 <td>{i.company.company}</td>
                 <td>{i.loanAmount}</td>
                 <td>{i.rateOfInterest}</td>
-                <td>{calcInterest(i.loanAmount, i.rateOfInterest, i.tenor)}</td>
                 <td>{i.buyerCompany}</td>
                 <td className="capitalize">{i.receivableStatus}</td>
                 <td>{i.proposals.length ?  + i.proposals.length + ' Bid(s)' : 'No Bid'}</td>
@@ -115,7 +114,6 @@ export default class LoanAccounts extends React.Component {
                         <th>Company</th>
                         <th>Loan amount</th>
                         <th>Interest %</th>
-                        <th>Interest</th>
                         <th>Buyer</th>
                         <th>Buyer Validation</th>
                         <th>Bid Received</th>
