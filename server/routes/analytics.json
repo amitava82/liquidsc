@@ -13,6 +13,26 @@
           "ADMIN", "BORROWER", "LENDER"
         ]
       }
+    },
+    {
+      "path": ":id/bids",
+      "method": "get",
+      "handler": "getBids",
+      "acl": {
+        "role": [
+          "ADMIN", "LENDER"
+        ]
+      }
+    },
+    {
+      "path": "applications",
+      "method": "get",
+      "handler": "getApplications",
+      "acl": {
+        "role": [
+          "ADMIN", "LENDER"
+        ]
+      }
     }
   ]
 }

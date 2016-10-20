@@ -107,6 +107,42 @@ module.exports = deps => {
                     totalLoanAmount: _.get(totalLoanAmount[0], 'total', 0)
                 });
             }).catch(next)
+        },
+
+        getBids(req, res, next) {
+            const appId = req.params.id;
+            Proposal.aggregate([
+                {
+                    $match: {application: appId}
+                },
+                {
+                    $group: {
+                        _id: { $dayOfYear: "$createdAt"},
+                        bids: { $sum: 1 } }
+                }
+            ]).then(
+                docs => {
+                    const data = _.map(docs, d => {
+                        d.date = moment().dayOfYear(d._id);
+                        return d;
+                    });
+                    res.send(data);
+                },
+                next
+            )
+        },
+
+        getApplications(req, res, next) {
+            const q = {
+                account: {$exists: false}
+            };
+            if(req.user.role == constants.roles.LENDER) {
+                q.lenders = {$in: req.user._id};
+            }
+            Application.find(q).select('_id').exec().then(
+                docs => res.send(docs),
+                next
+            );
         }
     };
 
