@@ -515,6 +515,7 @@ module.exports = deps => {
                         });
 
                         loanAccount.loanAmount = amount;
+                        loanAccount.fees = amount * 1.25;
 
                         return loanAccount.save();
                     }

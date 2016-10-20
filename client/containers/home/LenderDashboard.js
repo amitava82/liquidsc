@@ -6,10 +6,11 @@ import moment from 'moment';
 import {connect} from 'react-redux';
 import autobind from 'autobind-decorator';
 import {Link} from 'react-router';
-import {Navbar, Nav, NavItem, Tabs, Tab, Pagination} from 'react-bootstrap';
+import {Table, Tabs, Tab, Pagination} from 'react-bootstrap';
 import UIDate from '../../components/UIDate';
 import {getApplications} from '../../redux/modules/applications';
 import {loadAccounts} from '../../redux/modules/loanAccounts';
+import { calcInterest } from '../../utils';
 
 import LenderOverview from './LenderOverview';
 
@@ -55,9 +56,11 @@ export default class LenderDashboard extends React.Component {
                 <td>{i.borrower.company}</td>
                 <td>{i.lenders[0].loanAmount}</td>
                 <td>{i.lenders[0].interestRate}</td>
+                <td>{calcInterest(i.lenders[0].loanAmount, i.lenders[0].interestRate, i.lenders[0].tenor)}</td>
                 <td>{i.lenders[0].tenor}</td>
                 <td><UIDate date={i.lenders[0].disbursementDate} time={false}/></td>
                 <td><UIDate date={i.lenders[0].repaymentDate} time={false}/></td>
+                <td>{i.lenders[0].settled ? 'Yes' : 'No'}</td>
             </tr>
         ));
 
@@ -100,7 +103,7 @@ export default class LenderDashboard extends React.Component {
                     </Tab>
                     <Tab eventKey={3} title="Loans Portfolio">
                         <br/>
-                        <table className="table table-striped">
+                        <Table striped responsive>
                             <thead>
                             <tr>
                                 <th>ID</th>
@@ -108,15 +111,17 @@ export default class LenderDashboard extends React.Component {
                                 <th>Borrower</th>
                                 <th>Amount</th>
                                 <th>Interest %</th>
+                                <th>Interest</th>
                                 <th>Tenor</th>
                                 <th>Disbursement Date</th>
                                 <th>Repayment Date</th>
+                                <th>Settled</th>
                             </tr>
                             </thead>
                             <tbody>
                             {accountRows}
                             </tbody>
-                        </table>
+                        </Table>
                         <div>
                             <Pagination
                                 prev

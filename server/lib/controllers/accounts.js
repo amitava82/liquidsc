@@ -169,6 +169,7 @@ module.exports = deps => {
         updateAccount(req, res, next) {
             const disDate = req.body.disbursementDate;
             const loanId = req.body.loanId;
+            const feesRate = req.body.feesRate;
 
             LoanAccount.findById(req.params.id).populate(populate).exec()
                 .then(
@@ -177,6 +178,7 @@ module.exports = deps => {
                         const payDate = moment(disDate).add(loan.tenor, 'days').toDate();
                         loan.disbursementDate = disDate;
                         loan.repaymentDate = payDate;
+                        if(feesRate) doc.feesRate = feesRate;
                         return doc.save();
                     }
                 )
@@ -200,6 +202,8 @@ module.exports = deps => {
                 doc => res.send(doc),
                 next
             );
-        }
+        },
+
+
     }
 };

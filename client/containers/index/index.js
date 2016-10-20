@@ -5,10 +5,15 @@ import { Link } from 'react-router';
 
 
 export default class Index extends React.Component {
+
+    componentDidMount() {
+        document.getElementsByClassName('carousel')[0].style.height = window.innerHeight - 75;
+
+    }
     render() {
 
         const bs = (
-            <Carousel controls={false}>
+            <Carousel controls={false} ref="slider">
                 <Carousel.Item>
                     <Carousel.Caption>
                         <h1>Supply Chain Financing Platform</h1>
@@ -33,7 +38,7 @@ export default class Index extends React.Component {
                     {bs}
                 </div>
                 <div className="container">
-                    <Row className="flex">
+                    <Row className="flex" style={{marginBottom: 100}}>
                         <Col sm={4}>
                             <div className=" home-card">
                                 <h3 className="text-center">BUYER</h3>

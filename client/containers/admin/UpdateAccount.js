@@ -11,7 +11,8 @@ export default class UpdateAccount extends React.Component {
     constructor(...args) {
         super(...args);
         this.state = {
-            disbursementDate: null
+            disbursementDate: null,
+            rate: ''
         }
     }
 
@@ -21,6 +22,7 @@ export default class UpdateAccount extends React.Component {
             disbursementDate: v
         });
     }
+
 
     @autobind
     submit() {

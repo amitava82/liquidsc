@@ -75,12 +75,6 @@ export default class LenderOverview extends React.Component {
                             </Table>
                         </div>
                     </Col>
-                    <Col xs={3}>
-                        <h5>Time left to bid</h5>
-                    </Col>
-                    <Col xs={3}>
-                        <h5>Latest activity</h5>
-                    </Col>
                 </Row>
             </div>
         )

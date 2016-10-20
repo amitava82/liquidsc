@@ -63,7 +63,13 @@ module.exports = function (deps) {
             ref: 'Application',
             required: true,
             index: {unique: true}
+        },
+
+        feesRate: {
+            type: Number,
+            default: 1.25
         }
+
     }, {timestamps: true});
 
 

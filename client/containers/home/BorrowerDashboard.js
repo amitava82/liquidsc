@@ -8,7 +8,7 @@ import { getApplications } from '../../redux/modules/applications';
 import { loadAccounts } from '../../redux/modules/loanAccounts';
 import { Navbar, Nav, NavItem, Tabs, Tab, Pagination, Button, Glyphicon, Label } from 'react-bootstrap';
 import UploadDocModal  from './UploadDocModal';
-import {pc} from '../../utils';
+import {pc, calcInterest} from '../../utils';
 
 @connect(state=>state)
 export default class SupplierDashboard extends React.Component {
@@ -61,13 +61,15 @@ export default class SupplierDashboard extends React.Component {
         const accountRows = [];
 
         loanAccounts.data.forEach(i => {
+            const fees = i.feesRate || 1.25;
             accountRows.push(
                 (
                     <tr key={i._id}>
                         <td>{i._id}</td>
                         <td><UIDate date={i.createdAt} time={false} /></td>
                         <td>{i.loanAmount}</td>
-                        <td>{(i.loanAmount * (1.25/100)).toFixed(0)}</td>
+                        <td>{fees}</td>
+                        <td>{(i.loanAmount * (fees/100)).toFixed(0)}</td>
                         <td>
                             <Button bsSize="xs" onClick={e => this.toggleDetails(i._id)}>
                                 <Glyphicon glyph="eye-open" />
@@ -87,6 +89,7 @@ export default class SupplierDashboard extends React.Component {
                                     <th>Amount</th>
                                     <th>Allocation %</th>
                                     <th>Interest %</th>
+                                    <th>Interest</th>
                                     <th>Tenor</th>
                                     <th>Disbursement date</th>
                                     <th>Repayment date</th>
@@ -101,6 +104,7 @@ export default class SupplierDashboard extends React.Component {
                                         <td>{l.loanAmount}</td>
                                         <td>{pc(l.loanAmount, i.loanAmount)}%</td>
                                         <td>{l.interestRate}</td>
+                                        <td>{calcInterest(l.loanAmount, l.interestRate, l.tenor)}</td>
                                         <td>{l.tenor} days</td>
                                         <td><UIDate date={l.disbursementDate} time={false} /></td>
                                         <td><UIDate date={l.repaymentDate} time={false}/></td>
@@ -157,20 +161,24 @@ export default class SupplierDashboard extends React.Component {
                     </Tab>
                     <Tab eventKey={2} title="Loan Accounts">
                         <br/>
-                        <table className="table table-striped">
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Created on</th>
-                                <th>Amount</th>
-                                <th>Processing fees</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {accountRows}
-                            </tbody>
-                        </table>
+                        <div className="table-responsive">
+                            <table className="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Created on</th>
+                                    <th>Amount</th>
+                                    <th>Processing Fees %</th>
+                                    <th>Processing fees</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {accountRows}
+                                </tbody>
+                            </table>
+                        </div>
+                        <br/>
                         <div>
                             <Pagination
                                 prev
