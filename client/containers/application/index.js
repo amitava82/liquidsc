@@ -112,7 +112,7 @@ export default class Application extends React.Component {
                                 <label className="text-info">Processing fees (1.25%): <strong>{fees}</strong></label>
 
                             </p>
-                            <Checkbox field={tos} label="Processing fees of upto 1.5% will be charged upon loan disbursement" />
+                            <Checkbox field={tos} label="Exact Fees will be notified post Loan application assessment." />
                             <Button bsSize="large" block disabled={submitting} type="submit" bsStyle="primary">Submit</Button>
                         </form>
                     )}

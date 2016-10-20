@@ -8,3 +8,7 @@ export function prettyAddress(address) {
 }
 
 export const pc = (amt, total) => accounting.toFixed((amt * 100)/total);
+
+export const calcInterest = (amnt, rate, tenor) => {
+    return accounting.toFixed((amnt * (rate/100) * tenor)/365);
+};

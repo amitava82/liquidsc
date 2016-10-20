@@ -79,7 +79,7 @@ export default class LoanAccounts extends React.Component {
     }
 
     toggleDetails(id) {
-        this.setState({visibleRow: id});
+        this.setState({visibleRow: this.state.visibleRow == id ? '' : id});
     }
 
     render() {
@@ -95,7 +95,7 @@ export default class LoanAccounts extends React.Component {
                     <td>{i.loanAmount}</td>
                     <td>{(i.loanAmount * (1.25/100)).toFixed(0)}</td>
                     <td>
-                        <Button bsSize="xs" onClick={e => this.toggleDetails(i._id)}>
+                        <Button bsStyle="primary" bsSize="xs" onClick={e => this.toggleDetails(i._id)}>
                             <Glyphicon glyph="eye-open" />
                         </Button>
                     </td>

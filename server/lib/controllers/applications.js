@@ -16,7 +16,7 @@ var constants = require('../../../constants');
 const USER_PROPS =  'company email';
 const populate = [
     {path: 'company', select: USER_PROPS},
-    {path: 'lenders', select: USER_PROPS},
+    {path: 'lenders.lender', select: USER_PROPS},
     {path: 'buyer', select: USER_PROPS}
 ];
 
@@ -86,7 +86,7 @@ module.exports = deps => {
                 //query.receivableStatus = 'pending';
                 query.status = constants.status.UNDER_REVIEW;
             } else if(userRole == constants.roles.LENDER) {
-                query.lenders = {$in: [userId]};
+                query['lenders.lender'] = userId;
                 query.status = constants.status.APPROVED;
                 //query.account
             }
@@ -100,7 +100,7 @@ module.exports = deps => {
                 } else if(userRole == constants.roles.BUYER) {
                     query.buyerEmail = req.user.email;
                 } else if(userRole == constants.roles.LENDER) {
-                    query.lenders = {$in: [userId]};
+                    query['lenders.lender'] = userId;
                 }
 
                 const agg = [
@@ -276,6 +276,10 @@ module.exports = deps => {
                 updateData = data;
             }
 
+            if(updateData.status == constants.status.APPROVED) {
+                updateData.approvalDate = new Date()
+            }
+
             Application.findOne(q).exec().then(
                 doc => {
                     if(!doc) throw new Error('Not found');
@@ -360,30 +364,43 @@ module.exports = deps => {
         ],
 
         assignToLenders(req, res, next) {
-            const lenders = req.body;
+            const lenders = _.compact(req.body);
             const id = req.params.id;
 
-            Application.findByIdAndUpdate(id, {
-                lenders
-            }, {new: true}).populate(populate)
-                .exec()
-                .then(
-                    doc => {
-                        const lenders = _.map(doc.lenders, 'email');
-                        var mailer = deps.nodemailer;
-                        mailer.sendMail({
-                            from: 'support@alchcapital.com',
-                            to: lenders,
-                            subject: 'ALCH : Loans Ready for Bid',
-                            html: templates.lenderAssigned(doc)
-                        });
-                        return doc;
-                    }
-                )
-                .then(
-                    doc => res.send(doc),
-                    next
-                )
+            Application.findById(id).populate(populate).exec().then(
+                app => {
+                    _.forEach(lenders, i => {
+                        if(!app.lenders.id(i)){
+                            app.lenders.push({
+                                _id: i,
+                                lender: i
+                            });
+                        }
+                    });
+                    return app.save();
+                }
+            )
+            .then(doc => Application.populate(doc, populate))
+            .then(
+                doc => {
+                    const lenderEmails = [];
+                    lenders.forEach(i => {
+                        lenderEmails.push(doc.lenders.id(i).lender.email);
+                    });
+                    var mailer = deps.nodemailer;
+                    mailer.sendMail({
+                        from: 'support@alchcapital.com',
+                        to: lenderEmails,
+                        subject: 'ALCH : Loans Ready for Bid',
+                        html: templates.lenderAssigned(doc)
+                    });
+                    return doc;
+                }
+            )
+            .then(
+                doc => res.send(doc),
+                next
+            )
         },
 
         getDoc(req, res, next) {
@@ -398,7 +415,7 @@ module.exports = deps => {
             if(role == constants.roles.BUYER) {
                 query.buyerEmail = email;
             } else if(role == constants.roles.LENDER) {
-                query.lenders = {$in: [_id]};
+                query['lenders.lender'] = _id;
             } else if(role == constants.roles.BORROWER) {
                 query.company = _id;
             }
@@ -425,6 +442,7 @@ module.exports = deps => {
             )
         },
 
+        // TODO
         lenderReject(req, res, next) {
             Application.findByIdAndUpdate(req.params.id, {
                 $pull: {

@@ -66,7 +66,7 @@ export default class Analytics extends React.Component {
                                 <h4>Total</h4>
                                 <h2 className="text-success">{data.totalLoanAcc}</h2>
                                 <h4>Total Loan Funded</h4>
-                                <h2 className="text-success">{accounting.formatMoney(data.totalLoanAmount)}</h2>
+                                <h2 className="text-success">{accounting.formatMoney(data.totalLoanAmount, null, 0)}</h2>
                             </div>
                         </div>
                     </Col>

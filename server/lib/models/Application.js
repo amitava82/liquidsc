@@ -15,6 +15,14 @@ var uid = require('../helpers/id');
 module.exports = function (deps) {
     const model = 'Application';
 
+    const sentToSchema = mongoose.Schema({
+        _id: String,
+        lender: {
+            type: String,
+            ref: 'User'
+        }
+    }, {timestamps: true});
+
     const applicationSchema = mongoose.Schema({
         //borrower input fields
         _id: {
@@ -102,10 +110,7 @@ module.exports = function (deps) {
             enum: Object.keys(constants.status)
         },
 
-        lenders: [{
-            type: String,
-            ref: 'User'
-        }],
+        lenders: [sentToSchema],
 
         account: {
             type: String,
@@ -114,7 +119,9 @@ module.exports = function (deps) {
 
         fees: Number,
 
-        adminComment: String
+        adminComment: String,
+
+        approvalDate: Date,
 
     }, {timestamps: true});
 

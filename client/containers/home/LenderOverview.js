@@ -48,7 +48,7 @@ export default class LenderOverview extends React.Component {
                     <Col xs={3}>
                         <div className="text-center">
                             <h4>Total Loan Funded</h4>
-                            <h5 className="text-success">{accounting.formatMoney(data.totalLoanAmount)}</h5>
+                            <h5 className="text-success">{accounting.formatMoney(data.totalLoanAmount, null, 0)}</h5>
                         </div>
                     </Col>
                     <Col xs={3}>

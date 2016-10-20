@@ -66,7 +66,7 @@ export default class ApplicationDetails extends React.Component {
             const {lenders} = this.state;
             const {users} = this.props;
             return (
-                <Col md={3}>
+                <Col md={3} className="nobox">
                     <h5>Assign Lenders</h5>
                     <CheckboxList
                         value={lenders}

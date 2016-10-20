@@ -2,6 +2,7 @@
  * Created by amita on 10/10/2016.
  */
 import React from 'react';
+import moment from 'moment';
 import {connect} from 'react-redux';
 import autobind from 'autobind-decorator';
 import { Row, Col, Button, Table, Pagination } from 'react-bootstrap';
@@ -9,6 +10,7 @@ import { Link } from 'react-router';
 import map from 'lodash/map';
 import UIDate from '../../components/UIDate';
 import SearchBar, {buildQuery} from '../../components/Searchbar';
+import { calcInterest } from '../../utils'
 
 import { getApplications } from '../../redux/modules/applications';
 
@@ -58,9 +60,11 @@ export default class LoanAccounts extends React.Component {
                 <td>{i._id}</td>
                 <td>{i.company.company}</td>
                 <td>{i.loanAmount}</td>
+                <td>{i.rateOfInterest}</td>
+                <td>{calcInterest(i.loanAmount, i.rateOfInterest, i.tenor)}</td>
                 <td>{i.buyerCompany}</td>
                 <td className="capitalize">{i.receivableStatus}</td>
-                <td className="capitalize">{i.proposals.length ?  + i.proposals.length + ' Bid(s)' : 'No Bid'}</td>
+                <td>{i.proposals.length ?  + i.proposals.length + ' Bid(s)' : 'No Bid'}</td>
                 <th>{i.status}</th>
                 <td><Link to={`/admin/applications/${i._id}`}>View</Link></td>
             </tr>
@@ -110,6 +114,8 @@ export default class LoanAccounts extends React.Component {
                         <th>ID</th>
                         <th>Company</th>
                         <th>Loan amount</th>
+                        <th>Interest %</th>
+                        <th>Interest</th>
                         <th>Buyer</th>
                         <th>Buyer Validation</th>
                         <th>Bid Received</th>

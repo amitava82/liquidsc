@@ -2,6 +2,7 @@
  * Created by amita on 10/9/2016.
  */
 import React from 'react';
+import moment from 'moment';
 import {connect} from 'react-redux';
 import autobind from 'autobind-decorator';
 import {Link} from 'react-router';
@@ -39,7 +40,8 @@ export default class LenderDashboard extends React.Component {
                 <td><UIDate date={i.createdAt}/></td>
                 <td>{i.company.company}</td>
                 <td>{i.loanAmount}</td>
-                <th>{i.proposals ? 'Bid' : 'No Bid'}</th>
+                <td>{i.proposals ? 'Bid placed' : 'No Bid'}</td>
+                <td>{moment(i.lenders[0].createdAt).add(30, 'd').diff(moment(), 'd')}</td>
                 <td>
                     <Link className="btn btn-primary" to={`/lender/applications/${i._id}`}>View</Link>
                 </td>
@@ -74,7 +76,8 @@ export default class LenderDashboard extends React.Component {
                                 <th>Application date</th>
                                 <th>Company</th>
                                 <th>Amount</th>
-                                <th>Loan</th>
+                                <th>Bid</th>
+                                <th>Days to bid</th>
                                 <th>Action</th>
                             </tr>
                             </thead>

@@ -211,7 +211,7 @@ export default class Analytics extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Total Loan Amount Funded</td>
-                                    <td>{accounting.formatMoney(data.totalLoanAmount)}</td>
+                                    <td>{accounting.formatMoney(data.totalLoanAmount, null, 0)}</td>
                                 </tr>
                                 <tr>
                                     <td>Total Amount Not Funded</td>

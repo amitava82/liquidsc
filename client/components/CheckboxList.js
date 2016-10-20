@@ -64,7 +64,7 @@ export default class CheckboxList extends React.Component {
             <div className="checkbox-list">
                 <button onClick={this.checkAll} className="btn btn-link btn-sm">Check all</button>
                 {' '}
-                <button onClick={this.uncheckAll} className="btn btn-link btn-sm">Check all</button>
+                <button onClick={this.uncheckAll} className="btn btn-link btn-sm">Uncheck all</button>
                 <ul className="list-unstyled" ref="list">
                     {items}
                 </ul>

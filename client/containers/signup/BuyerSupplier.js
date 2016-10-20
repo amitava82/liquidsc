@@ -9,7 +9,7 @@ import RadioGroup from '../../components/form/RadioGroup';
 import Checkbox from '../../components/form/Checkbox';
 import { signup } from '../../redux/modules/session';
 import { createToast } from '../../redux/modules/toast';
-import { createValidator, required, email } from '../../utils/validator';
+import { createValidator, required, email, minLength } from '../../utils/validator';
 
 const ROLE_OPTIONS = [
     {label: 'I\'m buyer', value: 'BUYER'},
@@ -43,7 +43,7 @@ const ROLE_OPTIONS = [
         password: required(),
         role: required(),
         company: required(),
-        pan: required(),
+        pan: [minLength(10), required()],
         phone: required(),
         contactPerson: required(),
         designation: required(),
