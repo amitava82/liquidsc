@@ -157,9 +157,9 @@ export default class Users extends React.Component {
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Name</th>
                         <th>Email</th>
                         <th>Company</th>
-                        <th>Full name</th>
                         <th>Phone</th>
                         <th>Address</th>
                         <th>City</th>
@@ -174,9 +174,9 @@ export default class Users extends React.Component {
                     {data.map(i => (
                         <tr key={i._id}>
                             <td>{i._id}</td>
+                            <td>{i.name}</td>
                             <td>{i.email}</td>
                             <td>{i.company}</td>
-                            <td>{i.fullName}</td>
                             <td>{i.phoneCode}-{i.phone}</td>
                             <td>{i.address}</td>
                             <td>{i.city}</td>

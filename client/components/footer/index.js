@@ -10,6 +10,7 @@ export default class Footer extends React.Component {
                     <Col xs={12}>
                         <div className="footer-links">
                             <a href="/privacy">Privacy Policy</a>
+                            <a href="/tos">Terms of Service</a>
                             <a href="mailto:support@alchcapital.com">Support</a>
                             <a href="">LinkedIn</a>
                             <a href="">Twitter</a>

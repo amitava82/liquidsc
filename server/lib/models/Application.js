@@ -112,6 +112,8 @@ module.exports = function (deps) {
             ref: 'LoanAccount'
         },
 
+        fees: Number,
+
         adminComment: String
 
     }, {timestamps: true});

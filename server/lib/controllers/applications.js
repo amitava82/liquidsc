@@ -154,6 +154,12 @@ module.exports = deps => {
                         foreignField: '_id',
                         as: 'company'
                     }},
+                    {$lookup: {
+                        from: 'loanaccounts',
+                        localField: 'account',
+                        foreignField: '_id',
+                        as: 'account'
+                    }},
                     {
                         $match: _.extend(q, query)
                     },
@@ -181,8 +187,11 @@ module.exports = deps => {
                             limit: limit,
                             docs: r.docs.map(i => {
                                 i.company = _.pick(i.company[0], ['company']);
-                                if(userRole == constants.roles.BUYER) {
+                                i.account = _.first(i.account);
+                                if (userRole == constants.roles.BUYER) {
                                     i.documents = _.filter(i.documents, {fieldname: 'receivable'});
+                                } else if(userRole == constants.roles.LENDER) {
+                                    i.bidAccepted = !!(i.account && _.find(i.account.lenders, {lender: userId}));
                                 }
                                 return i;
                             })
@@ -208,8 +217,11 @@ module.exports = deps => {
                         type: file.fieldname, filename: file.filename, size: file.size, destination: file.destination})),
 
                 };
-                _.assign(application, JSON.parse(req.body.model), {
+
+                const data = JSON.parse(req.body.model);
+                _.assign(application, data, {
                     company: req.user._id,
+                    fees: data.loanAmount * 1.25,
                     status: constants.status.PENDING
                 });
 
@@ -420,6 +432,7 @@ module.exports = deps => {
             let proposal = null;
             let account = null;
             let application = null;
+            const proposalIds = [];
             Application.findById(appId).populate(['company']).exec()
                 .then(
                     app => {
@@ -457,6 +470,7 @@ module.exports = deps => {
                                     tenor: p.tenor,
 
                                 });
+                                proposalIds.push(p._id);
                                 amount = amount + bal;
                                 return false;
                             } else {
@@ -469,6 +483,7 @@ module.exports = deps => {
 
                                 });
                                 amount = amount + amt;
+                                proposalIds.push(p._id);
                             }
                         });
 
@@ -504,6 +519,15 @@ module.exports = deps => {
                         return Application.findByIdAndUpdate(appId, {
                             account: loanAccount._id
                         }, {new: true}).populate(populate).exec();
+                    }
+                )
+                .then(
+                    doc => {
+                        Proposal.findByIdAndUpdate({
+                            _id: {$id: proposalIds}
+                        }, {status: 'accepted'}, {multi: true}).exec();
+
+                        return doc;
                     }
                 )
                 .then(

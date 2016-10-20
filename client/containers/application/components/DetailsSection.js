@@ -12,7 +12,7 @@ import UIDate from '../../../components/UIDate';
 export default class DetailsSection extends React.Component {
 
     render() {
-        const {data} = this.props;
+        const {data, showReceivable, showAccount} = this.props;
 
         const docs = data.documents.map(doc => <div><a target="_blank" href={`/api/applications/${data._id}/docs/${doc.fieldname}`}>{doc.fieldname}</a> </div>);
 
@@ -34,14 +34,22 @@ export default class DetailsSection extends React.Component {
                             <dd>{data.tenor} days</dd>
                             <dt>Interest %</dt>
                             <dd>{data.rateOfInterest}</dd>
-                            <dt>Receivable date</dt>
-                            <dd><UIDate date={data.receivableDate}/></dd>
+                            {showReceivable  !=false ? (
+                                <span>
+                                    <dt>Receivable date</dt>
+                                    <dd><UIDate date={data.receivableDate} time={false} /></dd>
+                                </span>
+                            ): null}
                             <dt> RECEIVABLE STATUS</dt>
                             <dd className="capitalize">{data.receivableStatus}</dd>
                             <dt>ALCH status</dt>
                             <dd className="capitalize">{data.status}</dd>
-                            <dt>Loan account</dt>
-                            <dd>{data.account && <Link to={`/admin/accounts/${data.account}`}>Account</Link>}</dd>
+                            {showAccount !== false ? (
+                                <span>
+                                    <dt>Loan account</dt>
+                                    <dd>{data.account && <Link to={`/admin/accounts/${data.account}`}>Account</Link>}</dd>
+                                </span>
+                            ) : null}
                         </dl>
                     </Col>
                     <Col xs={6}>

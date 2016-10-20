@@ -6,6 +6,7 @@ import { Button, Alert } from 'react-bootstrap';
 import autobind from 'autobind-decorator';
 import Input from '../../components/form/PureInput';
 import Select from '../../components/form/Select';
+import Checkbox from '../../components/form/Checkbox';
 import { signup } from '../../redux/modules/session';
 import { createToast } from '../../redux/modules/toast';
 import { createValidator, required, email } from '../../utils/validator';
@@ -28,7 +29,8 @@ const LENDER_TYPES = 'Accredited Investor,Individual,Company,Bank,NBFC,Fund,Othe
         'country',
         'city',
         'address',
-        'phoneCode'
+        'phoneCode',
+        'tos'
     ],
     validate: createValidator({
         name: required(),
@@ -36,14 +38,14 @@ const LENDER_TYPES = 'Accredited Investor,Individual,Company,Bank,NBFC,Fund,Othe
         password: required(),
         role: required(),
         company: required(),
-        fullName: required(),
         lenderType: required(),
         phone: required(),
         designation: required(),
         country: required(),
         city: required(),
         address: required(),
-        phoneCode: required()
+        phoneCode: required(),
+        tos: required()
     }),
     initialValues: {
         role: 'LENDER'
@@ -67,7 +69,7 @@ export default class Lender extends React.Component {
 
     render() {
         const {
-            fields: {name, email, password, company, fullName, phone, lenderType, designation, comments, address, city, country, phoneCode},
+            fields: {name, email, password, company, phone, lenderType, designation, comments, address, city, country, phoneCode, tos},
             handleSubmit, submitting, error} = this.props;
 
         return (
@@ -77,11 +79,10 @@ export default class Lender extends React.Component {
                 ) : (
                     <form onSubmit={handleSubmit(this.submit)}>
                         {error && <Alert bsStyle="danger">{error}</Alert> }
-                        <Input field={name} label="Your name" />
+                        <Input field={name} label="Full name" />
                         <Input field={company} label="Company Name/Individual Name" />
                         <Input field={email} label="Email" type="email" />
                         <Input type="password" field={password} label="Password" />
-                        <Input field={fullName} label="Full name" />
                         <Input field={phoneCode} label="Phone country code" />
                         <Input field={phone} label="Contact number" />
                         <Select field={lenderType} options={LENDER_TYPES} label="Lender type" required />
@@ -89,8 +90,8 @@ export default class Lender extends React.Component {
                         <Input field={address} label="Address" />
                         <Input field={city} label="City" />
                         <Input field={country} label="Country" />
-
                         <Input field={comments} label="Comments" />
+                        <Checkbox field={tos} label="I agree to Terms of Service" />
                         <Button  bsSize="large" block disabled={submitting} type="submit" bsStyle="primary">Register</Button>
                     </form>
                 )}

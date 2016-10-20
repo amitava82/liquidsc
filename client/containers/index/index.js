@@ -1,14 +1,36 @@
 import React from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Carousel } from 'react-bootstrap';
 import { Link } from 'react-router';
+
+
 
 export default class Index extends React.Component {
     render() {
+
+        const bs = (
+            <Carousel>
+                <Carousel.Item>
+                    <Carousel.Caption>
+                        <h1>Supply Chain Financing Platform</h1>
+                    </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                    <Carousel.Caption>
+                        <h1>Competitive & transparent Loan Pricing via Loan bidding</h1>
+                    </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                    <Carousel.Caption>
+                        <h1>Access to Asset Backed lending opportunities</h1>
+                    </Carousel.Caption>
+                </Carousel.Item>
+            </Carousel>
+        );
+
         return (
             <div>
-                <div className="hero">
-                    <h1>LiquidSC</h1>
-                    <h2>Supply Chain Financing Platform</h2>
+                <div>
+                    {bs}
                 </div>
                 <br/>
                 <Row className="flex">

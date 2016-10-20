@@ -57,6 +57,9 @@ module.exports = function (dependencies, callback) {
         res.render('privacy', {title: 'Privacy Policy'});
     });
 
+    app.get('/tos', (req, res) => {
+        res.render('tos', {title: 'Terms of Service'});
+    });
 
     //delete cache buster
     app.use(function (req, res, next) {

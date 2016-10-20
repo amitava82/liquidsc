@@ -60,7 +60,7 @@ export default class ApplicationDetails extends React.Component {
             <div>
                 <h3>Application details</h3>
                 <Row>
-                    <DetailsSection data={viewing} />
+                    <DetailsSection data={viewing} showReceivable={false} showAccount={false} />
                     <Col md={3}>
                         {loading ? (
                             <h5>Loading...</h5>

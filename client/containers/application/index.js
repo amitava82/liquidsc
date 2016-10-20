@@ -34,7 +34,8 @@ const TENOR = [30, 60, 90, 120, 180].map(i => ({label: i + ' days', value: i}));
         'buyerConsent',
         'loanAmount',
         'rateOfInterest',
-        'tenor'
+        'tenor',
+        'tos'
     ],
     initialValues: {
         isExporter: false,
@@ -56,7 +57,8 @@ const TENOR = [30, 60, 90, 120, 180].map(i => ({label: i + ' days', value: i}));
             pan: file(),
             coi: file(),
             report: file()
-        })
+        }),
+        tos: required()
     })
 })
 @connect(state=>state, {createApplication})
@@ -77,7 +79,8 @@ export default class Application extends React.Component {
 
     render() {
         const {
-            fields: {loanAmount, receivable, receivableDate, buyerCompany, buyerContactPerson, buyerEmail, isExporter, documents, buyerConsent, rateOfInterest, tenor},
+            fields: {loanAmount, receivable, receivableDate, buyerCompany, buyerContactPerson, buyerEmail,
+                isExporter, documents, buyerConsent, rateOfInterest, tenor, tos},
             handleSubmit, submitting, error} = this.props;
 
         const fees = (loanAmount.value * (1.25/100)).toFixed(2);
@@ -109,6 +112,7 @@ export default class Application extends React.Component {
                                 <label className="text-info">Processing fees (1.25%): <strong>{fees}</strong></label>
 
                             </p>
+                            <Checkbox field={tos} label="Processing fees of upto 1.5% will be charged upon loan disbursement" />
                             <Button bsSize="large" block disabled={submitting} type="submit" bsStyle="primary">Submit</Button>
                         </form>
                     )}

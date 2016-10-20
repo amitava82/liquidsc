@@ -6,6 +6,7 @@ import { Button, Alert } from 'react-bootstrap';
 import autobind from 'autobind-decorator';
 import Input from '../../components/form/PureInput';
 import RadioGroup from '../../components/form/RadioGroup';
+import Checkbox from '../../components/form/Checkbox';
 import { signup } from '../../redux/modules/session';
 import { createToast } from '../../redux/modules/toast';
 import { createValidator, required, email } from '../../utils/validator';
@@ -33,7 +34,8 @@ const ROLE_OPTIONS = [
         'address',
         'phoneCode',
         'sector',
-        'subSector'
+        'subSector',
+        'tos'
     ],
     validate: createValidator({
         name: required(),
@@ -49,7 +51,8 @@ const ROLE_OPTIONS = [
         country: required(),
         city: required(),
         address: required(),
-        phoneCode: required()
+        phoneCode: required(),
+        tos: required()
 
     }),
     initialValues: {
@@ -77,7 +80,7 @@ export default class BuyerSupplier extends React.Component {
         const {
             fields: {
                 name, email, password, role, company, pan, phone, contactPerson,
-                designation, businessType, address, city, country, phoneCode, sector, subSector},
+                designation, businessType, address, city, country, phoneCode, sector, subSector, tos},
             handleSubmit, submitting, error} = this.props;
 
         return (
@@ -88,7 +91,7 @@ export default class BuyerSupplier extends React.Component {
                     <form onSubmit={handleSubmit(this.submit)}>
                         {error && <Alert bsStyle="danger">{error}</Alert> }
                         <RadioGroup options={ROLE_OPTIONS} field={role} label="What's your role?" />
-                        <Input field={name} label="Your name" />
+                        <Input field={name} label="Full name" />
                         <Input field={email} label="Email" type="email" />
                         <Input field={company} label="Company name" />
                         <Input field={sector} label="Sector" />
@@ -103,6 +106,7 @@ export default class BuyerSupplier extends React.Component {
                         <Input field={address} label="Address" />
                         <Input field={city} label="City" />
                         <Input field={country} label="Country" />
+                        <Checkbox field={tos} label="I agree to Terms of Service" />
                         <Button bsSize="large" block disabled={submitting} type="submit" bsStyle="primary">Register</Button>
                     </form>
                 )}
