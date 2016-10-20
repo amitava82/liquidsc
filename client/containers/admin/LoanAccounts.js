@@ -134,7 +134,8 @@ export default class LoanAccounts extends React.Component {
                                         <td><UIDate date={l.disbursementDate} time={false} /></td>
                                         <td><UIDate date={l.repaymentDate} time={false}/></td>
                                         <td>
-                                            {l.settled ? 'No' : moment(l.repaymentDate).isBefore(moment()) ? <Label bsStyle="danger">Yes</Label> : 'No'}
+                                            {l.settled ? 'No' : moment(l.repaymentDate).isBefore(moment()) ?
+                                                <Label bsStyle="danger">Yes - {moment().diff(moment(l.repaymentDate), 'd')} days</Label> : 'No'}
                                         </td>
                                         <td>
                                             <select
