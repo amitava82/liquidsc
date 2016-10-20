@@ -160,6 +160,12 @@ module.exports = deps => {
                         foreignField: '_id',
                         as: 'account'
                     }},
+                    {$lookup: {
+                        from: 'proposals',
+                        localField: '_id',
+                        foreignField: 'application',
+                        as: 'proposals'
+                    }},
                     {
                         $match: _.extend(q, query)
                     },
@@ -192,6 +198,7 @@ module.exports = deps => {
                                     i.documents = _.filter(i.documents, {fieldname: 'receivable'});
                                 } else if(userRole == constants.roles.LENDER) {
                                     i.bidAccepted = !!(i.account && _.find(i.account.lenders, {lender: userId}));
+                                    i.proposals = _.find(i.proposals, {lender: userId})
                                 }
                                 return i;
                             })
@@ -242,16 +249,11 @@ module.exports = deps => {
                         var mailer = deps.nodemailer;
                         mailer.sendMail({
                             from: 'support@alchcapital.com',
-                            to: constants.adminEmail,
-                            subject: 'Application created',
-                            html: templates.applicationReceived(doc)
+                            to: req.user.email,
+                            subject: 'ALCH : Loan Application received',
+                            html: templates.applicationReceived({app: doc})
                         });
-                        mailer.sendMail({
-                            from: 'support@alchcapital.com',
-                            to: application.buyerEmail,
-                            subject: 'New application: Validate Rec Doc',
-                            html: templates.verifyRecDoc(doc)
-                        });
+
 
                         return doc;
                     }
@@ -296,6 +298,13 @@ module.exports = deps => {
                             to: [constants.adminEmail, doc.company.email],
                             subject: 'Receivable doc status updated',
                             html: templates.recStatusUpdated(doc)
+                        });
+                    } else if(updateData.status == constants.status.UNDER_REVIEW) {
+                        mailer.sendMail({
+                            from: 'support@alchcapital.com',
+                            to: doc.buyer.email,
+                            subject: 'Buyer : Receivable Approval Request',
+                            html: templates.verifyRecDoc(doc)
                         });
                     }
                     return doc;
@@ -365,7 +374,7 @@ module.exports = deps => {
                         mailer.sendMail({
                             from: 'support@alchcapital.com',
                             to: lenders,
-                            subject: 'Application received',
+                            subject: 'ALCH : Loans Ready for Bid',
                             html: templates.lenderAssigned(doc)
                         });
                         return doc;
@@ -507,8 +516,8 @@ module.exports = deps => {
                         mailer.sendMail({
                             from: 'support@alchcapital.com',
                             to: emails,
-                            subject: 'Loan account created',
-                            html: templates.loanAccountCreated({application: application, account: loanAccount}),
+                            subject: 'ALCH : Bid Accepted',
+                            html: templates.bidAccepted({application: application, loan: loanAccount}),
                             attachments: application.documents.map(i => ({filename: i.fieldname + path.extname(i.filename), path: i.path}))
                         });
                         return loanAccount;

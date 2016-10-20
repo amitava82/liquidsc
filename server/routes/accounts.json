@@ -27,6 +27,14 @@
       "acl": {
         "role": "ADMIN"
       }
+    },
+    {
+      "path": ":id/:loan/settle",
+      "method": "put",
+      "handler": "settle",
+      "acl": {
+        "role": "ADMIN"
+      }
     }
   ]
 }

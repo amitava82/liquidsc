@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import cx from 'classnames';
 import {push} from 'react-router-redux';
 import autobind from 'autobind-decorator';
 import {logout} from './redux/modules/session';
@@ -23,10 +24,14 @@ export default class App extends React.Component {
 
     render() {
         const {session: {isLoggedIn}} = this.props;
+        const isHome = this.props.location.pathname == "/";
+        const containerClass = cx('flex-item', {
+            'site-content container ': !isHome
+        });
         return (
             <div id="main" className="flex column">
                 <Header onLogout={this.logout}/>
-                <main className="site-content container flex-item">
+                <main className={containerClass}>
                     {this.props.children}
                 </main>
                 <Footer/>

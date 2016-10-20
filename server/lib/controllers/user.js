@@ -39,8 +39,8 @@ module.exports = deps => {
                     mailer.sendMail({
                         from: 'support@alchcapital.com',
                         to: user.email,
-                        subject: 'Account approved',
-                        html: templates.accountActivated(user)
+                        subject: 'ALCH : Registration Request Approved',
+                        html: templates.accountActivated({user})
                     });
                     return user;
                 }

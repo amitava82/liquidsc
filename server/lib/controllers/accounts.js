@@ -192,7 +192,7 @@ module.exports = deps => {
             LoanAccount.findById(id).populate(populate).exec().then(
                 acc => {
                     const _loan = acc.lenders.id(loan);
-                    _loan.settled = true;
+                    _loan.settled = req.body.settled;
 
                     return acc.save();
                 }

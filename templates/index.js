@@ -18,6 +18,7 @@ var lenderAssigned = fs.readFileSync(path.resolve(__dirname, './lender-assigned.
 var recStatusUpdated = fs.readFileSync(path.resolve(__dirname, './rec-status-changed.html'), 'utf8');
 var loanAccountCreated = fs.readFileSync(path.resolve(__dirname, './loanAccount-created.html'), 'utf8');
 var verifyRecDoc = fs.readFileSync(path.resolve(__dirname, './request-buyer-validate-rec-doc.html'), 'utf8');
+var bidAccepted = fs.readFileSync(path.resolve(__dirname, './bidAccepted.html'), 'utf8');
 
 var EXTERNAL_HOST = process.env.EXTERNAL_HOST || 'http://localhost:3000';
 
@@ -30,7 +31,8 @@ const templates = {
     lenderAssigned: lenderAssigned,
     recStatusUpdated: recStatusUpdated,
     loanAccountCreated: loanAccountCreated,
-    verifyRecDoc: verifyRecDoc
+    verifyRecDoc: verifyRecDoc,
+    bidAccepted: bidAccepted
 };
 
 _.each(templates, (val, key) => {

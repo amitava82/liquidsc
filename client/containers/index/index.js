@@ -8,7 +8,7 @@ export default class Index extends React.Component {
     render() {
 
         const bs = (
-            <Carousel>
+            <Carousel controls={false}>
                 <Carousel.Item>
                     <Carousel.Caption>
                         <h1>Supply Chain Financing Platform</h1>
@@ -32,49 +32,51 @@ export default class Index extends React.Component {
                 <div>
                     {bs}
                 </div>
-                <br/>
-                <Row className="flex">
-                    <Col xs={4}>
-                        <div className=" home-card">
-                            <h2>Buyer</h2>
-                            <div className="flex-item">
-                                <div>Extend Payable days and improve WCR.</div>
-                                <div>Improve supplier relationships by ensuring supplier ‘liquidity’.</div>
-                                <div>Enhance cash flows and profitability.</div>
+                <div className="container">
+                    <Row className="flex">
+                        <Col sm={4}>
+                            <div className=" home-card">
+                                <h3 className="text-center">BUYER</h3>
+                                <div className="flex-item">
+                                    <div>Extend Payable days and improve WCR.</div>
+                                    <div>Improve supplier relationships by ensuring supplier ‘liquidity’.</div>
+                                    <div>Enhance cash flows and profitability.</div>
+                                </div>
+                                <div className="text-center">
+                                    <Link className="btn btn-primary btn-lg" to="/signup">Register</Link>
+                                </div>
                             </div>
-                           <div className="text-center">
-                               <Link className="btn btn-primary btn-lg" to="/signup">Register</Link>
-                           </div>
-                        </div>
-                    </Col>
-                    <Col xs={4}>
-                        <div className="home-card">
-                            <h2>Supplier</h2>
-                            <div className="flex-item">
-                                <div>Reduce cost of financing & optimize working capital cycle</div>
-                                <div>Leverage pooled assets for improving profitability.</div>
-                                <div>Unlock liquidity & enhance cashflows.</div>
+                        </Col>
+                        <Col sm={4}>
+                            <div className="home-card">
+                                <h3 className="text-center">SUPPLIER</h3>
+                                <div className="flex-item">
+                                    <div>Reduce cost of financing & optimize working capital cycle</div>
+                                    <div>Leverage pooled assets for improving profitability.</div>
+                                    <div>Unlock liquidity & enhance cashflows.</div>
+                                </div>
+                                <div className="text-center">
+                                    <Link className="btn btn-primary btn-lg" to="/signup">Register</Link>
+                                </div>
                             </div>
-                            <div className="text-center">
-                                <Link className="btn btn-primary btn-lg" to="/signup">Register</Link>
+                        </Col>
+                        <Col sm={4}>
+                            <div className="home-card">
+                                <h3 className="text-center">LENDER</h3>
+                                <div className="flex-item">
+                                    <div>Access to Asset Backed( i.e. Receivables) lending opportunities.</div>
+                                    <div>Opportunity to earn high yields.</div>
+                                    <div>Flexibility to diversify risk through investing in pooled receivables.</div>
+                                    <div>*lending to businesses is subject to risk and only permitted for Accredited Investors.</div>
+                                </div>
+                                <div className="text-center">
+                                    <Link className="btn btn-primary btn-lg" to="/signup">Register</Link>
+                                </div>
                             </div>
-                        </div>
-                    </Col>
-                    <Col xs={4}>
-                        <div className="home-card">
-                            <h2>Lender</h2>
-                            <div className="flex-item">
-                                <div>Access to Asset Backed( i.e. Receivables) lending opportunities.</div>
-                                <div>Opportunity to earn high yields.</div>
-                                <div>Flexibility to diversify risk through investing in pooled receivables.</div>
-                                <div>*lending to businesses is subject to risk and only permitted for Accredited Investors.</div>
-                            </div>
-                           <div className="text-center">
-                               <Link className="btn btn-primary btn-lg" to="/signup">Register</Link>
-                           </div>
-                        </div>
-                    </Col>
-                </Row>
+                        </Col>
+                    </Row>
+                    <br/>
+                </div>
             </div>
         )
     }

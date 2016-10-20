@@ -60,7 +60,7 @@ export default class LoanAccounts extends React.Component {
                 <td>{i.loanAmount}</td>
                 <td>{i.buyerCompany}</td>
                 <td className="capitalize">{i.receivableStatus}</td>
-                <td className="capitalize">{i.account ? 'approved' : 'pending'}</td>
+                <td className="capitalize">{i.proposals.length ?  + i.proposals.length + ' Bid(s)' : 'No Bid'}</td>
                 <th>{i.status}</th>
                 <td><Link to={`/admin/applications/${i._id}`}>View</Link></td>
             </tr>
@@ -112,7 +112,7 @@ export default class LoanAccounts extends React.Component {
                         <th>Loan amount</th>
                         <th>Buyer</th>
                         <th>Buyer Validation</th>
-                        <th>Lender Decision</th>
+                        <th>Bid Received</th>
                         <th>ALCH Decision</th>
                         <th>Action</th>
                     </tr>

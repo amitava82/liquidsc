@@ -22,7 +22,8 @@ export default class Login extends React.Component {
 
     componentWillMount() {
         if(this.props.session.isLoggedIn){
-            this.props.dispatch(push('/home'));
+            const to = this.props.session.user.role == 'admin' ? '/admin/analytics' : '/home';
+            this.props.dispatch(push(to));
         }
     }
 

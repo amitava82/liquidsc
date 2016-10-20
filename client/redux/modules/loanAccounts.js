@@ -77,3 +77,10 @@ export const updateAccount = (id, loanId, disbursementDate) => ({
         promise: api => api.put(`accounts/${id}`, {data: {loanId, disbursementDate}})
     }
 });
+
+export const settleAccount = (id, loan, settled) => ({
+    type: UPDATE,
+    payload: {
+        promise: api => api.put(`accounts/${id}/${loan}/settle`, {data: {settled}})
+    }
+});

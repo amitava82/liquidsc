@@ -45,7 +45,7 @@ export default class ApplicationDetails extends React.Component {
         if(proposal) {
             proposalContent = (
                 <div>
-                    <h4>Submitted proposal</h4>
+                    <h4>Submitted bid</h4>
                     <p><strong>Amount: </strong> {proposal.loanAmount}</p>
                     <p><strong>Rate: </strong> {proposal.interestRate}%</p>
                     <p><strong>Tenor: </strong> {proposal.tenor} days</p>

@@ -83,8 +83,8 @@ module.exports = function(deps){
                         mailer.sendMail({
                             from: 'support@alchcapital.com',
                             to: data.email,
-                            subject: 'Registration success',
-                            html: templates.signup(user)
+                            subject: 'ALCH : Registration Request Received',
+                            html: templates.signup({user})
                         });
                         return user;
                     }

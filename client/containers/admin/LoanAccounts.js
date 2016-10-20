@@ -36,7 +36,8 @@ export default class LoanAccounts extends React.Component {
         this.state = {
             editing: null,
             docId: null,
-            showSearch : false
+            showSearch : false,
+            visibleRow: ''
         }
     }
 
@@ -72,9 +73,13 @@ export default class LoanAccounts extends React.Component {
         this.props.dispatch(loadAccounts({...this.props.users.query, page: page}));
     }
 
+    @autobind
+    settle(id, loan, value) {
+        this.props.dispatch(settleAccount(id, loan, value == 'y'));
+    }
+
     toggleDetails(id) {
-        const e = document.getElementById(id);
-        e.style.display = e.style.display == 'none' ? 'table-row' : 'none';
+        this.setState({visibleRow: id});
     }
 
     render() {
@@ -98,7 +103,7 @@ export default class LoanAccounts extends React.Component {
             );
 
             allRows.push(
-                <tr id={i._id} style={{display: 'none'}}>
+                <tr key={i._id+1} id={i._id} className={cx({hidden: this.state.visibleRow != i._id})}>
                     <td colSpan="5">
                         <div className="collapsible-table">
                             <table className="table table-condensed table-striped">
@@ -132,7 +137,14 @@ export default class LoanAccounts extends React.Component {
                                             {l.settled ? 'No' : moment(l.repaymentDate).isBefore(moment()) ? <Label bsStyle="danger">Yes</Label> : 'No'}
                                         </td>
                                         <td>
-                                            {l.settled ? <Label bsStyle="success">Yes</Label> : 'No'}
+                                            <select
+                                                style={{width: 100}}
+                                                className="form-control"
+                                                value={l.settled ? 'y' : 'n'}
+                                                onChange={e => this.settle(i._id, l._id, e.target.value)}>
+                                                <option value="n">No</option>
+                                                <option value="y">Yes</option>
+                                            </select>
                                         </td>
                                         <td><Button bsStyle="default" className="btn-sm" onClick={e => this.toggleEdit(i._id, l._id)}>Edit</Button></td>
                                     </tr>
