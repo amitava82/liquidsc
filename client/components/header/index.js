@@ -19,12 +19,12 @@ export default class Header extends React.Component {
         const {session: {user}} = this.props;
         const items = [];
         if(user) {
-            items.push(
-                <LinkContainer to="/home">
-                    <NavItem>Home</NavItem>
-                </LinkContainer>
-            );
             if(user.role == 'BORROWER') {
+                items.push(
+                    <LinkContainer to="/home" key={5}>
+                        <NavItem>Dashboard</NavItem>
+                    </LinkContainer>
+                );
                 items.push(
                     <LinkContainer to="/application/create" key={1}>
                         <NavItem>New Loan</NavItem>
@@ -36,6 +36,16 @@ export default class Header extends React.Component {
                     </LinkContainer>
                 );
             } else if(user.role == 'ADMIN') {
+                items.push(
+                    <LinkContainer to="/admin/analytics" key={5}>
+                        <NavItem>Dashboard</NavItem>
+                    </LinkContainer>
+                );
+                items.push(
+                    <LinkContainer to="/admin/requests">
+                        <NavItem>Reg Requests</NavItem>
+                    </LinkContainer>
+                );
                 items.push(
                     <LinkContainer to="/admin/users" key={2}>
                         <NavItem>Users</NavItem>
@@ -51,12 +61,12 @@ export default class Header extends React.Component {
                         <NavItem>Accounts</NavItem>
                     </LinkContainer>
                 );
+            } else if(user.role == 'LENDER' || user.role == 'BUYER') {
                 items.push(
-                    <LinkContainer to="/admin/analytics" key={5}>
-                        <NavItem>Analytics</NavItem>
+                    <LinkContainer to="/home" key={5}>
+                        <NavItem>Dashboard</NavItem>
                     </LinkContainer>
                 );
-            } else if(user.role == 'LENDER') {
                 // items.push(
                 //     <LinkContainer to="/analytics" key={6}>
                 //         <NavItem>Analytics</NavItem>

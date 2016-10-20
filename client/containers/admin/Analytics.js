@@ -125,11 +125,6 @@ export default class Analytics extends React.Component {
 
         return (
             <div style={{marginTop: 20}}>
-                <div className="flex center">
-                    <h3 className="flex-item">{data.totalLoanAcc} Loan accounts</h3>
-                    <h3 className="strong">{accounting.formatMoney(data.totalLoanAmount)} Loan funded</h3>
-                </div>
-                <hr/>
                 <Row>
                     <Col xs={12}>
                         <div className="form-group">
@@ -153,56 +148,75 @@ export default class Analytics extends React.Component {
                 <Row>
                     <Col xs={6}>
                         <Table>
-                            <caption>Registration</caption>
-                            <thead>
-                                <tr>
-                                    <th>New</th>
-                                    <th>Pending</th>
-                                </tr>
-                            </thead>
                             <tbody>
                                 <tr>
+                                    <th>Users</th>
+                                    <th>Count</th>
+                                </tr>
+                                <tr>
+                                    <td>New Registration</td>
                                     <td>{get(data, 'newUsersCount', 0)}</td>
+                                </tr>
+                                <tr>
+                                    <td>Registration Req Pending</td>
                                     <td>{get(data, 'pendingUsersCount', 0)}</td>
                                 </tr>
-                            </tbody>
-                        </Table>
-                    </Col>
-                    <Col xs={6}>
-                        <Table>
-                            <caption>Users</caption>
-                            <thead>
-                            <tr>
-                                <th>Buyer</th>
-                                <th>Seller</th>
-                                <th>Lender</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{get(find(data.usersTypeCount, {_id: 'BUYER'}), 'count', 0)}</td>
-                                <td>{get(find(data.usersTypeCount, {_id: 'BORROWER'}), 'count', 0)}</td>
-                                <td>{get(find(data.usersTypeCount, {_id: 'LENDER'}), 'count', 0)}</td>
-                            </tr>
-                            </tbody>
-                        </Table>
-                    </Col>
-                    <Col xs={6}>
-                        <Table>
-                            <caption>Applications</caption>
-                            <thead>
-                            <tr>
-                                <th>Pending</th>
-                                <th>Approved</th>
-                                <th>Rejected</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{pending}</td>
-                                <td>{approved}</td>
-                                <td>{rejected}</td>
-                            </tr>
+                                <tr>
+                                    <td>Total Buyers</td>
+                                    <td>{get(find(data.usersTypeCount, {_id: 'BUYER'}), 'count', 0)}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Sellers</td>
+                                    <td>{get(find(data.usersTypeCount, {_id: 'BORROWER'}), 'count', 0)}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Lenders</td>
+                                    <td>{get(find(data.usersTypeCount, {_id: 'LENDER'}), 'count', 0)}</td>
+                                </tr>
+                                <tr>
+                                    <th>Applications</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td>Pending</td>
+                                    <td>{pending}</td>
+                                </tr>
+                                <tr>
+                                    <td>Under Review</td>
+                                    <td>{reviewing}</td>
+                                </tr>
+                                <tr>
+                                    <td>ALCH Approved</td>
+                                    <td>{approved}</td>
+                                </tr>
+                                <tr>
+                                    <td>Received Bid(s)</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Not Received Bid</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Total App till date</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Loan</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td>Total Loan Accounts</td>
+                                    <td>{data.totalLoanAcc}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Loan Amount Funded</td>
+                                    <td>{accounting.formatMoney(data.totalLoanAmount)}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Amount Not Funded</td>
+                                    <td></td>
+                                </tr>
                             </tbody>
                         </Table>
                     </Col>

@@ -43,7 +43,11 @@ export default (store) => {
     const redirect = (nextState, replace, cb) => {
         const {session: {isLoggedIn, user}} = store.getState();
         if(isLoggedIn) {
-            replace({pathname: '/home'});
+            if(user.role == 'ADMIN') {
+                replace({pathname: '/admin/analytics'});
+            }else {
+                replace({pathname: '/home'});
+            }
         }
         cb();
     };
@@ -57,6 +61,7 @@ export default (store) => {
             <Route path="home" component={Home} onEnter={ensureLoggedIn} />
             <Route path="application/create" component={Application} onEnter={checkRole('BORROWER')} />
             <Route path="/admin" onEnter={checkRole('ADMIN')}>
+                <Route path="requests" component={Home} />
                 <Route path="users" component={Admin.Users} />
                 <Route path="applications" component={Admin.Applications} />
                 <Route path="applications/:id" component={Admin.ApplicationDetails} />
