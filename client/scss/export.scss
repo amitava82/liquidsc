@@ -1,5 +1,5 @@
-@import "custom/main";
-
+//@import "custom/main";
+@import "variables";
 @import "toastr";
 @import "utils";
 @import "home";
@@ -8,8 +8,6 @@
 @import "footer";
 @import "signup";
 
-
-@include theme-maker("default", ());
 
 .react-datepicker {
   font-size: 14px !important;
