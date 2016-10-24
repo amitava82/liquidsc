@@ -191,10 +191,13 @@ module.exports = function(deps){
                         user.password = hash;
                         user.resetToken = null;
 
-                        return user.save();
+                        return user.save().then(
+                            () => res.render('reset-password', {data: {success: true}, title: 'Reset password'}),
+                            e => renderError(res, e)
+                        );
                     })
                 }
-            ).then(() => res.render('reset-password', {data: {success: true}, title: 'Reset password'})).catch(e => renderError(res, e));
+            ).catch(e => renderError(res, e));
         },
 
         /*
@@ -248,5 +251,6 @@ module.exports = function(deps){
 };
 
 function renderError(res, e){
+    console.log(e);
     res.render('error', {error: e.message, title: 'Error - Work alley'})
 }

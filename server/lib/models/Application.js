@@ -104,6 +104,11 @@ module.exports = function (deps) {
           ref: 'Loan'
         },
 
+        wacd: {
+            type: Number,
+            default: 0
+        },
+
         status: {
             type: String,
             required: true,

@@ -53,7 +53,7 @@ export default class SupplierDashboard extends React.Component {
                 <td>{i.loanAmount}</td>
                 <td>{i.rateOfInterest}</td>
                 <td className="capitalize">{i.receivableStatus}</td>
-                <td className="capitalize">{i.status}</td>
+                <td className="capitalize">{i.status == 'APPROVED' ? 'Bidding Active' : i.status}</td>
                 <td>{i.status !== 'APPROVED' && <button onClick={e => this.toggleUpload(i._id)}>Upload Doc</button>}</td>
             </tr>
         ));

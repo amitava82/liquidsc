@@ -34,6 +34,8 @@ export default class DetailsSection extends React.Component {
                             <dd>{data.tenor} days</dd>
                             <dt>Interest %</dt>
                             <dd>{data.rateOfInterest}</dd>
+                            <dt title="Weighted Average cost of debt">Weighted Average cost of debt</dt>
+                            <dd>{data.wacd}</dd>
                             {showReceivable  !=false ? (
                                 <span>
                                     <dt>Receivable date</dt>

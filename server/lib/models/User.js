@@ -21,8 +21,7 @@ module.exports = function (deps) {
         },
 
         name: {
-            type: String,
-            required: true
+            type: String
         },
 
         email: {

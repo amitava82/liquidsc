@@ -35,6 +35,7 @@ const TENOR = [30, 60, 90, 120, 180].map(i => ({label: i + ' days', value: i}));
         'loanAmount',
         'rateOfInterest',
         'tenor',
+        'wacd',
         'tos'
     ],
     initialValues: {
@@ -58,7 +59,8 @@ const TENOR = [30, 60, 90, 120, 180].map(i => ({label: i + ' days', value: i}));
             coi: file(),
             report: file()
         }),
-        tos: required()
+        tos: required(),
+        wacd: required()
     })
 })
 @connect(state=>state, {createApplication})
@@ -80,10 +82,8 @@ export default class Application extends React.Component {
     render() {
         const {
             fields: {loanAmount, receivable, receivableDate, buyerCompany, buyerContactPerson, buyerEmail,
-                isExporter, documents, buyerConsent, rateOfInterest, tenor, tos},
+                isExporter, documents, buyerConsent, rateOfInterest, tenor, tos, wacd},
             handleSubmit, submitting, error} = this.props;
-
-        const fees = (loanAmount.value * (1.25/100)).toFixed(2);
 
         return (
             <div className="col-xs-6 col-xs-offset-3 form-container">
@@ -107,12 +107,9 @@ export default class Application extends React.Component {
                             <Checkbox field={buyerConsent} label="Consent to check Receivable validity from Buyer" required />
                             <NumberInput field={loanAmount} label="Loan amount" min={0} required />
                             <NumberInput field={rateOfInterest} label="Rate of interest" min={0} required />
+                            <NumberInput field={wacd} label="Weighted Average cost of debt" min={0} required />
                             <Select field={tenor} options={TENOR} label="Tenor of Loan" required />
-                            <p>
-                                <label className="text-info">Processing fees (1.25%): <strong>{fees}</strong></label>
-
-                            </p>
-                            <Checkbox field={tos} label="Exact Fees will be notified post Loan application assessment." />
+                            <Checkbox field={tos} label="Processing fees may be upto 1.5%. Exact fees will be notified post loan application assessment and only charged upon loan disbursement" />
                             <Button bsSize="large" block disabled={submitting} type="submit" bsStyle="primary">Submit</Button>
                         </form>
                     )}
